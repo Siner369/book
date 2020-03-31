@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>17商城</title>
+<link type="text/css" href="css/css.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/js.js"></script>
+<script type="text/javascript" src="js/cookie.js"></script>
+ <script>
+  $(function (){
+
+   $("#loginform").submit(function () {
+    if (checkPassword()&&checkUsername()){
+     $.ajax({
+      url:"/doLogin",
+      type:"post",
+      data:{uname:$("#username").val(),upass:$("#password").val()},
+      dataType:"json",
+      success:function (data) {
+       //注册成功，跳转成功页面
+       if (data.msg!="ISNULL"){
+        var uid = data.uid;
+        var uname = data.uname;
+        var upass = data.upass;
+        var ugender = data.ugender;
+        var uaddress = data.uaddress;
+        var uemail = data.uemail;
+        var umailcode = data.umailcode;
+        var utel = data.utel;
+        var ustate = data.ustate;
+        cookie.setCookie("uid",uid,15);
+        cookie.setCookie("uname",uname,15);
+        cookie.setCookie("upass",upass,15);
+        cookie.setCookie("ugender",ugender,15);
+        cookie.setCookie("uaddress",uaddress,15);
+        cookie.setCookie("uemail",uemail,15);
+        cookie.setCookie("umailcode",umailcode,15);
+        cookie.setCookie("utel",utel,15);
+        cookie.setCookie("ustate",ustate,15);
+
+       console.info("跳转index");
+      location.href="index.html";
+        $("#error_msg").text("");
+        $("#error_msg").css(color,"");
+      }else{
+        $("#error_msg").css("color","red");
+        $("#error_msg").text("用户名或密码错误，请重试.");
+       }
+
+      },
+      error:function(){
+
+      }
+     });
+    }
+
+    //2.不让页面跳转
+    return false;
+    //如果这个方法没有返回值，或者返回为true，则表单提交，如果返回为false，则表单不提交
+   });
+   $("#username").blur(checkUsername);
+   $("#password").blur(checkPassword);
+/////////
+   function checkUsername() {
+    //1.获取用户名
+    var username = $("#username").val();
+    //2.定义正则
+    var reg_uname = /[A-Za-z0-9_\-\u4e00-\u9fa5]+/;
+    //3.判断，给出提示
+    var flag = reg_uname.test(username);
+    //3.判断
+    if (!flag) {
+     $("#username").css("border", "1px solid red");
+     return false;
+    } else {
+     $("#username").css("border", "");
+     return true;
+    }
+  }
+
+   //校验密码
+   function checkPassword() {
+    //1.获取密码值
+    var password = $("#password").val();
+    //2.定义正则
+    var reg_password = /^\w{3,20}$/;
+    //3.判断，给出提示信息
+    var flag = reg_password.test(password);
+    if (flag) {
+     //密码合法
+     $("#password").css("border", "");
+    } else {
+     //密码非法,加一个红色边框
+     $("#password").css("border", "1px solid red");
+    }
+    return flag;
+   }
+  })
+
+ </script>
+</head>
+
+<body style=" background:#FFF;">
+ <div class="loginLogo">
+  <div class="logoMid">
+   <h1 class="logo" style="height:71px;padding-top:10px;"><a href="index.html"><img src="images/loginLogo.jpg" width="241" height="71" /></a></h1>
+   <div class="loginReg">
+    还没有会员账号?&nbsp;<a href="reg.html">免费注册</a>
+   </div><!--loginReg/-->
+  </div><!--logoMid/-->
+ </div><!--loginLogo/-->
+ <div class="loginBox">
+  <div class="loginLeft">
+   <img src="images/logoinimg.jpg" width="716" height="376" />
+  </div><!--loginLeft/-->
+  <form id="loginform" class="loginRight">
+   <h2>会员登录</h2>
+   <h3>用户名</h3>
+   <input id="username" type="text" class="name" />
+   <h3>密码</h3>
+   <input id="password" type="password" class="pwd" />
+   <div class="zhuangtai">
+    <input type="checkbox" checked="checked" /> 下次自动登录
+   </div><!--zhuangtai/-->
+   <div class="subs">
+    <input type="submit" src="images/sub.jpg"/>
+   </div><br/>
+   <div id="error_msg"></div>
+ </form><!--loginRight/-->
+ <div class="clears"></div>
+ </div><!--loginBox/-->
+</body>
+</html>

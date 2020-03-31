@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siner.dao.UserDao">
+    <resultMap id="UserMap" type="com.siner.entity.User">
+        <id property="uid" column="uid"/>
+        <result property="uname" column="uname"/>
+        <result property="upass" column="upass"/>
+        <result property="ugender" column="ugender"/>
+        <result property="uaddress" column="uaddress"/>
+        <result property="uemail" column="uemail"/>
+        <result property="utel" column="utel"/>
+        <result property="ustate" column="ustate"/>
+
+
+        <!--<association property="account" javaType="com.hntest.entity.Account">
+            <id property="account_id" column="account_id"/>
+            <result property="tradepassword" column="tradepassword"/>
+            <result property="useableamount" column="useableamount"/>
+            <result property="freezedamount" column="freezedamount"/>
+            <result property="borrowlimit" column="borrowlimit"/>
+            <result property="version" column="version"/>
+            <result property="unreceiveinterest" column="unreceiveinterest"/>
+            <result property="unreceiveprincipal" column="unreceiveprincipal"/>
+            <result property="unreceiveamount" column="unreceiveamount"/>
+            <result property="remainborrowlimit" column="remainborrowlimit"/>
+        </association>
+
+        <association property="userinfo" javaType="com.hntest.entity.Userinfo">
+            <result property="version" column="version"/>
+            <result property="bitState" column="bitState"/>
+            <result property="realName" column="realName"/>
+            <result property="idNumber" column="idNumber"/>
+            <result property="phoneNumber" column="phoneNumber"/>
+            <result property="incomeGrade" column="incomeGrade"/>
+            <result property="Marriage" column="Marriage"/>
+            <result property="KidCount" column="KidCount"/>
+            <result property="educationBackground" column="educationBackground"/>
+            <result property="houseCondition" column="houseCondition"/>
+
+
+             <result property="ugender" column="ugender"/>
+        <result property="uaddress" column="uaddress"/>
+        <result property="uemail" column="uemail"/>
+        <result property="utel" column="utel"/>
+        <result property="ustate" column="ustate"/>
+
+        </association>-->
+    </resultMap>
+
+    <select id="login" resultType="com.siner.entity.User" parameterType="com.siner.entity.User">
+        select uid,uname,upass,ugender,uaddress,uemail,utel,ustate from user where uname = #{uname} and upass = #{upass}
+    </select>
+
+    <select id="checkRepeat" resultType="java.lang.String" parameterType="com.siner.entity.User">
+        select uname from user WHERE UNAME = #{uname}
+    </select>
+
+
+    <insert id="reg" parameterType="com.siner.entity.User">
+        insert into user(uname,upass,utel,ustate) values(#{uname},#{upass},#{utel},#{ustate})
+	</insert>
+    
+
+</mapper>
