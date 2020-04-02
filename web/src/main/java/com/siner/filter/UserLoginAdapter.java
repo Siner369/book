@@ -19,7 +19,7 @@ public class UserLoginAdapter implements WebMvcConfigurer {
                 .excludePathPatterns("/admin/css/**","/admin/js/**",
                         "/admin/images/**","/admin/upload/**")//排除样式、脚本、图片等资源文件
                 .excludePathPatterns("/admin/login.html")//排除登录页面
-                .excludePathPatterns("/admin/login");//排除用户点击登录按钮
+                .excludePathPatterns("/manager/login");//排除用户点击登录按钮
 
     }
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siner.dao.ManagerDao">
+    <resultMap id="ManagerMap" type="com.siner.entity.Manager">
+        <id property="mid" column="mid"/>
+        <result property="mname" column="mname"/>
+        <result property="mpass" column="mpass"/>
+        <result property="usertype" column="usertype"/>
+
+        <!--<association property="userinfo" javaType="com.hntest.entity.Userinfo">
+            <result property="version" column="version"/>
+            <result property="bitState" column="bitState"/>
+            <result property="realName" column="realName"/>
+            <result property="idNumber" column="idNumber"/>
+            <result property="phoneNumber" column="phoneNumber"/>
+            <result property="incomeGrade" column="incomeGrade"/>
+            <result property="Marriage" column="Marriage"/>
+            <result property="KidCount" column="KidCount"/>
+            <result property="educationBackground" column="educationBackground"/>
+            <result property="houseCondition" column="houseCondition"/>
+        </association>-->
+    </resultMap>
+
+    <select id="login_admin" resultType="com.siner.entity.Manager" parameterType="com.siner.entity.Manager">
+        select mname,mpass from manager where mname = #{mname} and mpass = #{mpass}
+    </select>
+
+
+
+<!--    <insert id="register" parameterType="com.hntest.entity.Logininfo">
+        insert into Logininfo values(#{lid},#{username},#{password},#{state},
+        #{usertype},#{admin})
+	</insert>-->
+    
+
+</mapper>
