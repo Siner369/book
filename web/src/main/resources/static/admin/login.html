@@ -35,7 +35,6 @@ $(function () {
  $(".submit_btn").click(function () {
   var strdata = $("#loginform").serializeObject();
   var str = JSON.stringify(strdata);
-  alert(str);
    $.ajax({
     url:"/manager/login",
     contentType:"application/json;charset=UTF-8",
@@ -44,14 +43,12 @@ $(function () {
     dataType:"json",
     success:function (data) {
      //注册成功，跳转成功页面
-     alert(data);
      if (data.mname!="" && data.mname!=null){
       var mname = data.mname;
       var usertype = data.usertype;
       cookie.setCookie("mname",mname,15);
       cookie.setCookie("usertype",usertype,15);
 
-      console.info("跳转index");
       location.href="index.html";
       $("#error_msg").text("");
       $("#error_msg").css(color,"");

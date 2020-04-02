@@ -29,24 +29,24 @@ public class ManagerController {
             , produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String Managerlogin(@RequestBody Manager manager, HttpServletRequest request) {
-        System.out.println("管理登录");
+        System.out.println("后台登录");
         Manager m = managerService.login_admin(manager);
         request.getSession().setAttribute("manager","true");
-        System.out.println("管理员登录方法执行，传递的参数为" + JSONObject.toJSONString(m));
         return JSONObject.toJSONString(m);
     }
     
     //退出并清除cookie
-    @RequestMapping("admin_logout")
+    @RequestMapping("/logout")
     public String logOut(HttpServletRequest request){
-        System.out.println("管理员账号退出方法执行了...");
+        System.out.println("后台注销");
         JSONObject jo = new JSONObject();
         //判断seesion是否存在，不存在则退出
         if (request.getSession().getAttribute("manager")!=null){
             request.getSession().removeAttribute("manager");
-            return jo.put("logout","success").toString();
+            jo.put("logout","success");
         }else{
-            return jo.put("logout","error").toString();
+            jo.put("logout","error");
         }
+        return jo.toString();
     }
 }

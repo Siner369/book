@@ -52,7 +52,6 @@ public class UserController {
     @RequestMapping(value = "checkDouble", method = {RequestMethod.POST})
     public @ResponseBody
     String checkDouble(@RequestBody String uname) {
-        System.out.println("Controller:" + uname);
         User u = new User();
         u.setUname(uname);
         boolean canUse = userService.checkDouble(u);
@@ -72,7 +71,6 @@ public class UserController {
     @RequestMapping(value = "loadInfo", method = {RequestMethod.POST})
     public @ResponseBody
     String loadInfo(@RequestBody String uname) {
-        System.out.println("Controller:" + uname);
         User u = userService.loadInfo(uname);
         JSONObject object = new JSONObject();
         return object.toString();
