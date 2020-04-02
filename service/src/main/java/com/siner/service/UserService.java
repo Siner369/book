@@ -12,4 +12,10 @@ public interface UserService {
     //查找同名
     public boolean checkDouble(User user);
 
+    //加载个人资料
+    public User loadInfo(String username);
+
+    //更新资料
+    public int updateUserInfo(User user);
+
 }

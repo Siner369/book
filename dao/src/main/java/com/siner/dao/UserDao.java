@@ -15,15 +15,11 @@ public interface UserDao {
     // 注册检测重名
     public String checkRepeat(User str);
 
-    /*
+
     //加载个人资料
-    public int loadInfo(String username);
-
-    //检查信息是否完整  地址 手机
-    public int checkComplete(String username);
-
+    public User loadInfo(String username);
 
     //用户修改信息
-    public int updateUserInfo(User user);*/
+    public int updateUserInfo(User user);
 
 }

@@ -16,7 +16,7 @@ var cookie={
         return '';
     },
     removeCookie:function(name){
-        cookie.setCookie(name,'',-1)
+        cookie.setCookie(name,'',0);
     }
 
 }

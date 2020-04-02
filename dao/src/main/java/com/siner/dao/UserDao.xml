@@ -52,6 +52,10 @@
         select uid,uname,upass,ugender,uaddress,uemail,utel,ustate from user where uname = #{uname} and upass = #{upass}
     </select>
 
+    <select id="loadInfo" resultType="com.siner.entity.User" parameterType="com.siner.entity.User">
+        select uid,uname,upass,ugender,uaddress,uemail,utel,ustate from user where uname = #{uname}
+    </select>
+
     <select id="checkRepeat" resultType="java.lang.String" parameterType="com.siner.entity.User">
         select uname from user WHERE UNAME = #{uname}
     </select>
@@ -60,6 +64,18 @@
     <insert id="reg" parameterType="com.siner.entity.User">
         insert into user(uname,upass,utel,ustate) values(#{uname},#{upass},#{utel},#{ustate})
 	</insert>
+
+    <update id="updateUserInfo" parameterType="com.siner.entity.User">
+        <!--		update t_Admin-->
+        <!--		<set>-->
+        <!--			<if test="loginPWD!=null">-->
+        <!--				loginPWD = #{loginPWD},-->
+        <!--			</if>-->
+        <!--		</set>-->
+        <!--		where loginID = #{loginID}-->
+        update user set ugender = #{ugender},uaddress = #{uaddress},
+        uemail = #{uemail},utel = #{utel},umailcode = #{umailcode} where uname = #{uname}
+    </update>
     
 
 </mapper>

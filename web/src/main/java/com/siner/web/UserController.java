@@ -19,45 +19,76 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("/doReg")
-    public @ResponseBody  boolean doReg(@RequestBody User user){
+    public @ResponseBody
+    boolean doReg(@RequestBody User user) {
         boolean ok = userService.reg(user);
-        System.out.println("新增成功了吗？"+ok);
-        if (ok){
+        System.out.println("新增成功了吗？" + ok);
+        if (ok) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
     @RequestMapping(value = "doLogin", method = {RequestMethod.POST},
             produces = "application/json;charset=UTF-8")
-    public @ResponseBody String doLogin(String uname,String upass){
+    public @ResponseBody
+    String doLogin(String uname, String upass) {
         User webUser = new User();
         webUser.setUname(uname);
         webUser.setUpass(upass);
         User u = userService.login(webUser);
 
-        JSONObject json = (JSONObject)JSONObject.toJSON(u);
-        if (json!=null){
+        JSONObject json = (JSONObject) JSONObject.toJSON(u);
+        if (json != null) {
             return json.toString();
-        }else {
+        } else {
             JSONObject j = new JSONObject();
-            j.put("msg","ISNULL");
+            j.put("msg", "ISNULL");
             return j.toString();
         }
     }
-            @RequestMapping(value = "checkDouble",method = {RequestMethod.POST})
-            public @ResponseBody String checkDouble(@RequestBody String uname){
-                System.out.println("Controller:"+uname);
-                User u = new User();
-                u.setUname(uname);
-            boolean canUse = userService.checkDouble(u);
-            JSONObject object = new JSONObject();
-        if (canUse){
-            object.put("msg","no");
+
+    @RequestMapping(value = "checkDouble", method = {RequestMethod.POST})
+    public @ResponseBody
+    String checkDouble(@RequestBody String uname) {
+        System.out.println("Controller:" + uname);
+        User u = new User();
+        u.setUname(uname);
+        boolean canUse = userService.checkDouble(u);
+        JSONObject object = new JSONObject();
+        if (canUse) {
+            object.put("msg", "no");
             System.out.println(object);
-        }else {
-            object.put("msg","yes");
+        } else {
+            object.put("msg", "yes");
+        }
+
+        return object.toString();
+    }
+
+
+    //加载信息
+    @RequestMapping(value = "loadInfo", method = {RequestMethod.POST})
+    public @ResponseBody
+    String loadInfo(@RequestBody String uname) {
+        System.out.println("Controller:" + uname);
+        User u = userService.loadInfo(uname);
+        JSONObject object = new JSONObject();
+        return object.toString();
+    }
+
+    //更新个人信息
+    @RequestMapping("/doUpdate")
+    public @ResponseBody
+    String updateUserInfo(@RequestBody User user) {
+        int n = userService.updateUserInfo(user);
+        JSONObject object = new JSONObject();
+        if (n>0) {
+            object.put("update", "success");
+            System.out.println(object);
+        } else {
+            object.put("update", "error");
         }
 
         return object.toString();
