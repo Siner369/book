@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Book {
-    private int bid;//
+    private int bid;
     private String bname;
     private String booktype;
     private int mid;
