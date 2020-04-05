@@ -106,6 +106,13 @@
             <version>2.9.0</version>
         </dependency>
         <!--JSON 完-->
+
+        <!--thymeleaf-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <!--thymeleaf完-->
     </dependencies>
 
     <build>

@@ -26,5 +26,4 @@ public class UserLoginInterceptor implements HandlerInterceptor {
             return false;
         }
     }
-
 }

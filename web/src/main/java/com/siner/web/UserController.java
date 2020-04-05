@@ -6,10 +6,7 @@ import com.siner.entity.User;
 import com.siner.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -49,7 +46,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "checkDouble", method = {RequestMethod.POST})
+    /*@RequestMapping(value = "checkDouble", method = {RequestMethod.POST})
     public @ResponseBody
     String checkDouble(@RequestBody String uname) {
         User u = new User();
@@ -64,7 +61,7 @@ public class UserController {
         }
 
         return object.toString();
-    }
+    }*/
 
 
     //加载信息

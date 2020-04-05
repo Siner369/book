@@ -15,5 +15,5 @@ public class Book {
     private double bprice;
     private int bnum;
     private int bcomid;
-
+    private Comments comments;
 }
