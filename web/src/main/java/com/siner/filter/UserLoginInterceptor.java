@@ -17,7 +17,7 @@ public class UserLoginInterceptor implements HandlerInterceptor {
                              Object handler)throws Exception {
 
         HttpSession session = request.getSession(true);
-        Object username=session.getAttribute("manager");
+        Object username=session.getAttribute("admin");
         if(null!=username) {//已登录
             return true;
         }else {//未登录

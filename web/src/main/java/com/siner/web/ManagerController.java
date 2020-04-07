@@ -36,9 +36,10 @@ public class ManagerController {
         else type = "(商家)";
         if (null != m) {
             HttpSession session = request.getSession();
-            session.setAttribute("manager", "true");
+            session.setAttribute("admin", "true");
             session.setAttribute("mname",m.getMname()+type);
             session.setAttribute("usertype",m.getUsertype());
+            //System.out.println(session.getAttribute("mname"));
             return "redirect:/admin/index.html";
         } else {
             return  "redirect:/admin/login.html";
@@ -46,12 +47,12 @@ public class ManagerController {
     }
     //退出并清除cookie
     @RequestMapping("/logout")
-    public String logOut(HttpServletRequest request){
+    public @ResponseBody String logOut(HttpServletRequest request){
         System.out.println("后台注销");
         JSONObject jo = new JSONObject();
         //判断seesion是否存在，不存在则退出
-        if (request.getSession().getAttribute("manager")!=null){
-            request.getSession().removeAttribute("manager");
+        if (request.getSession().getAttribute("admin")!=null){
+            request.getSession().removeAttribute("admin");
             jo.put("logout","success");
         }else{
             jo.put("logout","error");
