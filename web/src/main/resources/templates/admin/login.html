@@ -32,7 +32,7 @@ $(function () {
   dotColor: '#5cbdaa',
   lineColor: '#5cbdaa'
  });
- $(".submit_btn").click(function () {
+ /*$(".submit_btn").click(function (){
   var strdata = $("#loginform").serializeObject();
   var str = JSON.stringify(strdata);
    $.ajax({
@@ -66,14 +66,14 @@ $(function () {
   //2.不让页面跳转
   return false;
   //如果这个方法没有返回值，或者返回为true，则表单提交，如果返回为false，则表单不提交
- });
+ });*/
 })
 </script>
 </head>
 <body>
- <form id="loginform" action="/manager/login">
-  <dl class="admin_login">
-   <dt>
+ <form id="loginform" action="/admin/login" method="post">
+    <dl class="admin_login">
+     <dt>
     <strong>网上书城后台管理系统</strong>
     <em>Management System</em>
    </dt>
@@ -83,13 +83,6 @@ $(function () {
  <dd class="pwd_icon">
   <input id="password" name="mpass" type="password" placeholder="密码" class="login_txtbx"/>
  </dd>
-<!-- <dd class="val_icon">
-  <div class="checkcode">
-    <input type="text" id="J_codetext" placeholder="验证码" maxlength="4" class="login_txtbx">
-    <canvas class="J_codeimg" id="myCanvas" onclick="createCode()">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
-  </div>
-  <input type="button" value="验证码核验" class="ver_btn" onClick="validate();">
- </dd>-->
  <dd>
   <input type="submit" value="立即登录" class="submit_btn"/>
  </dd>
@@ -98,7 +91,7 @@ $(function () {
    </dd>
  <dd>
   <p>Copyright © 2020 YeXing</p>
-  <p>2016051557</p>
+  <p>2016051557  1606401-13</p>
  </dd>
 </dl>
 </form>

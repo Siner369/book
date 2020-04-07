@@ -23,7 +23,7 @@
     </resultMap>
 
     <select id="login_admin" resultType="com.siner.entity.Manager" parameterType="com.siner.entity.Manager">
-        select mname,mpass from manager where mname = #{mname} and mpass = #{mpass}
+        select mid,mname,mpass,usertype from manager where mname = #{name} and mpass = #{pass}
     </select>
 
 

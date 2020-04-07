@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.siner.entity.Manager;
 import com.siner.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +15,8 @@ import javax.servlet.http.HttpSession;
  @ResponseBody是用来响应数据的，如果是对象类型的方法，则springmvc会将结果对象转成json格式输出给前端
  本例中我使用的是@RestController注解，所以springmvc会将返回的对象Result自动转json返回给前端（底层默认是使用jsckson来实现数据格式转换的）
  */
-@RestController
-@RequestMapping("manager")
+@Controller
+@RequestMapping("admin")
 public class ManagerController {
     @Autowired
     private ManagerService managerService;
@@ -25,16 +26,24 @@ public class ManagerController {
     }
 
     //执行管理员登录方法
-    @RequestMapping(value = "/login", method = {RequestMethod.POST}
-            , produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public String Managerlogin(@RequestBody Manager manager, HttpServletRequest request) {
+    @PostMapping(value = "/login")
+    public String Managerlogin(String mname,String mpass, HttpServletRequest request) {
         System.out.println("后台登录");
-        Manager m = managerService.login_admin(manager);
-        request.getSession().setAttribute("manager","true");
-        return JSONObject.toJSONString(m);
+        Manager m = managerService.login_admin(mname,mpass);
+        System.out.println(m);
+        String type = null;
+        if (m.getUsertype()==0) type = "（管理员）";
+        else type = "(商家)";
+        if (null != m) {
+            HttpSession session = request.getSession();
+            session.setAttribute("manager", "true");
+            session.setAttribute("mname",m.getMname()+type);
+            session.setAttribute("usertype",m.getUsertype());
+            return "redirect:/admin/index.html";
+        } else {
+            return  "redirect:/admin/login.html";
+        }
     }
-    
     //退出并清除cookie
     @RequestMapping("/logout")
     public String logOut(HttpServletRequest request){

@@ -18,9 +18,8 @@ $(".content").delegate("a[href='top']","click",function(e){
 function logout() {
     var flag = confirm("确定退出？");
     if (flag==true) {
-        alert("确定了");
         $.ajax({
-            url: "/manager/logout",
+            url: "/admin/logout",
             type: "post",
             data: {},
             dataType: "text",
