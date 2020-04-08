@@ -5,10 +5,12 @@ import com.siner.entity.Manager;
 import com.siner.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 /**
  *@RestController是@ResponseBody和@Controller的组合注解
  @Controller是用来响应页面的，如果是string类型的方法，则springmvc会跳转到相应的页面（视图）
@@ -27,22 +29,20 @@ public class ManagerController {
 
     //执行管理员登录方法
     @PostMapping(value = "/login")
-    public String Managerlogin(String mname,String mpass, HttpServletRequest request) {
+    public String Managerlogin(String mname, String mpass,HttpSession session) {
         System.out.println("后台登录");
         Manager m = managerService.login_admin(mname,mpass);
         System.out.println(m);
         String type = null;
-        if (m.getUsertype()==0) type = "（管理员）";
+        if (m.getUsertype()==0) type = "(管理员)";
         else type = "(商家)";
         if (null != m) {
-            HttpSession session = request.getSession();
             session.setAttribute("admin", "true");
             session.setAttribute("mname",m.getMname()+type);
             session.setAttribute("usertype",m.getUsertype());
-            //System.out.println(session.getAttribute("mname"));
-            return "redirect:/admin/index.html";
+            return "redirect:/admin/index";
         } else {
-            return  "redirect:/admin/login.html";
+            return  "admin/login";
         }
     }
     //退出并清除cookie

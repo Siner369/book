@@ -4,42 +4,38 @@
 <mapper namespace="com.siner.dao.BookDao">
     <resultMap id="BookMap" type="com.siner.entity.Book">
         <id property="bid" column="bid"/>
-        <result property="bname" column="booktype"/>
+        <result property="bname" column="bname"/>
+        <result property="booktype" column="booktype"/>
+        <result property="bpic" column="bpic"/>
         <result property="mid" column="mid"/>
         <result property="bprice" column="bprice"/>
         <result property="bnum" column="bnum"/>
-        <result property="bcomid" column="bcomid"/>
 
 
         <association property="comments" javaType="com.siner.entity.Comments">
             <id property="cid" column="cid"/>
             <result property="uid" column="uid"/>
+            <result property="bid" column="bid"/>
             <result property="oid" column="oid"/>
             <result property="cscore" column="cscore"/>
         </association>
     </resultMap>
-
-<!--    <select id="Login" resultType="int" parameterType="com.hntest.entity.Logininfo">
-        select l.username,l.password from Logininfo l left outer join Account a
-        on l.lid = a.account_id
-    </select>-->
 
     <!--<insert id="register" parameterType="com.hntest.entity.Logininfo">
         insert into Logininfo values(#{lid},#{username},#{password},#{state},
         #{usertype},#{admin})
 	</insert>-->
 
-    <select id="getCounts" resultType="int" parameterType="com.siner.entity.Book">
-        select count(1) from book b left outer join comments c on b.bcomid = c.cid
+    <select id="findAllBook" resultMap="BookMap" parameterType="java.lang.String">
+        select * from book b left join comments c on b.bid = c.bid;
     </select>
 
-    <select id="getListByPage" resultMap="BookMap" parameterType="java.util.Map">
-        select *from(
-        select r.bankinfo_id,r.tradeCode,r.tradeTime,r.amount,r.note,p.bankname,
-        p.accountname,p.accountNumber,p.bankforname,p.iconCls,rownum rn  from Rechargeoffline r
-        left outer join Platformbankinfo p on r.bankinfo_id = p.platformbankinfo_id
-        and rownum <![CDATA[ <= ]]> #{pageEnd} order by r.bankinfo_id)
-        where rn <![CDATA[ >= ]]> #{pageStart}
+    <select id="searchBookByName" resultMap="BookMap" parameterType="java.lang.String">
+        select * from book b left join comments c on b.bid = c.bid where b.bname like  concat('%',#{bookname},'%');
     </select>
 
+    <insert id="addBook" parameterType="com.siner.entity.Book">
+        insert into book values(#{bname},#{booktype},#{bpic},#{mid},
+        #{bprice},#{bnum})
+	</insert>
 </mapper>

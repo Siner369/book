@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8"/>
 <title>后台管理系统</title>
@@ -13,6 +14,8 @@
 <script src="/js/cookie.js"></script>
 <script src="/js/base.js"></script>
 <script>
+/* var mname=[[${session.mname}]];
+ alert(mname);*/
  $(function () {
 
  })
@@ -40,11 +43,10 @@
    <dl>
     <dt>商品信息</dt>
     <!--当前链接则添加class:active-->
-    <dd><a href="product_list.html" class="active">商品检索管理</a></dd>
-    <dd><a href="product_detail.html">上架新商品</a></dd>
+    <dd><a href="/findAllBook" class="active">商品检索管理</a></dd>
+    <dd><a href="/addBook">上架新商品</a></dd>
     <dd><a href="recycle_bin.html">下架商品管理</a></dd>
     <dd><a href="user_list.html">评价管理</a></dd>
-    
    </dl>
   </li>
   

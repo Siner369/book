@@ -11,9 +11,9 @@ public class Book {
     private int bid;
     private String bname;
     private String booktype;
+    private String bpic;
     private int mid;
     private double bprice;
     private int bnum;
-    private int bcomid;
     private Comments comments;
 }

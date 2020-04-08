@@ -10,21 +10,21 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class UserLoginInterceptor implements HandlerInterceptor {
-   /* protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
+    protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler)throws Exception {
 
-        HttpSession session = request.getSession(true);
-        Object username=session.getAttribute("admin");
+        HttpSession session = request.getSession();
+        Object username = session.getAttribute("admin");
         if(null!=username) {//已登录
             return true;
         }else {//未登录
             //直接重定向到登录页面
             System.out.println("拦截了");
-            response.sendRedirect("/admin/login.html");
+            response.sendRedirect("/login");//跳到登录页面
             return false;
         }
-    }*/
+    }
 }

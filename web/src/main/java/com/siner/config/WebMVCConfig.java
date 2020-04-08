@@ -14,5 +14,8 @@ public class WebMVCConfig {
             registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
             registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
         }
+
+
+
     }
 }

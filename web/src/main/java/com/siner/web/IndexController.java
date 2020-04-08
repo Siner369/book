@@ -3,6 +3,8 @@ package com.siner.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class IndexController {
 
@@ -15,12 +17,18 @@ public class IndexController {
         return "bookstore/index.html";
     }
 
-/*    *//**
-     * 访问根目录转发到首页
+    /**
+     * 打开后台首页
      * @return
-     *//*
-    @RequestMapping("/")
-    public String index(){
-        return "forward:/index.html";
-    }*/
+     */
+    @RequestMapping("admin/index")
+    public String toAdminIndex() {
+        return "admin/index";
+    }
+
+    @RequestMapping("login")
+    public String loginpage() {
+        return "admin/login";
+    }
+
 }
