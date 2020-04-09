@@ -1,6 +1,6 @@
 
 //默认配置
-/*$("a[rel='load-content']").click(function(e){
+$("a[rel='load-content']").click(function(e){
     e.preventDefault();
     var url=$(this).attr("href");
     $.get(url,function(data){
@@ -13,7 +13,7 @@
 $(".content").delegate("a[href='top']","click",function(e){
     e.preventDefault();
     $(".content").mCustomScrollbar("scrollTo",$(this).attr("href"));
-});*/
+});
 
 function logout() {
     var flag = confirm("确定退出？");

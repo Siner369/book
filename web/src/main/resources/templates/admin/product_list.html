@@ -29,9 +29,8 @@
     dataType:"json",
     success:function (data) {
      //注册成功，跳转成功页面
-     alert(data);
-     data = JSON.stringify(data);
-     alert(data);
+     //data = JSON.stringify(data);
+     console.info(data[0].bname);
      $("#t_books").html("");
      var table = "<table id=\"t_books\" class=\"table\">\n" +
              "       <tr>\n" +
@@ -45,41 +44,17 @@
              "        <th>修改</th>\n" +
              "        <th>下架</th>\n" +
              "       </tr>";
-     /*$("#t_books").append("<table id=\"t_books\" class=\"table\">" +
-             "       <tr>\n" +
-             "        <th>缩略图</th>\n" +
-             "        <th>书籍ID</th>\n" +
-             "        <th>书名</th>\n" +
-             "        <th>单价</th>\n" +
-             "        <th>类型</th>\n" +
-             "        <th>商家ID</th>\n" +
-             "        <th>库存</th>\n" +
-             "        <th>修改</th>\n" +
-             "        <th>下架</th>\n" +
-             "       </tr>");
-     alert("head");*/
-     if (data!="" && data != null){
 
+     if (data!="" && data != null){
       for (var i = 0; i < data.length; i++) {
-       /*$("#t_books").append("<tr>\n" +
-               "        <td class='center'><img width='50' height='50' th:src="+data[i].bpic+"></td>\n" +
-               "        <td class='center'><span th:text="+data[i].bid+"></span></td>\n" +
-               "        <td class='center'><span th:text="+data[i].bname+"></span></td>\n" +
-               "        <td class='center'><strong class='rmb_icon'><span th:text='"+data[i].bprice+"></span></strong></td>\n" +
-               "        <td class='center'><span th:text="+data[i].booktype+"></span></td>\n" +
-               "        <td class='center'><span th:text="+data[i].mid+"></span></td>\n" +
-               "        <td class='center'><span th:text="+data[i].bnum+"></span></td>\n" +
-               "        <td class='center'><a href='/product_detail' title='编辑' class='link_icon'>&#101;</a></td>\n" +
-               "        <td class='center'><a href='#' title='下架' class='link_icon'>&#100;</a></td>\n" +
-               "       </tr>");*/
        table += "<tr>\n" +
-               "        <td class='center'><img width='50' height='50' th:src="+data[i].bpic+"></td>\n" +
-               "        <td class='center'><span th:text="+data[i].bid+"></span></td>\n" +
-               "        <td class='center'><span th:text="+data[i].bname+"></span></td>\n" +
-               "        <td class='center'><strong class='rmb_icon'><span th:text='"+data[i].bprice+"></span></strong></td>\n" +
-               "        <td class='center'><span th:text="+data[i].booktype+"></span></td>\n" +
-               "        <td class='center'><span th:text="+data[i].mid+"></span></td>\n" +
-               "        <td class='center'><span th:text="+data[i].bnum+"></span></td>\n" +
+               "        <td class='center'><img width='50' height='50' src="+data[i].bpic+"></td>\n" +
+               "        <td class='center'><span >"+data[i].bid+"</span></td>\n" +
+               "        <td class='center'><span>"+data[i].bname+"</span></td>\n" +
+               "        <td class='center'><strong class='rmb_icon'><span>"+data[i].bprice+"</span></strong></td>\n" +
+               "        <td class='center'><span>"+data[i].booktype+"</span></td>\n" +
+               "        <td class='center'><span>"+data[i].mid+"</span></td>\n" +
+               "        <td class='center'><span>"+data[i].bnum+"</span></td>\n" +
                "        <td class='center'><a href='/product_detail' title='编辑' class='link_icon'>&#101;</a></td>\n" +
                "        <td class='center'><a href='#' title='下架' class='link_icon'>&#100;</a></td>\n" +
                "       </tr>";
@@ -89,7 +64,6 @@
 
      }
      table += "</table>"
-     /*$("#t_books").append("</table>");*/
      $("#t_books").html(table);
     },
     error:function(){
@@ -122,7 +96,7 @@
     <dt>商品信息</dt>
     <!--当前链接则添加class:active-->
     <dd><a href="/findAllBook" class="active">商品检索管理</a></dd>
-    <dd><a href="/addBook" >上架新商品</a></dd>
+    <dd><a href="/addPage" >上架新商品</a></dd>
     <dd><a href="recycle_bin.html">下架商品管理</a></dd>
     <dd><a href="user_list.html">评价管理</a></dd>
     
