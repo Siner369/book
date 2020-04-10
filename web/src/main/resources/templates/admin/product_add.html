@@ -1,180 +1,242 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8"/>
-<title>后台管理系统</title>
-<meta name="author" content="DeathGhost" />
-<link rel="stylesheet" type="text/css" href="/css/style.css">
-<!--[if lt IE 9]>
+    <meta charset="utf-8"/>
+    <title>后台管理系统</title>
+    <meta name="author" content="DeathGhost"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
+    <!--[if lt IE 9]>
     <script src="/js/html5.js"></script>
     <![endif]-->
-<script src="/js/jquery.js"></script>
-<script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
-<script src="/js/cookie.js"></script>
-<script src="/js/base.js"></script>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script src="/js/base.js"></script>
+    <script src="/js/jsonHandler.js"></script>
+    <script src="/layui/layui.js"></script>
     <script>
-    $(function () {
-        $("#bookMsg").submit(function (data) {
-            console.info("进入了工厂确定函数");
-            //1.发送数据到服务器
-            var strdata = $("#bookMsg").serializeObject();
-            var str = JSON.stringify(strdata);
-            alert(str);
-            /*console.info("bname"+checkUsername());
-            console.info("booktype"+checkTel());
-            console.info("bpic"+doubleCheck());
-            console.info("bprice"+checkEmail());
-            console.info("mid"+checkPassword());
-            console.info("bnum"+checkPassword());*/
-
-            if (checkNotNull() && checkNotNum()){
-                console.info("校验五个测试通过");
-                $.ajax({
-                    url:"/doReg",
-                    contentType:"application/json;charset=UTF-8",
-                    type:"post",
-                    data:str,
-                    dataType:"json",
-                    success:function (data) {
-                        //注册成功，跳转成功页面
-                        if (data){
-                            console.info("跳转index");
-                            location.href="index.html";
+        $(function () {
+            $("#bookMsg").submit(function () {
+                var strdata = $("#bookMsg").serializeObject();
+                var str = JSON.stringify(strdata);
+                alert(str);
+                if (checkNotNull() && checkNotNum()) {
+                    alert("校验2个测试通过");
+                    $.ajax({
+                        url: "/addBook",
+                        contentType: "application/json;charset=UTF-8",
+                        type: "post",
+                        data: str,
+                        dataType: "json",
+                        success: function (data) {
+                            //注册成功，跳转成功页面
+                            if (data.msg == "success") {
+                                alert("新增成功");
+                            } else {
+                                alert("新增失败");
+                            }
+                        },
+                        error: function () {
+                            console.info("Error");
                         }
-                    },
-                    error:function(){
-                        console.info("Error");
+                    });
+                } else {
+                    alert("请按格式填写数据");
+                }
+                //2.不让页面跳转
+                return false;
+                //如果这个方法没有返回值，或者返回为true，则表单提交，如果返回为false，则表单不提交
+            });
+
+            ///上传图片执行
+            layui.use('upload', function(){
+                var $ = layui.jquery
+                    ,upload = layui.upload;
+
+                //普通图片上传
+                var uploadInst = upload.render({
+                    elem: '#btn_upload'
+                    ,url: '/addBook_Pic'
+                    ,accept:'images'
+                    ,size:50000
+                    ,before: function(obj){
+
+                        obj.preview(function(index, file, result){
+                            $('#demo1').attr('src', result);
+                        });
+                    }
+                    ,done: function(res){
+                        //如果上传失败
+                        if(res.code > 0){
+                            return layer.msg('上传失败');
+                        }
+                        //上传成功
+                        var demoText = $('#demoText');
+                        demoText.html('<span style="color: #4cae4c;">上传成功</span>');
+                        var fileupload = $(".image");
+                        fileupload.attr("value",res.data.src);
+                        console.log(fileupload.attr("value"));
+                    }
+                    ,error: function(){
+                        //演示失败状态，并实现重传
+                        var demoText = $('#demoText');
+                        demoText.html('<span style="color: #FF5722;">上传失败111</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                        demoText.find('.demo-reload').on('click', function(){
+                            uploadInst.upload();
+                        });
                     }
                 });
-            }
-            //2.不让页面跳转
-            return false;
-            //如果这个方法没有返回值，或者返回为true，则表单提交，如果返回为false，则表单不提交
-        })
-    })
+
+            });
+            ///上传图片完成
+
+            //完成
+        });
+
         function checkNotNull() {
-        var bname = $("#bname");
-        var booktype = $("#booktype");
-        var mid = $("#mid");
+            var bname = $("#bname").val();
+            var booktype = $("#booktype").val();
 
-        return false;
+            // var bpic = $("#bpic");
+            var bnum = $("#bnum").val();
+            var bprice = $("#bprice").val();
 
+            if (bname != null && bname != "" && booktype != 0 &&
+                bnum != null && bnum != "" && bprice != null && bprice != "") {
+                return true;
+            }
+            return false;
         }
 
         function checkNotNum() {
-            var bname = $("#bname");
-            var booktype = $("#booktype");
-            var mid = $("#mid");
+            var bprice = $("#bprice").val();
+            var bnum = $("#bnum").val();
 
-        return false;
-
+            var reg = /^([1-9][0-9]*)+(.[0-9]{1,2})?$/;
+            var flag1 = reg.test(bnum);
+            var flag2 = reg.test(bprice);
+            if (flag1 && flag2) {
+                return true;
+            }
+            // var mid = $("#mid");
+            return false;
         }
-</script>
+
+    </script>
 </head>
 <body>
 <!--header-->
 <header>
- <h1><img src="/images/admin_logo.png"/></h1>
- <ul class="rt_nav">
-  <li><a href="#" target="_blank" class="website_icon">站点首页</a></li>
-  <li><a href="#" class="clear_icon">清除缓存</a></li>
-     <li><a th:text="${session.mname}" class="admin_icon"></a></li>
-     <li><a href="#" class="set_icon">账号设置</a></li>
-     <li><a href="login.html" onclick="return logout()" class="quit_icon">安全退出</a></li>
- </ul>
+    <h1><img src="/images/admin_logo.png"/></h1>
+    <ul class="rt_nav">
+        <li><a href="#" target="_blank" class="website_icon">站点首页</a></li>
+        <li><a href="#" class="clear_icon">清除缓存</a></li>
+        <li><a th:text="${session.mname}" class="admin_icon"></a></li>
+        <li><a href="#" class="set_icon">账号设置</a></li>
+        <li><a href="login.html" onclick="return logout()" class="quit_icon">安全退出</a></li>
+    </ul>
 </header>
 <!--aside nav-->
 <!--aside nav-->
 <aside class="lt_aside_nav content mCustomScrollbar">
- <h2><a href="/admin/index">后台中心</a></h2>
- <ul>
-  <li>
-   <dl>
-    <dt>商品信息</dt>
-    <!--当前链接则添加class:active-->
-    <dd><a href="/findBook">商品检索管理</a></dd>
-    <dd><a href="/addPage">上架新商品</a></dd>
-    <dd><a href="recycle_bin.html">下架商品管理</a></dd>
-    <dd><a href="user_list.html">评价管理</a></dd>
-   </dl>
-  </li>
-  
-  <li>
-   <dl>
-    <dt>订单信息</dt>
-    <dd><a href="order_list.html">订单管理</a></dd>
-    <!--<dd><a href="order_detail.html">订单详情</a></dd>-->
-   </dl>
-  </li>
-  <li>
-   <dl>
-    <dt>会员管理</dt>
-    <dd><a href="user_list.html">会员列表</a></dd>
-    <dd><a href="user_detail.html">会员详情</a></dd>
-   </dl>
-  </li>
+    <h2><a href="/admin/index">后台中心</a></h2>
+    <ul>
+        <li>
+            <dl>
+                <dt>商品信息</dt>
+                <!--当前链接则添加class:active-->
+                <dd><a href="/findAllBook">商品检索管理</a></dd>
+                <dd><a href="/addPage">上架新商品</a></dd>
+                <dd><a href="recycle_bin.html">下架商品管理</a></dd>
+                <dd><a href="user_list.html">评价管理</a></dd>
+            </dl>
+        </li>
 
-  <li>
-   <p class="btm_infor">©1606401-13 YeXing</p>
-  </li>
- </ul>
+        <li>
+            <dl>
+                <dt>订单信息</dt>
+                <dd><a href="order_list.html">订单管理</a></dd>
+                <!--<dd><a href="order_detail.html">订单详情</a></dd>-->
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>会员管理</dt>
+                <dd><a href="user_list.html">会员列表</a></dd>
+                <dd><a href="user_detail.html">会员详情</a></dd>
+            </dl>
+        </li>
+
+        <li>
+            <p class="btm_infor">©1606401-13 YeXing</p>
+        </li>
+    </ul>
 </aside>
 
 <section class="rt_wrap content mCustomScrollbar">
- <div class="rt_content">
-      <div class="page_title">
-       <h2 class="fl">商品详情示例</h2>
-       <a class="fr top_rt_btn">返回产品列表</a>
-      </div>
-     <section>
-    <form id="bookMsg"><!--/addBook-->
-      <ul class="ulColumn2">
-       <li>
-        <span class="item_name" style="width:120px;">商品名称：</span>
-        <input id="bname" name="bname" type="text" class="textbox textbox_295" placeholder="商品名称..."/>
-        <span class="errorTips">错误提示信息...</span>
-       </li>
-          <li>
-              <span class="item_name" style="width:120px;">书籍类型：</span>
-              <select name="booktype" id="booktype" class="select">
-                  <option value="0">选择产品分类</option>
-                  <option value="social">人文社科类</option>
-                  <option value="novel">小说类</option>
-                  <option value="edu">教育类</option>
-              </select>
-              <span class="errorTips">错误提示信息...</span>
-          </li>
-       <li>
-        <span class="item_name" style="width:120px;">商家ID：</span>
-           <input name="mid" id="mid" type="text" disabled="disabled" th:value="${session.usertype}" class="textbox" />
-        <span class="errorTips">错误提示信息...</span>
-       </li>
-          <li>
-              <span class="item_name" style="width:120px;">售价：</span>
-              <input type="text" id="bprice" name="bprice" class="textbox" placeholder="0.00"/> 元
-              <span class="errorTips">错误提示信息...</span>
-          </li>
-          <li>
-              <span class="item_name" style="width:120px;">库存：</span>
-              <input type="text" id="bnum" name="bnum" class="textbox" placeholder="1000"/> 本
-              <span class="errorTips">错误提示信息...</span>
-          </li>
+    <div class="rt_content">
+        <div class="page_title">
+            <h2 class="fl">商品详情示例</h2>
+            <a class="fr top_rt_btn">返回产品列表</a>
+        </div>
+        <section>
+            <form id="bookMsg"><!--/addBook-->
+                <ul class="ulColumn2">
+                    <li>
+                        <span class="item_name" style="width:120px;">商品名称：</span>
+                        <input id="bname" name="bname" type="text" class="textbox textbox_295" placeholder="商品名称..."/>
 
-       <li>
-        <span class="item_name" style="width:120px;">上传图片：</span>
-        <label class="uploadImg">
-         <input name="bpic" id="bpic" type="file"/>
-         <span>上传图片</span>
-        </label>
-       </li>
-       <li>
-        <span class="item_name" style="width:120px;"></span>
-        <input type="submit"  class="link_btn"/>
-       </li>
-      </ul>
-         </form>
-     </section>
- </div>
+                    </li>
+                    <li>
+                        <span class="item_name" style="width:120px;">书籍类型：</span>
+                        <select name="booktype" id="booktype" class="select">
+                            <option value="0">选择产品分类</option>
+                            <option value="social">人文社科类</option>
+                            <option value="novel">小说类</option>
+                            <option value="edu">教育类</option>
+                        </select>
+
+                    </li>
+                    <li>
+                        <span class="item_name" style="width:120px;">商家ID：</span>
+                        <input name="mid" id="mid" type="text" readonly="readonly" th:value="${session.usertype}"
+                               class="textbox"/>
+
+                    </li>
+                    <li>
+                        <span class="item_name" style="width:120px;">售价：</span>
+                        <input type="text" id="bprice" name="bprice" class="textbox" placeholder="0.00"/> 元
+
+                    </li>
+                    <li>
+                        <span class="item_name" style="width:120px;">库存：</span>
+                        <input type="text" id="bnum" name="bnum" class="textbox" placeholder="1000"/> 本
+
+                    </li>
+
+                    <li>
+                        <label class="item_name" style="width:120px;">上传图片：</label>
+                        <input type="hidden" name="images" class="image">
+                        <div class="layui-form-item" style="margin-left:100px">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn" id="btn_upload">上传图片</button>
+                                <div class="layui-upload-list">
+                                    <img class="layui-upload-img" id="demo1" style="width:150px; height: 150px;">
+                                    <p id="demoText"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li>
+                        <span class="item_name" style="width:120px;"></span>
+                        <input type="submit" class="link_btn"/>
+                    </li>
+                </ul>
+            </form>
+        </section>
+    </div>
 </section>
 
 </body>

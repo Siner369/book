@@ -31,4 +31,9 @@ public class IndexController {
         return "admin/login";
     }
 
+    @RequestMapping("layui")
+    public String toTest() {
+        return "admin/layui";
+    }
+
 }

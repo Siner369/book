@@ -10,11 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller("BookController")
 public class BookController {
@@ -64,6 +69,70 @@ public class BookController {
             return json.toString();
         }
     }
+
+
+    //  添加新书 添加图片
+    //图片上传测试
+    @ResponseBody
+    @RequestMapping("/addBook_Pic")
+    public Map upload(MultipartFile file, HttpServletRequest request){
+
+        String path = "";
+        String prefix="";
+        //保存上传
+        OutputStream out = null;
+        InputStream fileInput=null;
+        try{
+            if(file!=null){
+                String pathRoot = System.getProperty("user.dir");// 获取项目物理地址
+                System.out.println(pathRoot);
+                pathRoot += "/src/main/resources/";
+                System.out.println("物理路径："+pathRoot);
+                /* String originalName = file.getOriginalFilename();
+                prefix=originalName.substring(originalName.lastIndexOf(".")+1);*/
+                String uuid = UUID.randomUUID().toString().replaceAll("-","");
+                String contentType = file.getContentType();
+                System.out.println("类型："+contentType);
+                String ImgName = contentType.substring(contentType.indexOf("/")+1);
+                path = "static/upload/"+uuid+"."+ImgName;
+                String srcPath = "/upload/"+uuid+"." + contentType;
+                File files=new File(path);
+                //打印查看上传路径
+                System.out.println(path);
+                if(!files.getParentFile().exists()){
+                    files.getParentFile().mkdirs();
+                }
+                file.transferTo(new File(pathRoot+path));
+                Map<String,Object> map2=new HashMap<>();
+                Map<String,Object> map=new HashMap<>();
+                map.put("code",0);
+                map.put("msg","");
+                map.put("data",map2);
+                map2.put("src",srcPath);
+                System.out.println(map2.get("src"));
+                return map;
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally{
+            try {
+                if(out!=null){
+                    out.close();
+                }
+                if(fileInput!=null){
+                    fileInput.close();
+                }
+            } catch (IOException e) {
+            }
+        }
+        Map<String,Object> map=new HashMap<>();
+        map.put("code",1);
+        map.put("msg","");
+        return map;
+
+    }
+
 
 
 
