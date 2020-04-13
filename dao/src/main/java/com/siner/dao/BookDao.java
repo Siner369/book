@@ -10,18 +10,24 @@ import java.util.List;
 public interface BookDao {
 
    /* //前台  关键词检索
-    public List<Book> keyWordSearch(String bname);
+    List<Book> keyWordSearch(String bname);
 
     //前台  分类检索
-    public List<Book> categorySearch(String booktype);
+    List<Book> categorySearch(String booktype);
 */
     //后台 检索全部书籍
-    public List<Book> findAllBook();
+    List<Book> findAllBook();
 
     //后台 关键词检索书籍
-    public List<Book> searchBookByName(@Param("bookname")String bname);
+    List<Book> searchBookByName(@Param("bookname")String bname);
 
     //后台 新增书籍
-    public int addBook(Book book);
+    int addBook(Book book);
 
+    //后台 删除书籍
+    int delBook(String bid);
+
+    Book searchBookByID(int bid);
+
+    int updateBook(Book book);
 }

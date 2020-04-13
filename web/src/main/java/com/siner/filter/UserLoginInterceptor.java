@@ -10,7 +10,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class UserLoginInterceptor implements HandlerInterceptor {
-   /* protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
+    protected org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
@@ -26,5 +26,5 @@ public class UserLoginInterceptor implements HandlerInterceptor {
             response.sendRedirect("/login");//跳到登录页面
             return false;
         }
-    }*/
+    }
 }

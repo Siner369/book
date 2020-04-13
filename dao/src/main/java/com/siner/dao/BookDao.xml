@@ -7,18 +7,8 @@
         <result property="bname" column="bname"/>
         <result property="booktype" column="booktype"/>
         <result property="bpic" column="bpic"/>
-        <result property="mid" column="mid"/>
         <result property="bprice" column="bprice"/>
         <result property="bnum" column="bnum"/>
-
-
-        <association property="comments" javaType="com.siner.entity.Comments">
-            <id property="cid" column="cid"/>
-            <result property="uid" column="uid"/>
-            <result property="bid" column="bid"/>
-            <result property="oid" column="oid"/>
-            <result property="cscore" column="cscore"/>
-        </association>
     </resultMap>
 
     <!--<insert id="register" parameterType="com.hntest.entity.Logininfo">
@@ -32,10 +22,23 @@
 
     <select id="searchBookByName" resultMap="BookMap" parameterType="java.lang.String">
         select * from book b left join comments c on b.bid = c.bid where b.bname like  concat('%',#{bookname},'%');
+    </select>   <!---->
+
+    <select id="searchBookByID" resultType="com.siner.entity.Book" parameterType="int">
+        select * from book b  where bid = #{bid}
     </select>
 
     <insert id="addBook" parameterType="com.siner.entity.Book">
-        insert into book values(#{bname},#{booktype},#{bpic},#{mid},
+        insert into book(bname,booktype,bpic,bprice,bnum) values(#{bname},#{booktype},#{bpic},
         #{bprice},#{bnum})
 	</insert>
+    
+    <delete id="delBook" parameterType="java.lang.String">
+        delete from book where bid = #{bid}
+    </delete>
+
+    <update id="updateBook"  parameterType="com.siner.entity.Book">
+        update book set bname = #{bname},booktype=#{booktype},bpic=#{bpic},bprice=#{bprice},bnum=#{bnum}
+        where bid = #{bid}
+    </update>
 </mapper>

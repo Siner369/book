@@ -17,6 +17,36 @@
     <script src="/layui/layui.js"></script>
     <script>
         $(function () {
+            /*$(window).unload(function(){
+                //响应事件
+                alert("获取到了页面要关闭的事件了！");
+            });*/
+            /////////////////////////////1
+            /*
+                        $(window).bind('beforeunload',function(){
+                            alert(" 临时图片删除 函数");
+                            if (confirm('您输入的内容尚未保存，确定离开此页面吗1111？')) {
+                                $.ajax({
+                                    url: "/cancelUpload",
+                                    contentType: "application/json;charset=UTF-8",
+                                    type: "post",
+                                    data: cookie.getCookie("fullPath"),
+                                    dataType: "json",
+                                    success: function (data) {
+                                        //注册成功，跳转成功页面
+                                        if (data.msg == "success") {
+                                            alert("删除临时图片成功");
+                                        } else {
+                                            alert("删除临时图片失败");
+                                        }
+                                    },
+                                    error: function () {
+                                        console.info("Error");
+                                    }
+                                });
+                            }
+                        });*/
+            ///////////////
             $("#bookMsg").submit(function () {
                 var strdata = $("#bookMsg").serializeObject();
                 var str = JSON.stringify(strdata);
@@ -76,6 +106,7 @@
                         demoText.html('<span style="color: #4cae4c;">上传成功</span>');
                         var fileupload = $(".image");
                         fileupload.attr("value",res.data.src);
+                        cookie.setCookie("uploadPath",res.data.fullPath);
                         console.log(fileupload.attr("value"));
                     }
                     ,error: function(){
@@ -89,10 +120,8 @@
                 });
 
             });
-            ///上传图片完成
-
-            //完成
         });
+
 
         function checkNotNull() {
             var bname = $("#bname").val();
@@ -122,6 +151,14 @@
             // var mid = $("#mid");
             return false;
         }
+        //临时图片删除
+        window.addEventListener('unload', logData, false);
+
+        function logData() {
+            navigator.sendBeacon('/log', analyticsData);
+        }
+
+
 
     </script>
 </head>
@@ -148,8 +185,8 @@
                 <!--当前链接则添加class:active-->
                 <dd><a href="/findAllBook">商品检索管理</a></dd>
                 <dd><a href="/addPage">上架新商品</a></dd>
-                <dd><a href="recycle_bin.html">下架商品管理</a></dd>
-                <dd><a href="user_list.html">评价管理</a></dd>
+                <dd><a href="#">下架商品管理</a></dd>
+                <dd><a href="#">评价管理</a></dd>
             </dl>
         </li>
 
@@ -177,7 +214,7 @@
 <section class="rt_wrap content mCustomScrollbar">
     <div class="rt_content">
         <div class="page_title">
-            <h2 class="fl">商品详情示例</h2>
+            <h2 class="fl">新增书籍</h2>
             <a class="fr top_rt_btn">返回产品列表</a>
         </div>
         <section>
@@ -198,12 +235,12 @@
                         </select>
 
                     </li>
-                    <li>
+                    <!--<li>
                         <span class="item_name" style="width:120px;">商家ID：</span>
                         <input name="mid" id="mid" type="text" readonly="readonly" th:value="${session.usertype}"
                                class="textbox"/>
 
-                    </li>
+                    </li>-->
                     <li>
                         <span class="item_name" style="width:120px;">售价：</span>
                         <input type="text" id="bprice" name="bprice" class="textbox" placeholder="0.00"/> 元

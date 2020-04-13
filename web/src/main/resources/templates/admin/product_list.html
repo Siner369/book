@@ -21,7 +21,6 @@
   function searchByName() {
 
    var bookname= $("#bookname").val();
-   alert("关键字搜索:"+bookname);
    $.ajax({
     url:"/searchByName",
     type:"post",
@@ -55,8 +54,8 @@
                "        <td class='center'><span>"+data[i].booktype+"</span></td>\n" +
                "        <td class='center'><span>"+data[i].mid+"</span></td>\n" +
                "        <td class='center'><span>"+data[i].bnum+"</span></td>\n" +
-               "        <td class='center'><a href='/product_detail' title='编辑' class='link_icon'>&#101;</a></td>\n" +
-               "        <td class='center'><a href='#' title='下架' class='link_icon'>&#100;</a></td>\n" +
+               "        <td class='center'><a href='/updatePage(id="+data[i].bid+")}' title='编辑' class='link_icon'>&#101;</a></td>\n" +
+               "        <td class='center'><a href='#' th:onclick='javascript:return del("+ [[data.bid]]+ ")' title='下架' class='link_icon'>&#100;</a></td>\n" +
                "       </tr>";
       }
 
@@ -71,6 +70,33 @@
 
     }
    });
+  }
+
+  /////删除书籍
+  function del(bid){
+   var flag = confirm("确定删除？");
+   if (flag==true) {
+    $.ajax({
+     url: "/delBook",
+     type: "post",
+     data: {bid:bid},
+     dataType: "text",
+     success: function (data) {
+      //注册成功，跳转成功页面
+      alert(data);
+      if (data != null && data!= "") {
+       alert("删除成功！");
+      }else {
+       alert("删除失败！");
+      }
+     },
+     error: function (){
+      alert("后台错误");
+     }
+    });//ajax完
+    return true;
+   } //if确认框完
+   return  false;
   }
 </script>
 </head>
@@ -97,12 +123,11 @@
     <!--当前链接则添加class:active-->
     <dd><a href="/findAllBook" class="active">商品检索管理</a></dd>
     <dd><a href="/addPage" >上架新商品</a></dd>
-    <dd><a href="recycle_bin.html">下架商品管理</a></dd>
-    <dd><a href="user_list.html">评价管理</a></dd>
+    <dd><a href="#">下架商品管理</a></dd>
+    <dd><a href="#">评价管理</a></dd>
     
    </dl>
 </li>
-
   <li>
    <dl>
     <dt>订单信息</dt>
@@ -146,7 +171,6 @@
         <th>书名</th>
         <th>单价</th>
         <th>类型</th>
-        <th>商家ID</th>
         <th>库存</th>
         <th>修改</th>
         <th>下架</th>
@@ -157,22 +181,21 @@
         <td class="center"><span th:text="${book.bname}"></span></td>
         <td class="center"><strong class="rmb_icon"><span th:text="${book.bprice}"></span></strong></td>
         <td class="center"><span th:text="${book.booktype}"></span></td>
-        <td class="center"><span th:text="${book.mid}"></span></td>
         <td class="center"><span th:text="${book.bnum}"></span></td>
-        <td class="center"><a href="/product_detail" title="编辑" class="link_icon">&#101;</a></td>
-        <td class="center"><a href="#" title="下架" class="link_icon">&#100;</a></td>
+        <td class="center"><a th:href="@{/updatePage(bid=${book.bid})}" title="编辑" class="link_icon">&#101;</a></td>
+        <td class="center"><a href="#" th:onclick="'javascript:return del(\''+${book.bid}+'\')'" title="下架" class="link_icon">&#100;</a></td>
        </tr>
-      <!-- <tr>
-        <td class="center"><img src="/upload/goods02.jpg" width="50" height="50"/></td>
-        <td>这里是产品名称</td>
-        <td class="center">A15902</td>
-        <td class="center"><strong class="rmb_icon">59.00</strong></td>
-        <td class="center">教育</td>
-        <td class="center">1</td>
-        <td class="center">5559</td>
-        <td class="center"><a href="product_detail.html" title="编辑" class="link_icon">&#101;</a></td>
-        <td class="center"><a href="#" title="下架" class="link_icon">&#100;</a></td>
-       </tr>-->
+       <!-- <tr>
+         <td class="center"><img src="/upload/goods02.jpg" width="50" height="50"/></td>
+         <td>这里是产品名称</td>
+         <td class="center">A15902</td>
+         <td class="center"><strong class="rmb_icon">59.00</strong></td>
+         <td class="center">教育</td>
+         <td class="center">1</td>
+         <td class="center">5559</td>
+         <td class="center"><a href="product_detail.html" title="编辑" class="link_icon">&#101;</a></td>
+         <td class="center"><a href="#" title="下架" class="link_icon">&#100;</a></td>
+        </tr>-->
       </table>
       <aside class="paging">
        <a>第一页</a>

@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableCaching
 @Configuration
 public class UserLoginAdapter implements WebMvcConfigurer {
-    /*@Autowired
+    @Autowired
     private UserLoginInterceptor userLoginInterceptor;
 
     @Override
@@ -22,6 +22,5 @@ public class UserLoginAdapter implements WebMvcConfigurer {
                       )//排除样式、脚本、图片等资源文件
                 .excludePathPatterns("/admin/login")//排除登录验证
                 .excludePathPatterns("/login");//排除登录页面
-
-    }*/
+    }
 }

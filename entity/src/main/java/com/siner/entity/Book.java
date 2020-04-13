@@ -12,7 +12,6 @@ public class Book {
     private String bname;
     private String booktype;
     private String bpic;
-    private int mid;
     private double bprice;
     private int bnum;
     private Comments comments;

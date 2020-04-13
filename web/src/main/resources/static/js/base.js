@@ -29,10 +29,12 @@ function logout() {
                 if (data.logout == "success") {
                     cookie.removeCookie(mname);
                     cookie.removeCookie(usertype);
+                    location.href="http://localhost:8080/admin/login.html";
                 }
             },
             error: function () {
                 alert("后台错误");
+                location.href="http://localhost:8080/admin/login.html";
             }
         });
         //ajax完

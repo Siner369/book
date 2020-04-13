@@ -21,6 +21,8 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.siner.util.FileUtils.deleteDir;
+
 @Controller("BookController")
 public class BookController {
     @Autowired
@@ -28,13 +30,14 @@ public class BookController {
 
     @RequestMapping("findAllBook")
     public String findAll(Model model, HttpSession session) {
-
         List<Book> list = new ArrayList<Book>();
         list = bookService.findAllBook();
         System.out.println(list);
         model.addAttribute("books",list);
         return "admin/product_list";
     }
+
+
     //执行管理员登录方法
     @RequestMapping(value = "searchByName", method = {RequestMethod.POST},
             produces = "application/json;charset=UTF-8")
@@ -49,7 +52,6 @@ public class BookController {
 
     @RequestMapping("addPage")
     public String addPage() {
-
         return "admin/product_add";
     }
 
@@ -57,15 +59,15 @@ public class BookController {
     @RequestMapping(value = "addBook", method = {RequestMethod.POST},
             produces = "application/json;charset=UTF-8")
     public @ResponseBody
-    String addBook(@RequestBody Book book) {
+    String addBook(@RequestBody Book book,HttpSession session) {
         System.out.println(book);
         boolean addFlag = bookService.addBook(book);
         JSONObject json = new JSONObject();
         if (addFlag) {
-            json.put("add","success");
+            json.put("msg","success");
             return json.toString();
         } else {
-            json.put("add","error");
+            json.put("msg","error");
             return json.toString();
         }
     }
@@ -75,30 +77,25 @@ public class BookController {
     //图片上传测试
     @ResponseBody
     @RequestMapping("/addBook_Pic")
-    public Map upload(MultipartFile file, HttpServletRequest request){
+    public Map upload(MultipartFile file,HttpSession session, HttpServletRequest request){
 
         String path = "";
-        String prefix="";
+        String suffix="";
         //保存上传
         OutputStream out = null;
         InputStream fileInput=null;
         try{
             if(file!=null){
                 String pathRoot = System.getProperty("user.dir");// 获取项目物理地址
-                System.out.println(pathRoot);
                 pathRoot += "/src/main/resources/";
-                System.out.println("物理路径："+pathRoot);
-                /* String originalName = file.getOriginalFilename();
-                prefix=originalName.substring(originalName.lastIndexOf(".")+1);*/
+                //获取后缀
+                String originalName = file.getOriginalFilename();
+                suffix=originalName.substring(originalName.lastIndexOf(".")+1);
                 String uuid = UUID.randomUUID().toString().replaceAll("-","");
-                String contentType = file.getContentType();
-                System.out.println("类型："+contentType);
-                String ImgName = contentType.substring(contentType.indexOf("/")+1);
-                path = "static/upload/"+uuid+"."+ImgName;
-                String srcPath = "/upload/"+uuid+"." + contentType;
+                path = "static/images/"+uuid+"."+suffix;
+                String srcPath = "/images/"+uuid+"." + suffix;
                 File files=new File(path);
                 //打印查看上传路径
-                System.out.println(path);
                 if(!files.getParentFile().exists()){
                     files.getParentFile().mkdirs();
                 }
@@ -109,10 +106,10 @@ public class BookController {
                 map.put("msg","");
                 map.put("data",map2);
                 map2.put("src",srcPath);
-                System.out.println(map2.get("src"));
+                map2.put("fullPath",pathRoot+path);
+                session.setAttribute("currPicPath",srcPath);
                 return map;
             }
-
         }catch (Exception e){
             e.printStackTrace();
         }finally{
@@ -130,11 +127,66 @@ public class BookController {
         map.put("code",1);
         map.put("msg","");
         return map;
-
     }
 
+    //取消上传图片
+    @RequestMapping(value = "cancelUpload" , method = {RequestMethod.POST},
+            produces = "application/json;charset=UTF-8")
+    public @ResponseBody
+    String cancelUpload(String src) {
+        boolean flag = deleteDir(src);
+        JSONObject json = new JSONObject();
+        if (flag) {
+            json.put("msg","success");
+            return json.toString();
+        } else {
+            json.put("msg","error");
+            return json.toString();
+        }
+    }
 
+    //删除商品
+    @PostMapping(value = "delBook" )
+    public @ResponseBody String delBook(String bid) {
+        //删除图片
+        Book b = bookService.searchBookByID(Integer.valueOf(bid));
+        boolean flag2 = deleteDir(b.getBpic());
 
+        //删除数据库文件
+        boolean flag1 = bookService.delBook(bid);
+
+         JSONObject json = new JSONObject();
+            System.out.println("数据库："+flag1+"图片："+flag2);
+            if (flag1 && flag2) {
+                json.put("del", "success");
+                return json.toString();
+            } else {
+                return json.toString();
+            }
+    }
+
+    @GetMapping(value = "updatePage")
+    public String modifyPage(String bid,HttpSession session){
+        Book b = bookService.searchBookByID(Integer.valueOf(bid));
+        session.setAttribute("updateBook",b);
+        return  "admin/product_detail";
+    }
+
+    @PostMapping(value = "updateBook")
+    public @ResponseBody String updateBook(@RequestBody Book book){
+      //  book.setBpic(session.getAttribute("currPicPath").toString());
+        System.out.println(book);
+        deleteDir(book.getBpic());
+        boolean addFlag = bookService.updateBook(book);
+        JSONObject json = new JSONObject();
+        if (addFlag) {
+            json.put("update","success");
+            return json.toString();
+        } else {
+            json.put("update","error");
+            return json.toString();
+        }
+    }
 
 
 }
