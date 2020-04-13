@@ -17,9 +17,8 @@ public class UserLoginAdapter implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //添加对用户是否登录的拦截器，并添加过滤项、排除项
-        registry.addInterceptor(userLoginInterceptor).addPathPatterns("/**")
-                .excludePathPatterns("/css/**","/js/**","/bookstore/**"
-                      )//排除样式、脚本、图片等资源文件
+        registry.addInterceptor(userLoginInterceptor).addPathPatterns("/admin/**")
+                .excludePathPatterns("/static/**")//排除样式、脚本、图片等资源文件
                 .excludePathPatterns("/admin/login")//排除登录验证
                 .excludePathPatterns("/login");//排除登录页面
     }
