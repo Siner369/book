@@ -30,4 +30,6 @@ public interface BookDao {
     Book searchBookByID(int bid);
 
     int updateBook(Book book);
+
+    List<Book> searchByType(String booktype);
 }

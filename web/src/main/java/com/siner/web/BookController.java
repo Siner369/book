@@ -29,7 +29,7 @@ public class BookController {
     private BookService bookService;
 
     @RequestMapping("findAllBook")
-    public String findAll(Model model, HttpSession session) {
+    public String findAll(Model model, HttpSession session){
         List<Book> list = new ArrayList<Book>();
         list = bookService.findAllBook();
         System.out.println(list);
@@ -38,16 +38,41 @@ public class BookController {
     }
 
 
-    //执行管理员登录方法
+
     @RequestMapping(value = "searchByName", method = {RequestMethod.POST},
             produces = "application/json;charset=UTF-8")
     public @ResponseBody
-    List searchByName(String bookname,HttpSession session) {
+    List searchByName(String bookname) {
         System.out.println(bookname);
         List<Book> list = bookService.searchBookByName(bookname);
         System.out.println("controller 关键字结果输出："+list);
-
         return list;
+    }
+
+    @GetMapping(value = "keyWordSearch")
+    public String keyWordSearch(String bname,Model model){
+        List<Book> list = bookService.searchBookByName(bname);
+        System.out.println("controller 类型结果输出："+list);
+        model.addAttribute("searchList",list);
+        model.addAttribute("world","hello");
+        return "bookstore/product";
+    }
+
+    @GetMapping(value = "TypeSearch")
+    public String TypeSearch(String bookType,Model model){
+        System.out.println("类型:"+bookType);
+        List<Book> list = bookService.searchByType(bookType);
+        System.out.println("controller 类型结果输出："+list);
+        model.addAttribute("searchList",list);
+        model.addAttribute("world","hello");
+        return "bookstore/product";
+    }
+
+    @GetMapping(value = "proinfo")
+    public String searchByType(String bid,HttpSession session){
+        Book b = bookService.searchBookByID(Integer.valueOf(bid));
+        session.setAttribute("bookInfo",b);
+        return "bookstore/proinfo";
     }
 
     @RequestMapping("addPage")

@@ -16,4 +16,6 @@ public interface BookService {
     Book searchBookByID(int bid);
 
     boolean updateBook(Book book);
+
+    List<Book> searchByType(String booktype);
 }

@@ -17,12 +17,16 @@
 	</insert>-->
 
     <select id="findAllBook" resultMap="BookMap" parameterType="java.lang.String">
-        select * from book b left join comments c on b.bid = c.bid;
+        select * from book b left join comments c on b.bid = c.bid
     </select>
 
     <select id="searchBookByName" resultMap="BookMap" parameterType="java.lang.String">
-        select * from book b left join comments c on b.bid = c.bid where b.bname like  concat('%',#{bookname},'%');
-    </select>   <!---->
+        select * from book b left join comments c on b.bid = c.bid where b.bname like  concat('%',#{bookname},'%')
+    </select>   <!--searchByType-->
+
+    <select id="searchByType" resultMap="BookMap" parameterType="java.lang.String">
+        select * from book b left join comments c on b.bid = c.bid where b.booktype = #{bookname}
+    </select>
 
     <select id="searchBookByID" resultType="com.siner.entity.Book" parameterType="int">
         select * from book b  where bid = #{bid}
