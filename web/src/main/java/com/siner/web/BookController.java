@@ -66,12 +66,13 @@ public class BookController {
         model.addAttribute("searchList",list);
         model.addAttribute("world","hello");
         return "bookstore/product";
-    }
+}
 
     @GetMapping(value = "proinfo")
-    public String searchByType(String bid,HttpSession session){
+    public String searchByType(String bid,Model model){
         Book b = bookService.searchBookByID(Integer.valueOf(bid));
-        session.setAttribute("bookInfo",b);
+        System.out.println(b);
+        model.addAttribute("bookInfo",b);
         return "bookstore/proinfo";
     }
 

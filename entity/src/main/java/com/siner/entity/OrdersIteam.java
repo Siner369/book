@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Orders_iteam {
+public class OrdersIteam {
     private int ooid;//订单物品表ID
     private int bid;//书籍ID
     private int oocount;//购买数量

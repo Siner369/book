@@ -3,29 +3,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>17商城</title>
+<link type="text/css" href="/layui/css/layui.css" rel="stylesheet" />
 <link type="text/css" href="/css/css.css" rel="stylesheet" />
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/js.js"></script>
 <script src="/js/wb.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/MagicZoom.js" type="text/javascript"></script>
- <script>
-    $(function () {
-       function buy() {
-        if (checkeInfo()){
-        //信息充足 可以购买
+<script src="/layui/layui.js" type="text/javascript"></script>
+ <script>function decrNum() {
 
+ }
 
-        }
+ $(function () {
 
-       }
        
        function checkeInfo() {
         var utel = cookie.getCookie("utel");
         var uaddress = cookie.getCookie("uaddress");
         var umailcode = cookie.getCookie("umailcode");
-        $.ajax(
-           
-        )
         if (utel!=null && uaddress!=null && umailcode !=null) {
 
          return true;
@@ -36,6 +31,32 @@
         }
        }
     })
+
+ function buy() {
+  if (checkeInfo()){
+   //信息充足 可以购买
+
+
+  }
+
+ }
+
+ function  decrNum() {
+   var count = $("#BuyCount").text() * 1 ;
+   if (count>1){
+    count = count - 1 ;
+    $("#BuyCount").text(count);
+   }
+ }
+
+ function  addNum() {
+  var count = $("#BuyCount").text() * 1 ;
+  var maxCount = $("#maxCount").text()*1;
+  if (count<maxCount){
+   count = count + 1 ;
+   $("#BuyCount").text(count);
+  }
+ }
  </script>
 </head>
 
@@ -69,7 +90,7 @@
    <div class="gouwuche">
     <div class="gouCar">
      <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;" />&nbsp;|&nbsp;
-     <strong class="red">0</strong>&nbsp;件&nbsp;|
+     <strong class="red">0</strong>&nbsp;本&nbsp;|
      <strong class="red">￥ 0.00</strong> 
      <a href="order.html">去结算</a> <img src="/images/youjian.jpg" width="5" height="8" />
     </div><!--gouCar/-->
@@ -106,72 +127,41 @@
   <div class="cont">
    <div class="contLeft">
     <ul class="leftPorNav">
-     <li><a href="product.html">网络文学</a>
-      <div class="chilInPorNav">
-       <a href="#">玄幻奇幻</a>
-       <a href="#">现代都市</a>
-       <a href="#">武侠仙侠</a>
-      </div><!--chilLeftNav/-->
-     </li>
-     <li><a href="product.html">教育</a>
-      <div class="chilInPorNav">
-       <a href="#">教材</a>
-       <a href="#">考试</a>
-       <a href="#">外语</a>
-      </div><!--chilLeftNav/-->
-     </li>
-     <li><a href="product.html">小说</a>
-      <div class="chilInPorNav">
-       <a href="#">当代小说</a>
-       <a href="#">近代小说</a>
-       <a href="#">古典小说</a>
-      </div><!--chilLeftNav/-->
-     </li>
-     <li><a href="product.html">人文社科</a>
-      <div class="chilInPorNav">
-       <a href="#">历史</a>
-       <a href="#">文化</a>
-       <a href="#">古籍</a>
-
-      </div><!--chilLeftNav/-->
-     </li>
+     <li><a href="/TypeSearch?bookType=network">网络文学</a></li>
+     <li><a href="/TypeSearch?bookType=edu">教育</a></li>
+     <li><a href="/TypeSearch?bookType=novel">小说</a></li>
+     <li><a href="/TypeSearch?bookType=social">人文社科</a></li>
     </ul><!--InPorNav/-->
    </div><!--contLeft/-->
    <div class="contRight" style="border:0;">
    <div class="proBox">
    <div id="tsShopContainer">
-	<div id="tsImgS"><a href="/images/01.jpg" title="Images" class="MagicZoom" id="MagicZoom"><img width="300" height="300" src="/images/01.jpg" /></a></div>
+	<div id="tsImgS"><a th:href="${bookInfo.bpic}" title="Images" class="MagicZoom" id="MagicZoom"><img width="300" height="300" th:src="${bookInfo.bpic}" /></a></div>
 	<div id="tsPicContainer">
 		<div id="tsImgSArrL" onclick="tsScrollArrLeft()"></div>
 		<div id="tsImgSCon">
 			<ul>
-				<li onclick="showPic(0)" rel="MagicZoom" class="tsSelectImg"><img height="42" width="42" src="/images/01.jpg" tsImgS="images/01.jpg" /></li>
-				<!--<li onclick="showPic(1)" rel="MagicZoom"><img height="42" width="42" src="images/02.jpg" tsImgS="images/02.jpg" /></li>
-				<li onclick="showPic(2)" rel="MagicZoom"><img height="42" width="42" src="images/03.jpg" tsImgS="images/03.jpg" /></li>
-				<li onclick="showPic(3)" rel="MagicZoom"><img height="42" width="42" src="images/04.jpg" tsImgS="images/04.jpg" /></li>
-				<li onclick="showPic(4)" rel="MagicZoom"><img height="42" width="42" src="images/05.jpg" tsImgS="images/05.jpg" /></li>
-				<li onclick="showPic(5)" rel="MagicZoom"><img height="42" width="42" src="images/06.jpg" tsImgS="images/06.jpg" /></li>
-				<li onclick="showPic(6)" rel="MagicZoom"><img height="42" width="42" src="images/07.jpg" tsImgS="images/07.jpg" /></li>
-				<li onclick="showPic(7)" rel="MagicZoom"><img height="42" width="42" src="images/08.jpg" tsImgS="images/08.jpg" /></li>
-				<li onclick="showPic(8)" rel="MagicZoom"><img height="42" width="42" src="images/09.jpg" tsImgS="images/09.jpg" /></li>
-				<li onclick="showPic(9)" rel="MagicZoom"><img height="42" width="42" src="images/10.gif" tsImgS="images/10.gif" /></li>
-				<li onclick="showPic(10)" rel="MagicZoom"><img height="42" width="42" src="images/11.gif" tsImgS="images/10.gif" /></li>
--->			</ul>
+				<li onclick="showPic(0)" rel="MagicZoom" class="tsSelectImg"><img height="42" width="42" th:src="${bookInfo.bpic}" th:tsImgS="${bookInfo.bpic}" /></li>
+				</ul>
 		</div>
 		<div id="tsImgSArrR" onclick="tsScrollArrRight()"></div>
 	</div>
-	<img class="MagicZoomLoading" width="16" height="16" src="/images/loading.gif" alt="Loading..." />
+	<img class="MagicZoomLoading" width="16" height="16" th:src="${bookInfo.bpic}" alt="Loading..." />
     <script src="/js/ShopShow.js"></script>
     </div><!--tsShopContainer/-->
     <div class="proBoxRight">
-     <h3 class="proTitle">人生（茅盾文学奖得主路遥代表作，全新精装版）</h3>
-     <div>商品编号： 334011 </div>
-     <div>会员价：<strong class="red">¥25.80</strong> </div>
+     <h3 th:text="${bookInfo.bname}" class="proTitle"></h3>
+     商品编号：<span th:text="${bookInfo.bid}"> </span>
+     <div>会员价：<strong class="red">￥</strong><strong class="red" th:text="${bookInfo.bprice}"></strong></div>
      <div>单位：本 </div>
-     <div>库存：<strong class="red">[有货] </strong> 从上海发货</div>
+     <div>库存剩余：<strong class="red" id="maxCount" th:text="${bookInfo.bnum}"></strong> 本</div>
 
      <div class="shuliang2">
-      数量： <input type="text" value="1" />
+      数量：         <div class="layui-btn-group">
+      <button type="button" onclick="decrNum()" class="layui-btn layui-btn-xs layui-btn-primary num_action">-</button>
+      <button type="button" id="BuyCount" class="layui-btn layui-btn-xs layui-btn-primary num">3</button>
+      <button type="button" onclick="addNum()" class="layui-btn layui-btn-xs layui-btn-primary num_action">+</button>
+     </div>
      </div><!--shuliang2/-->
      <div class="gc">
       <a href="order.html"><img src="/images/goumai.png" width="117" height="36" onclick="buy();"/></a>&nbsp;&nbsp;
