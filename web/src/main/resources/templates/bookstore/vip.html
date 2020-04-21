@@ -1,209 +1,238 @@
 <!DOCTYPE>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>17商城</title>
-<link type="text/css" href="/css/css.css" rel="stylesheet" />
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/js.js"></script>
-<script src="/js/wb.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript">
- $(function(){
-	 $(".vipNav dd:first").show();
-	 })
-</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>17商城</title>
+    <link type="text/css" href="/css/css.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/js.js"></script>
+    <script src="/js/wb.js" type="text/javascript" charset="utf-8"></script>
+    <script th:inline="javascript">
+
+        $(function () {
+            var uname = /*[[${session.currUser.uname}]]*/ 'Sebastian';
+            if (uname == "tourist") {
+                $("#slogan").html("您好！欢迎来到本网上书城请<a href='/bookstore/login'>[登录]</a> <a href='/bookstore/reg'>[注册]</a>");
+
+            } else {
+                var msg = uname + ", 欢迎您来到网上书城！";
+                $("#slogan").html(msg + "<a href='/bookstore/logout' id='logout'>退出</a>");
+            }
+            $(".vipNav dd:first").show();
+        });
+        if (!$("#man").attr('checked')) {
+            $("#woman").val("woman");
+            $("#man").val("");
+        }
+
+        $("#submit").submit(function (){
+            //补全个人信息
+            alert("?");
+           var uid =/*[[${session.currUser.uid}]]*/ 'Sebastian';
+           var uaddress = $("#uaddress").val();
+           var ugender = $("#ugender").val();
+           var umailcode = $("#umailcode").val();
+           alert(uaddress);
+            $.ajax({
+                url: "/bookstore/compleInfo",
+                type: "post",
+                data: {uid:uid,uaddress:uaddress,ugender:ugender,umailcode:umailcode},
+                dataType: "json",
+                success: function (data) {
+                    //注册成功，跳转成功页面
+                    if (data.msg == "success") {
+                        alert("提交成功！");
+                    }
+                },
+                error: function () {
+                    console.info("Error");
+                }
+            });
+        });
+
+
+    </script>
 </head>
 
 <body>
- <div class="mianCont">
-  <div class="top">
-   <span>您好！欢迎来到网上书城 请&nbsp;<a href="login.html">[登录]</a>&nbsp;<a href="reg.html">[注册]</a></span>
-   <span class="topRight">
-    <a href="vip.html">我的17</a>&nbsp;| 
-    <a href="order.html">我的订单</a>&nbsp;| 
-    <a href="login.html">会员中心</a>&nbsp;|
+<div class="mianCont">
+    <div class="top">
+        <span id="slogan">您好！欢迎来到17网上书城 请&nbsp;<a href="login.html">[登录]</a>&nbsp;<a href="reg.html">[注册]</a></span>
+        <span class="topRight">
+    <a href="/bookstore/vip">我的17</a>&nbsp;|
+    <a href="/bookstore/order">我的订单</a>&nbsp;|
+    <a href="/bookstore/vip">会员中心</a>&nbsp;|
     <a href="contact.html">联系我们</a>
    </span>
-  </div><!--top/-->
-  <div class="lsg">
-   <h1 class="logo"><a href="index.html"><img src="/images/logo.png" width="217" height="90" /></a></h1>
-   <form action="/keyWordSearch" method="get" class="subBox">
-    <div class="subBoxDiv">
-     <input type="text" name="bname" class="subLeft" />
-     <input type="submit" src="/images/subimg.png" width="63" height="34" class="sub" />
-     <div class="hotWord">
-      热门搜索：
-      <a href="proinfo.html">人生</a>&nbsp;
-      <a href="proinfo.html">星光的速度</a> &nbsp;
-      <a href="proinfo.html">苏东坡词传</a>&nbsp;
-      <a href="proinfo.html">三体</a>  &nbsp;
-      <a href="proinfo.html">五年高考三年模拟</a>&nbsp;
-     </div><!--hotWord/-->
-    </div><!--subBoxDiv/-->
-   </form><!--subBox/-->
-   <div class="gouwuche">
-    <div class="gouCar">
-     <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;" />&nbsp;|&nbsp;
-     <strong class="red">0</strong>&nbsp;件&nbsp;|
-     <strong class="red">￥ 0.00</strong> 
-     <a href="order.html">去结算</a> <img src="/images/youjian.jpg" width="5" height="8" />
-    </div><!--gouCar/-->
-    <div class="myChunlv">
-     <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34" /></a>
-    </div><!--myChunlv/-->
-   </div><!--gouwuche/-->
-  </div><!--lsg/-->
-  <div class="pnt">
-   <div class="pntLeft">
-    <h2 class="Title">所有商品分类
-     <ul class="InPorNav">
-      <li><a href="/TypeSearch?bookType=network">网络文学</a></li>
-      <li><a href="/TypeSearch?bookType=edu">教育</a></li>
-      <li><a href="/TypeSearch?bookType=novel">小说</a></li>
-      <li><a href="/TypeSearch?bookType=social">人文社科</a></li>
-    </ul><!--InPorNav/-->
-    </h2>
-   </div><!--pntLeft/-->
-   <div class="pntRight">
-    <ul class="nav">
-     <li><a href="index.html">商城首页</a></li>
-     <li><a href="login.html">会员中心</a></li>
-     <li><a href="help.html">帮助中心</a></li>
-     <div class="clears"></div>
-     <div class="phone">TEL：021-12345678</div>
-    </ul><!--nav/-->
-   </div><!--pntRight/-->
-   <div class="clears"></div>
-  </div><!--pnt/-->
-  <div class="positions">
-   当前位置：<a href="index.html">首页</a> &gt; <a href="vip.html">会员中心</a>
-    &gt; <a href="#" class="posCur">我的订单</a>
-  </div><!--positions/-->
-  <div class="cont">
-   <div class="contLeft" id="contLeft">
-    <h3 class="leftTitle">会员中心</h3>
-    <dl class="helpNav vipNav">
-     <dt>我的主页</dt>
-      <dd>
-       <a href="vip.html" class="vipCur">个人中心</a>
-       <a href="vipOrder.html">我的订单</a>
-      </dd>
-     <dt>账户设置</dt>
-      <dd>
-       <a href="vipMy.html">个人信息</a>
-       <a href="vipPwd.html">密码修改</a>
-       <a href="vipAdress.html">收货地址</a>
-      </dd>
-      <dt>客户服务</dt>
-       <dd>
-        <a href="vipExit.html">网站使用条款</a>
-        <a href="vipTuihuo.html">网站免责声明</a>
-        <a href="message.html">在线留言</a>
-       </dd>
-      
-      
-    </dl><!--helpNav/-->
-   </div><!--contLeft/-->
-   <div class="contRight">
-    <h1 class="vipName"><span>用户名：</span>叶兴  <strong class="vipUp">[点击修改/补充个人信息]</strong></h1>
-    <table class="vipMy">
-     <tr>
-      <th>用户名</th>
-      <th>邮编</th>
-      <th>联系方式</th>
-      <th>证件号码</th>
-      <th>地址</th>
-     </tr>
-     <tr>
-      <td>心沉北海</td>
-      <td>424100</td>
-      <td>13322256586</td>
-      <td>43102619999999999</td>
-      <td>湖南省郴州市汝城县汝城一中</td>
-     </tr>
-    </table><!--vipMy/-->
-    <div class="address">
-    <div class="addList">
-     <label><span class="red">* </span>用户名:</label>
-     <input type="text" />
-    </div><!--addList-->
-    <div class="addList">
-     <label><span class="red">* </span>详细地址:</label>
-     <input type="text" />
-    </div><!--addList-->
-    <div class="addList">
-     <label><span class="red">* </span>邮政编码:</label>
-     <input type="text" />
-    </div><!--addList-->
-    <div class="addList">
-     <label><span class="red">* </span>证件号码:</label>
-     <input type="text" />
-    </div><!--addList-->
-    <div class="addList">
-     <label><span class="red">* </span>手机号码:</label>
-     <input type="text" /> 或者固定电话 <input type="text" />
-    </div><!--addList--> 
-    <div class="addList">
-     <label><span class="red">* </span>选择地区:</label>
-     <select>
-      <option>请选择省</option>
-     </select>
-     <select>
-      <option>请选择市</option>
-     </select>
-     <select>
-      <option>请选择地区</option>
-     </select>
-    </div><!--addList-->
-    <div class="addList2">
-     <input type="image" src="/images/baocun.png" width="79" height="30" />
-    </div><!--addList2/-->
-   </div><!--address/-->
-   </div><!--contRight/-->
-   <div class="clears"></div>
-  </div><!--cont/-->
-  <div class="inHelp">
-   <div class="inHLeft">
-    <h4>帮助中心</h4>
-    <ul class="inHeList">
-     <li><a href="help.html">购物指南</a></li>
-     <li><a href="help.html">支付方式</a></li>
-     <li><a href="help.html">售后服务</a></li>
-     <li><a href="about.html">企业简介</a></li>
-     <div class="clears"></div>
-    </ul><!--inHeList/-->
-   </div><!--inHLeft/-->
-   <div class="inHLeft">
-    <h4>会员服务</h4>
-    <ul class="inHeList">
-     <li><a href="reg.html">会员注册</a></li>
-     <li><a href="login.html">会员登录</a></li>
-     <li><a href="order.html">购物车</a></li>
-     <li><a href="order.html">我的订单</a></li>
-     <div class="clears"></div>
-    </ul><!--inHeList/-->
-   </div><!--inHLeft/-->
-   <div class="inHRight">
-    <h4>全国统一免费服务热线</h4>
-    <div class="telBox">400-0000-0000</div>
-    <div class="weibo">
-    <wb:follow-button uid="2991975565" type="red_1" width="67" height="24" ></wb:follow-button>
-    </div>
-   </div><!--inHRight/-->
-   <div class="clears"></div>
-  </div><!--inHelp/-->
-  <div class="footer">
-   <p>
-   <a href="#">进入书城官网</a>&nbsp;|&nbsp;
-   <a href="index.html">商城首页</a>&nbsp;|&nbsp;
-   <a href="product.html">促销中心</a>&nbsp;|
-   <a href="order.html">我的订单</a>&nbsp;|&nbsp;
-   <a href="new.html">新闻动态</a>&nbsp;|&nbsp;
-   <a href="login.html">会员中心</a>&nbsp;|&nbsp;
-   <a href="help.htmll">帮助中心</a>
-   </p>
-  </div><!--footer/-->
- </div><!--mianCont/-->
- <a href="#" class="backTop">&nbsp;</a>
+    </div><!--top/-->
+    <div class="lsg">
+        <h1 class="logo"><a href="/bookstore/index"><img src="/images/logo.png" width="217" height="90"/></a></h1>
+        <form action="/keyWordSearch" method="get" class="subBox">
+            <div class="subBoxDiv">
+                <input type="text" name="bname" class="subLeft"/>
+                <input type="submit" src="/images/subimg.png" width="63" height="34" class="sub"/>
+                <div class="hotWord">
+                    热门搜索：
+                    <a href="proinfo.html">人生</a>&nbsp;
+                    <a href="proinfo.html">星光的速度</a> &nbsp;
+                    <a href="proinfo.html">苏东坡词传</a>&nbsp;
+                    <a href="proinfo.html">三体</a> &nbsp;
+                    <a href="proinfo.html">五年高考三年模拟</a>&nbsp;
+                </div><!--hotWord/-->
+            </div><!--subBoxDiv/-->
+        </form><!--subBox/-->
+        <div class="gouwuche">
+            <div class="gouCar">
+                <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;"/>&nbsp;|&nbsp;
+                <strong class="red">0</strong>&nbsp;件&nbsp;|
+                <strong class="red">￥ 0.00</strong>
+                <a href="order.html">去结算</a> <img src="/images/youjian.jpg" width="5" height="8"/>
+            </div><!--gouCar/-->
+            <div class="myChunlv">
+                <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34"/></a>
+            </div><!--myChunlv/-->
+        </div><!--gouwuche/-->
+    </div><!--lsg/-->
+    <div class="pnt">
+        <div class="pntLeft">
+            <h2 class="Title">所有商品分类
+                <ul class="InPorNav">
+                    <li><a href="/TypeSearch?bookType=network">网络文学</a></li>
+                    <li><a href="/TypeSearch?bookType=edu">教育</a></li>
+                    <li><a href="/TypeSearch?bookType=novel">小说</a></li>
+                    <li><a href="/TypeSearch?bookType=social">人文社科</a></li>
+                </ul><!--InPorNav/-->
+            </h2>
+        </div><!--pntLeft/-->
+        <div class="pntRight">
+            <ul class="nav">
+                <li><a href="index.html">商城首页</a></li>
+                <li><a href="login.html">会员中心</a></li>
+                <li><a href="help.html">帮助中心</a></li>
+                <div class="clears"></div>
+                <div class="phone">TEL：021-12345678</div>
+            </ul><!--nav/-->
+        </div><!--pntRight/-->
+        <div class="clears"></div>
+    </div><!--pnt/-->
+    <div class="positions">
+        当前位置：<a href="/bookstore/index">首页</a> &gt; <a href="/bookstore/vip">会员中心</a>
+        &gt; <a href="#" class="posCur">我的订单</a>
+    </div><!--positions/-->
+    <div class="cont">
+        <div class="contLeft" id="contLeft">
+            <h3 class="leftTitle">会员中心</h3>
+            <dl class="helpNav vipNav">
+                <dt>我的主页</dt>
+                <dd>
+                    <a href="vip.html" class="vipCur">个人中心</a>
+                    <a href="vipOrder.html">我的订单</a>
+                </dd>
+                <dt>账户设置</dt>
+                <dd>
+                    <a href="vipMy.html">个人信息</a>
+                    <a href="vipPwd.html">密码修改</a>
+                    <a href="vipAdress.html">收货地址</a>
+                </dd>
+                <dt>客户服务</dt>
+                <dd>
+                    <a href="vipExit.html">网站使用条款</a>
+                    <a href="vipTuihuo.html">网站免责声明</a>
+                    <a href="message.html">在线留言</a>
+                </dd>
+
+
+            </dl><!--helpNav/-->
+        </div><!--contLeft/-->
+        <div class="contRight">
+            <h1 class="vipName"><span>用户名：</span>叶兴 <strong class="vipUp">[点击修改/补充个人信息]</strong></h1>
+            <table class="vipMy">
+                <tr>
+                    <th>用户名</th>
+                    <th>邮编</th>
+                    <th>联系方式</th>
+                    <th>地址</th>
+                </tr>
+                <tr>
+                    <td>心沉北海</td>
+                    <td>424100</td>
+                    <td>13322256586</td>
+                    <td>湖南省郴州市汝城县汝城一中</td>
+                </tr>
+            </table><!--vipMy/-->
+
+            <div class="address">
+                <form id="userInfo">
+                    <div class="addList">
+                        <label><span class="red">* </span>用户名:</label>
+                        <input type="text" disabled="disabled" th:value="${session.currUser.uname}"/>
+                    </div><!--addList-->
+                    <div class="addList">
+                        <label><span class="red">* </span>性别:</label>
+                        <select name="ugender" id="ugender" class="select">
+                            <option value="man">男</option>
+                            <option value="woman">女</option>
+                        </select>
+                    </div><!--addList-->
+                    <div class="addList">
+                        <label><span class="red">* </span>详细地址:</label>
+                        <input id="uaddress" name="uaddress" type="text"/>
+                    </div><!--addList-->
+                    <div class="addList">
+                        <label><span class="red">* </span>邮政编码:</label>
+                        <input id="umailcode" name="umailcode" type="text"/>
+                    </div><!--addList-->
+
+                    <div class="addList2">
+                        <input type="submit" src="/images/baocun.png" width="79" height="30"/>
+                    </div><!--addList2/-->
+                </form> <!--个人信息form-->
+            </div><!--address/-->
+        </div><!--contRight/-->
+        <div class="clears"></div>
+    </div><!--cont/-->
+    <div class="inHelp">
+        <div class="inHLeft">
+            <h4>帮助中心</h4>
+            <ul class="inHeList">
+                <li><a href="help.html">购物指南</a></li>
+                <li><a href="help.html">支付方式</a></li>
+                <li><a href="help.html">售后服务</a></li>
+                <li><a href="about.html">企业简介</a></li>
+                <div class="clears"></div>
+            </ul><!--inHeList/-->
+        </div><!--inHLeft/-->
+        <div class="inHLeft">
+            <h4>会员服务</h4>
+            <ul class="inHeList">
+                <li><a href="reg.html">会员注册</a></li>
+                <li><a href="login.html">会员登录</a></li>
+                <li><a href="order.html">购物车</a></li>
+                <li><a href="order.html">我的订单</a></li>
+                <div class="clears"></div>
+            </ul><!--inHeList/-->
+        </div><!--inHLeft/-->
+        <div class="inHRight">
+            <h4>全国统一免费服务热线</h4>
+            <div class="telBox">400-0000-0000</div>
+            <div class="weibo">
+                <wb:follow-button uid="2991975565" type="red_1" width="67" height="24"></wb:follow-button>
+            </div>
+        </div><!--inHRight/-->
+        <div class="clears"></div>
+    </div><!--inHelp/-->
+    <div class="footer">
+        <p>
+            <a href="#">进入书城官网</a>&nbsp;|&nbsp;
+            <a href="index.html">商城首页</a>&nbsp;|&nbsp;
+            <a href="product.html">促销中心</a>&nbsp;|
+            <a href="order.html">我的订单</a>&nbsp;|&nbsp;
+            <a href="new.html">新闻动态</a>&nbsp;|&nbsp;
+            <a href="login.html">会员中心</a>&nbsp;|&nbsp;
+            <a href="help.htmll">帮助中心</a>
+        </p>
+    </div><!--footer/-->
+</div><!--mianCont/-->
+<a href="#" class="backTop">&nbsp;</a>
 </body>
 </html>

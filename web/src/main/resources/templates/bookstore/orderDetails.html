@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -7,8 +7,17 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/js.js"></script>
 <script src="/js/wb.js" type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript">
- $(function(){
+ <script th:inline="javascript">
+  var uname = /*[[${session.currUser.uname}]]*/ 'Sebastian';
+  $(function () {
+
+   if (uname == "tourist") {
+    $("#slogan").html("您好！欢迎来到本网上书城请<a href='/bookstore/login'>[登录]</a> <a href='/bookstore/reg'>[注册]</a>");
+
+   } else {
+    var msg = uname + ", 欢迎您来到网上书城！";
+    $("#slogan").html(msg + "<a href='/bookstore/logout' id='logout'>退出</a>");
+   }
 	 $(".vipNav dd:eq(2)").show();
 	 })
 </script>
@@ -17,10 +26,10 @@
 <body>
  <div class="mianCont">
   <div class="top">
-   <span>您好！欢迎来到17商城 请&nbsp;<a href="login.html">[登录]</a>&nbsp;<a href="reg.html">[注册]</a></span>
+   <span>您好！欢迎来到17商城 请&nbsp;<a href="/bookstore/index">[登录]</a>&nbsp;<a href="reg.html">[注册]</a></span>
    <span class="topRight">
-    <a href="vip.html">我的17</a>&nbsp;| 
-    <a href="order.html">我的订单</a>&nbsp;| 
+    <a href="/bookstore/vip">我的17</a>&nbsp;|
+    <a href="/bookstore/order">我的订单</a>&nbsp;|
     <a href="login.html">会员中心</a>&nbsp;|
     <a href="contact.html">联系我们</a>
    </span>
@@ -86,7 +95,7 @@
      <dt>我的主页</dt>
       <dd>
        <a href="vip.html">个人中心</a>
-       <a href="vipOrder.html">我的订单</a>
+       <a href="/bookstore/order">我的订单</a>
       </dd>
      <dt>账户设置</dt>
       <dd>

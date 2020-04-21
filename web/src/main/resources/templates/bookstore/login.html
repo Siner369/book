@@ -20,23 +20,9 @@
       success:function (data) {
        //注册成功，跳转成功页面
        if (data.msg!="ISNULL"){
-        var uname = data.uname;
-        var ugender = data.ugender;
-        var uaddress = data.uaddress;
-        var uemail = data.uemail;
-        var umailcode = data.umailcode;
-        var utel = data.utel;
-        var ustate = data.ustate;
-        cookie.setCookie("uname",uname,15);
-        cookie.setCookie("ugender",ugender,15);
-        cookie.setCookie("uaddress",uaddress,15);
-        cookie.setCookie("uemail",uemail,15);
-        cookie.setCookie("umailcode",umailcode,15);
-        cookie.setCookie("utel",utel,15);
-        cookie.setCookie("ustate",ustate,15);
 
        console.info("跳转index");
-      location.href="index.html";
+      location.href="/bookstore/index";
         $("#error_msg").text("");
         $("#error_msg").css(color,"");
       }else{

@@ -1,262 +1,318 @@
 <!DOCTYPE>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>17商城</title>
-<link type="text/css" href="/layui/css/layui.css" rel="stylesheet" />
-<link type="text/css" href="/css/css.css" rel="stylesheet" />
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/js.js"></script>
-<script src="/js/wb.js" type="text/javascript" charset="utf-8"></script>
-<script src="/js/MagicZoom.js" type="text/javascript"></script>
-<script src="/layui/layui.js" type="text/javascript"></script>
- <script>function decrNum() {
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>17商城</title>
+    <link type="text/css" href="/layui/css/layui.css" rel="stylesheet"/>
+    <link type="text/css" href="/css/css.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/js.js"></script>
+    <script src="/js/base.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/js/MagicZoom.js" type="text/javascript"></script>
+    <script src="/layui/layui.js" type="text/javascript"></script>
+    <script th:inline="javascript">
 
- }
+        $(function () {
+            var uname = /*[[${session.currUser.uname}]]*/ 'Sebastian';
+            if (uname == "tourist") {
+                $("#slogan").html("您好！欢迎来到本网上书城请<a href='/bookstore/login'>[登录]</a> <a href='/bookstore/reg'>[注册]</a>");
+            } else {
+                var msg = uname + ", 欢迎您来到网上书城！";
+                $("#slogan").html(msg + "<a onclick='logout()' id='logout'>退出</a>");
+            }
+        });
 
- $(function () {
+        function buy() {
+            if (checkeLogin()) {
+                if (checkeInfo()){
+                    $.ajax({
+                        url: "/bookstore/addOrder",
+                        type: "post",
+                        data: {uid: $("#uid").val(), bid: $("#bid").val(), oocount: $("#BuyCount").val()},
+                        dataType: "text",
+                        success: function (data) {
+                            //goumai成功，跳转成功页面
 
-       
-       function checkeInfo() {
-        var utel = cookie.getCookie("utel");
-        var uaddress = cookie.getCookie("uaddress");
-        var umailcode = cookie.getCookie("umailcode");
-        if (utel!=null && uaddress!=null && umailcode !=null) {
+                            location.href = "/bookstore/order";
+                            alert(data);
+                        },
+                        error: function () {
 
-         return true;
-        }else {
-         alert("请先完善个人信息！");
-         location.href="vip.html";
-         return false;
+                        }
+                    });
+                } else {
+                    alert("信息不足，请先补全地址、手机、邮编");
+                    location.href = "/bookstore/vip";
+                }
+            } else {
+                location.href = "/bookstore/login";
+            }
         }
-       }
-    })
 
- function buy() {
-  if (checkeInfo()){
-   //信息充足 可以购买
+        function cart() {
+            if (checkeLogin()) {
+
+            } else {
+                alert("请先登录");
+            }
+        }
 
 
-  }
+        function checkeInfo() {
+            var utel = /*[[${session.currUser.utel}]]*/ 'Sebastian';
+            var uaddress = /*[[${session.currUser.uaddress}]]*/ 'Sebastian';
+            var umailcode = /*[[${session.currUser.umailcode}]]*/ 'Sebastian';
+            if (utel != null && uaddress != null && umailcode != null) {
 
- }
+                return true;
+            } else {
+                alert("请先完善个人信息！");
+                location.href = "bookstore/vip.html";
+                return false;
+            }
+        }
 
- function  decrNum() {
-   var count = $("#BuyCount").text() * 1 ;
-   if (count>1){
-    count = count - 1 ;
-    $("#BuyCount").text(count);
-   }
- }
+        function checkeLogin() {
+            var uname = '[[#{session.currUser.uname}]]';
+            if (uname != null) {
 
- function  addNum() {
-  var count = $("#BuyCount").text() * 1 ;
-  var maxCount = $("#maxCount").text()*1;
-  if (count<maxCount){
-   count = count + 1 ;
-   $("#BuyCount").text(count);
-  }
- }
- </script>
+                return true;
+            } else {
+                alert("请先登录！");
+                location.href = "bookstore/login.html";
+                return false;
+            }
+        }
+
+        function decrNum() {
+            var count = $("#BuyCount").val() * 1;
+            if (count > 1) {
+                count = count - 1;
+                $("#BuyCount").val(count);
+            }
+        }
+
+        function addNum() {
+            var count = $("#BuyCount").val() * 1;
+            var maxCount = $("#maxCount").text() * 1;
+            if (count < maxCount) {
+                count = count + 1;
+                $("#BuyCount").val(count);
+            }
+        }
+    </script>
 </head>
 
 <body>
- <div class="mianCont">
-  <div class="top">
-   <span>您好！欢迎来网上书城 请&nbsp;<a href="login.html">[登录]</a>&nbsp;<a href="reg.html">[注册]</a></span>
-   <span class="topRight">
+<div class="mianCont">
+    <div class="top">
+        <span id="slogan">您好！欢迎来网上书城 请&nbsp;<a href="/bookstore/login">[登录]</a>&nbsp;<a
+                href="/bookstore/reg">[注册]</a></span>
+        <span class="topRight">
     <a href="vip.html">个人中心</a>&nbsp;|
-    <a href="order.html">我的订单</a>&nbsp;|
+    <a href="/bookstore/order">我的订单</a>&nbsp;|
     <a href="login.html">会员中心</a>&nbsp;|
     <a href="contact.html">联系我们</a>
    </span>
-  </div><!--top/-->
-  <div class="lsg">
-   <h1 class="logo"><a href="index.html"><img src="/images/logo.png" width="217" height="90" /></a></h1>
-   <form action="/keyWordSearch" method="get" class="subBox">
-    <div class="subBoxDiv">
-     <input type="text" name="bname" class="subLeft" />
-     <input type="submit" src="/images/subimg.png" width="63" height="34" class="sub" />
-     <div class="hotWord">
-      热门搜索：
-      <a href="proinfo.html">人生</a>&nbsp;
-      <a href="proinfo.html">星光的速度</a> &nbsp;
-      <a href="proinfo.html">苏东坡词传</a>&nbsp;
-      <a href="proinfo.html">三体</a>  &nbsp;
-      <a href="proinfo.html">五年高考三年模拟</a>&nbsp;
-     </div><!--hotWord/-->
-    </div><!--subBoxDiv/-->
-   </form><!--subBox/-->
-   <div class="gouwuche">
-    <div class="gouCar">
-     <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;" />&nbsp;|&nbsp;
-     <strong class="red">0</strong>&nbsp;本&nbsp;|
-     <strong class="red">￥ 0.00</strong> 
-     <a href="order.html">去结算</a> <img src="/images/youjian.jpg" width="5" height="8" />
-    </div><!--gouCar/-->
-    <div class="myChunlv">
-     <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34" /></a>
-    </div><!--myChunlv/-->
-   </div><!--gouwuche/-->
-  </div><!--lsg/-->
-  <div class="pnt">
-   <div class="pntLeft">
-    <h2 class="Title">所有商品分类
-     <ul class="InPorNav">
-      <li><a href="/TypeSearch?bookType=network">网络文学</a></li>
-      <li><a href="/TypeSearch?bookType=edu">教育</a></li>
-      <li><a href="/TypeSearch?bookType=novel">小说</a></li>
-      <li><a href="/TypeSearch?bookType=social">人文社科</a></li>
-    </ul><!--InPorNav/-->
-    </h2>
-   </div><!--pntLeft/-->
-   <div class="pntRight">
-    <ul class="nav">
-     <li><a href="index.html">商城首页</a></li>
-     <li><a href="login.html">会员中心</a></li>
-     <li><a href="help.html">帮助中心</a></li>
-     <div class="clears"></div>
-     <div class="phone">TEL：021-12345678</div>
-    </ul><!--nav/-->
-   </div><!--pntRight/-->
-   <div class="clears"></div>
-  </div><!--pnt/-->
-  <div class="positions">
-   当前位置：<a href="index.html">首页</a> &gt; <a href="#" class="posCur">促销商品</a>
-  </div><!--positions/-->
-  <div class="cont">
-   <div class="contLeft">
-    <ul class="leftPorNav">
-     <li><a href="/TypeSearch?bookType=network">网络文学</a></li>
-     <li><a href="/TypeSearch?bookType=edu">教育</a></li>
-     <li><a href="/TypeSearch?bookType=novel">小说</a></li>
-     <li><a href="/TypeSearch?bookType=social">人文社科</a></li>
-    </ul><!--InPorNav/-->
-   </div><!--contLeft/-->
-   <div class="contRight" style="border:0;">
-   <div class="proBox">
-   <div id="tsShopContainer">
-	<div id="tsImgS"><a th:href="${bookInfo.bpic}" title="Images" class="MagicZoom" id="MagicZoom"><img width="300" height="300" th:src="${bookInfo.bpic}" /></a></div>
-	<div id="tsPicContainer">
-		<div id="tsImgSArrL" onclick="tsScrollArrLeft()"></div>
-		<div id="tsImgSCon">
-			<ul>
-				<li onclick="showPic(0)" rel="MagicZoom" class="tsSelectImg"><img height="42" width="42" th:src="${bookInfo.bpic}" th:tsImgS="${bookInfo.bpic}" /></li>
-				</ul>
-		</div>
-		<div id="tsImgSArrR" onclick="tsScrollArrRight()"></div>
-	</div>
-	<img class="MagicZoomLoading" width="16" height="16" th:src="${bookInfo.bpic}" alt="Loading..." />
-    <script src="/js/ShopShow.js"></script>
-    </div><!--tsShopContainer/-->
-    <div class="proBoxRight">
-     <h3 th:text="${bookInfo.bname}" class="proTitle"></h3>
-     商品编号：<span th:text="${bookInfo.bid}"> </span>
-     <div>会员价：<strong class="red">￥</strong><strong class="red" th:text="${bookInfo.bprice}"></strong></div>
-     <div>单位：本 </div>
-     <div>库存剩余：<strong class="red" id="maxCount" th:text="${bookInfo.bnum}"></strong> 本</div>
+    </div><!--top/-->
+    <div class="lsg">
+        <h1 class="logo"><a href="/bookstore/index"><img src="/images/logo.png" width="217" height="90"/></a></h1>
+        <form action="/keyWordSearch" method="get" class="subBox">
+            <div class="subBoxDiv">
+                <input type="text" name="bname" class="subLeft"/>
+                <input type="submit" src="/images/subimg.png" width="63" height="34" class="sub"/>
+                <div class="hotWord">
+                    热门搜索：
+                    <a href="proinfo.html">人生</a>&nbsp;
+                    <a href="proinfo.html">星光的速度</a> &nbsp;
+                    <a href="proinfo.html">苏东坡词传</a>&nbsp;
+                    <a href="proinfo.html">三体</a> &nbsp;
+                    <a href="proinfo.html">五年高考三年模拟</a>&nbsp;
+                </div><!--hotWord/-->
+            </div><!--subBoxDiv/-->
+        </form><!--subBox/-->
+        <div class="gouwuche">
+            <div class="gouCar">
+                <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;"/>&nbsp;|&nbsp;
+                <strong class="red">0</strong>&nbsp;本&nbsp;|
+                <strong class="red">￥ 0.00</strong>
+                <a href="order.html">去结算</a> <img src="/images/youjian.jpg" width="5" height="8"/>
+            </div><!--gouCar/-->
+            <div class="myChunlv">
+                <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34"/></a>
+            </div><!--myChunlv/-->
+        </div><!--gouwuche/-->
+    </div><!--lsg/-->
+    <div class="pnt">
+        <div class="pntLeft">
+            <h2 class="Title">所有商品分类
+                <ul class="InPorNav">
+                    <li><a href="/TypeSearch?bookType=network">网络文学</a></li>
+                    <li><a href="/TypeSearch?bookType=edu">教育</a></li>
+                    <li><a href="/TypeSearch?bookType=novel">小说</a></li>
+                    <li><a href="/TypeSearch?bookType=social">人文社科</a></li>
+                </ul><!--InPorNav/-->
+            </h2>
+        </div><!--pntLeft/-->
+        <div class="pntRight">
+            <ul class="nav">
+                <li><a href="/bookstore/index">商城首页</a></li>
+                <li><a href="login.html">会员中心</a></li>
+                <li><a href="help.html">帮助中心</a></li>
+                <div class="clears"></div>
+                <div class="phone">TEL：021-12345678</div>
+            </ul><!--nav/-->
+        </div><!--pntRight/-->
+        <div class="clears"></div>
+    </div><!--pnt/-->
+    <div class="positions">
+        当前位置：<a href="index.html">首页</a> &gt; <a href="#" class="posCur">促销商品</a>
+    </div><!--positions/-->
+    <div class="cont">
+        <div class="contLeft">
+            <ul class="leftPorNav">
+                <li><a href="/TypeSearch?bookType=network">网络文学</a></li>
+                <li><a href="/TypeSearch?bookType=edu">教育</a></li>
+                <li><a href="/TypeSearch?bookType=novel">小说</a></li>
+                <li><a href="/TypeSearch?bookType=social">人文社科</a></li>
+            </ul><!--InPorNav/-->
+        </div><!--contLeft/-->
+        <div class="contRight" style="border:0;">
+            <div class="proBox">
+                <div id="tsShopContainer">
+                    <div id="tsImgS"><a th:href="@{${bookInfo.bpic}}" title="Images" class="MagicZoom"
+                                        id="MagicZoom"><img
+                            width="300" height="300" th:src="${bookInfo.bpic}"/></a></div>
+                    <div id="tsPicContainer">
+                        <div id="tsImgSArrL" onclick="tsScrollArrLeft()"></div>
+                        <div id="tsImgSCon">
+                            <ul>
+                                <li onclick="showPic(0)" rel="MagicZoom" class="tsSelectImg"><img height="42" width="42"
+                                                                                                  th:src="@{${bookInfo.bpic}}"
+                                                                                                  th:tsImgS="${bookInfo.bpic}"/>
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="tsImgSArrR" onclick="tsScrollArrRight()"></div>
+                    </div>
+                    <img class="MagicZoomLoading" width="16" height="16" th:src="${bookInfo.bpic}" alt="Loading..."/>
+                    <script src="/js/ShopShow.js"></script>
+                </div><!--tsShopContainer/-->
+                <div class="proBoxRight">
+                    <input type="hidden" name="uid" id="uid" th:value="${session.currUser.uid}">
+                    <input type="hidden" name="bid" id="bid" th:value="${bookInfo.bid}">
+                    <h3 th:text="${bookInfo.bname}" class="proTitle"></h3>
+                    商品编号：<span th:text="${bookInfo.bid}"> </span>
+                    <div>会员价：<strong class="red">￥</strong><strong class="red" th:text="${bookInfo.bprice}"></strong>
+                    </div>
+                    <div>库存剩余：<strong id="maxCount" th:text="${bookInfo.bnum}"></strong> 本</div>
 
-     <div class="shuliang2">
-      数量：         <div class="layui-btn-group">
-      <button type="button" onclick="decrNum()" class="layui-btn layui-btn-xs layui-btn-primary num_action">-</button>
-      <button type="button" id="BuyCount" class="layui-btn layui-btn-xs layui-btn-primary num">3</button>
-      <button type="button" onclick="addNum()" class="layui-btn layui-btn-xs layui-btn-primary num_action">+</button>
-     </div>
-     </div><!--shuliang2/-->
-     <div class="gc">
-      <a href="order.html"><img src="/images/goumai.png" width="117" height="36" onclick="buy();"/></a>&nbsp;&nbsp;
-      <a href="#"><img src="/images/shoucang.png" width="117" height="36" /></a>
-     </div><!--gc/-->    
-    </div><!--proRight/-->
-    <div class="clears"></div>
-    </div><!--proBox/-->
-    <ul class="fangyuan">
-      <li>商品描述</li>
-      <li>商品参数</li>
-      <li>商品评论</li>
-      <li>商品晒图</li>
-      <div class="clears"></div>
-    </ul><!--fangyuan/-->
-    <div class="fangList">
-    <div class="fangPar">
-     书籍是一位不会说话但教你知识的老师。<br/>
-     书籍是一位可以解除你孤寂的朋友<br/>
-     书籍是人类精神的粮食。<br/>
-     书籍是传播先进文化的工具 。<br/>
-     书籍是一叶扁舟，带你遨游知识的海洋。<br/>
-     书籍是一盏灯，照亮着我们前进的路。<br/>
-     书籍是翅膀，带我遨游知识的天空。<br/>
-     书籍是链条，串连着人类的思想和文明。<br/>
-     书籍是阳光，将我们求知的道路照亮。<br/>
-     书籍是阶梯，引导我们登上科学的殿堂。<br/>
-     书籍是天空，镶嵌着沉重与伟大的历史繁星。<br/>
-     书籍是大海，翻滚着辉煌而厚重的文化激流。<br/>
-     书籍是大地，蕴含着博大精深的智慧沃土。<br/>
-     书籍是北斗星，指明我们求知的方向。<br/>
-    </div><!--fangPar/-->
-    <img src="/images/ban1.jpg" width="756" height="310" />
-    </div><!--fangList/-->
-    <div class="fangList">
-     商品参数
-    </div><!--fangList/-->
-    <div class="fangList">
-     商品评论
-    </div><!--fangList/-->
-    <div class="fangList">
-     <img src="/images/rdPro1.jpg" width="132" height="129" /><br /><br />
-     <img src="/images/rdPro2.jpg" width="132" height="129" /><br /><br />
-     <img src="/images/rdPro3.jpg" width="132" height="129" /><br /><br />
-     <img src="/images/rdPro4.jpg" width="132" height="129" /><br /><br />
-     <img src="/images/rdPro5.jpg" width="132" height="129" /><br /><br />
-    </div><!--fangList/-->
-   </div><!--contRight/-->
-   <div class="clears"></div>
-  </div><!--cont/-->
-  <div class="inHelp">
-   <div class="inHLeft">
-    <h4>帮助中心</h4>
-    <ul class="inHeList">
-     <li><a href="help.html">购物指南</a></li>
-     <li><a href="help.html">支付方式</a></li>
-     <li><a href="help.html">售后服务</a></li>
-     <li><a href="about.html">企业简介</a></li>
-     <div class="clears"></div>
-    </ul><!--inHeList/-->
-   </div><!--inHLeft/-->
-   <div class="inHLeft">
-    <h4>会员服务</h4>
-    <ul class="inHeList">
-     <li><a href="reg.html">会员注册</a></li>
-     <li><a href="login.html">会员登录</a></li>
-     <li><a href="order.html">购物车</a></li>
-     <li><a href="order.html">我的订单</a></li>
-     <div class="clears"></div>
-    </ul><!--inHeList/-->
-   </div><!--inHLeft/-->
-   <div class="inHRight">
-    <h4>全国统一免费服务热线</h4>
-    <div class="telBox">400-0000-0000</div>
-    <div class="weibo">
-    <wb:follow-button uid="2991975565" type="red_1" width="67" height="24" ></wb:follow-button>
-    </div>
-   </div><!--inHRight/-->
-   <div class="clears"></div>
-  </div><!--inHelp/-->
-  <div class="footer">
-   <p>
-   <a href="#">进入17官网</a>&nbsp;|&nbsp;
-   <a href="index.html">商城首页</a>&nbsp;|&nbsp;
-   <a href="product.html">促销中心</a>&nbsp;|&nbsp;
-   <a href="order.html">我的订单</a>&nbsp;|&nbsp;
-   <a href="new.html">新闻动态</a>&nbsp;|&nbsp;
-   <a href="login.html">会员中心</a>&nbsp;|&nbsp;
-   <a href="help.htmll">帮助中心</a>
-   </p>
-   <p>
-    版权所有：上海17实业有限公司 版权所有  Copyright 2010-2015   沪ICP备00000000号   <a href="http://www.mycodes.net/" target="_blank">源码之家</a>   
-   </p>
-  </div><!--footer/-->
- </div><!--mianCont/-->
- <a href="#" class="backTop">&nbsp;</a>
+                    <div class="shuliang2">
+                        数量：
+                        <button type="button" onclick="decrNum();"
+                                class="layui-btn layui-btn-sm layui-btn-primary num_action">-
+                        </button>
+                        <input type="text" readonly="readonly" id="BuyCount" name="oocount" value="1"/>
+                        <button type="button" onclick="addNum();"
+                                class="layui-btn layui-btn-sm layui-btn-primary num_action">+
+                        </button>
+                    </div><!--shuliang2/-->
+                    <div class="gc">
+                        <a href="#" id="buy" onclick="buy();"><img src="/images/goumai.png" width="117"
+                                                                   height="36"/></a>
+                        <a href="#" id="addCart" onclick="cart();"><img src="/images/shoucang.png" width="117"
+                                                                        height="36" onclick="cart();"/></a>
+                    </div><!--gc/-->
+                </div><!--proRight/-->
+                <div class="clears"></div>
+            </div><!--proBox/-->
+            <ul class="fangyuan">
+                <li>商品描述</li>
+                <li>商品参数</li>
+                <li>商品评论</li>
+                <li>商品晒图</li>
+                <div class="clears"></div>
+            </ul><!--fangyuan/-->
+            <div class="fangList">
+                <div class="fangPar">
+                    书籍是一位不会说话但教你知识的老师。<br/>
+                    书籍是一位可以解除你孤寂的朋友<br/>
+                    书籍是人类精神的粮食。<br/>
+                    书籍是传播先进文化的工具 。<br/>
+                    书籍是一叶扁舟，带你遨游知识的海洋。<br/>
+                    书籍是一盏灯，照亮着我们前进的路。<br/>
+                    书籍是翅膀，带我遨游知识的天空。<br/>
+                    书籍是链条，串连着人类的思想和文明。<br/>
+                    书籍是阳光，将我们求知的道路照亮。<br/>
+                    书籍是阶梯，引导我们登上科学的殿堂。<br/>
+                    书籍是天空，镶嵌着沉重与伟大的历史繁星。<br/>
+                    书籍是大海，翻滚着辉煌而厚重的文化激流。<br/>
+                    书籍是大地，蕴含着博大精深的智慧沃土。<br/>
+                    书籍是北斗星，指明我们求知的方向。<br/>
+                </div><!--fangPar/-->
+                <img src="/images/ban1.jpg" width="756" height="310"/>
+            </div><!--fangList/-->
+            <div class="fangList">
+                商品参数
+            </div><!--fangList/-->
+            <div class="fangList">
+                商品评论
+            </div><!--fangList/-->
+            <div class="fangList">
+                <img src="/images/rdPro1.jpg" width="132" height="129"/><br/><br/>
+                <img src="/images/rdPro2.jpg" width="132" height="129"/><br/><br/>
+                <img src="/images/rdPro3.jpg" width="132" height="129"/><br/><br/>
+                <img src="/images/rdPro4.jpg" width="132" height="129"/><br/><br/>
+                <img src="/images/rdPro5.jpg" width="132" height="129"/><br/><br/>
+            </div><!--fangList/-->
+        </div><!--contRight/-->
+        <div class="clears"></div>
+    </div><!--cont/-->
+    <div class="inHelp">
+        <div class="inHLeft">
+            <h4>帮助中心</h4>
+            <ul class="inHeList">
+                <li><a href="help.html">购物指南</a></li>
+                <li><a href="help.html">支付方式</a></li>
+                <li><a href="help.html">售后服务</a></li>
+                <li><a href="about.html">企业简介</a></li>
+                <div class="clears"></div>
+            </ul><!--inHeList/-->
+        </div><!--inHLeft/-->
+        <div class="inHLeft">
+            <h4>会员服务</h4>
+            <ul class="inHeList">
+                <li><a href="reg.html">会员注册</a></li>
+                <li><a href="login.html">会员登录</a></li>
+                <li><a href="order.html">购物车</a></li>
+                <li><a href="order.html">我的订单</a></li>
+                <div class="clears"></div>
+            </ul><!--inHeList/-->
+        </div><!--inHLeft/-->
+        <div class="inHRight">
+            <h4>全国统一免费服务热线</h4>
+            <div class="telBox">400-0000-0000</div>
+            <div class="weibo">
+                <!--                <wb:follow-button uid="2991975565" type="red_1" width="67" height="24"></wb:follow-button>-->
+            </div>
+        </div><!--inHRight/-->
+        <div class="clears"></div>
+    </div><!--inHelp/-->
+    <div class="footer">
+        <p>
+            <a href="#">进入17官网</a>&nbsp;|&nbsp;
+            <a href="index.html">商城首页</a>&nbsp;|&nbsp;
+            <a href="product.html">促销中心</a>&nbsp;|&nbsp;
+            <a href="order.html">我的订单</a>&nbsp;|&nbsp;
+            <a href="new.html">新闻动态</a>&nbsp;|&nbsp;
+            <a href="login.html">会员中心</a>&nbsp;|&nbsp;
+            <a href="help.htmll">帮助中心</a>
+        </p>
+        <p>
+            版权所有：上海17实业有限公司 版权所有 Copyright 2010-2015 沪ICP备00000000号 <a href="http://www.mycodes.net/" target="_blank">源码之家</a>
+        </p>
+    </div><!--footer/-->
+</div><!--mianCont/-->
+<a href="#" class="backTop">&nbsp;</a>
 </body>
 </html>

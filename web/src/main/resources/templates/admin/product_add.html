@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
@@ -15,8 +15,8 @@
     <script src="/js/base.js"></script>
     <script src="/js/jsonHandler.js"></script>
     <script src="/layui/layui.js"></script>
-    <script>
-        $(function () {
+    <script th:inline="javascript">
+        $(function (){
             /*$(window).unload(function(){
                 //响应事件
                 alert("获取到了页面要关闭的事件了！");
@@ -48,20 +48,29 @@
                         });*/
             ///////////////
             $("#bookMsg").submit(function () {
-                var strdata = $("#bookMsg").serializeObject();
-                var str = JSON.stringify(strdata);
-                alert(str);
+                /*var strdata = $("#bookMsg").serializeObject();
+                var str = JSON.stringify(strdata);*/
+
+                var bname = $("#bname").val();
+                var booktype = $("#booktype").val();
+                var bprice = $("#bprice").val();
+                var bpic = $("#bpic").val();
+                var bnum = $("#bnum").val();
+
+
                 if (checkNotNull() && checkNotNum()) {
-                    alert("校验2个测试通过");
                     $.ajax({
                         url: "/addBook",
-                        contentType: "application/json;charset=UTF-8",
                         type: "post",
-                        data: str,
-                        dataType: "json",
+                        data: {bname:bname,
+                            booktype:booktype,
+                            bprice:bprice,
+                            bpic:bpic,
+                            bnum:bnum},
+                        dataType: "text",
                         success: function (data) {
                             //注册成功，跳转成功页面
-                            if (data.msg == "success") {
+                            if (data.msg != ""){
                                 alert("新增成功");
                             } else {
                                 alert("新增失败");
@@ -78,7 +87,6 @@
                 return false;
                 //如果这个方法没有返回值，或者返回为true，则表单提交，如果返回为false，则表单不提交
             });
-
             ///上传图片执行
             layui.use('upload', function(){
                 var $ = layui.jquery
@@ -91,23 +99,27 @@
                     ,accept:'images'
                     ,size:50000
                     ,before: function(obj){
-
                         obj.preview(function(index, file, result){
                             $('#demo1').attr('src', result);
                         });
                     }
                     ,done: function(res){
+
                         //如果上传失败
                         if(res.code > 0){
                             return layer.msg('上传失败');
                         }
                         //上传成功
+                        var imgs = res.imgSrc;
+                        alert(imgs);
+                        $("#bpic").val(imgs);
                         var demoText = $('#demoText');
                         demoText.html('<span style="color: #4cae4c;">上传成功</span>');
                         var fileupload = $(".image");
                         fileupload.attr("value",res.data.src);
                         cookie.setCookie("uploadPath",res.data.fullPath);
                         console.log(fileupload.attr("value"));
+
                     }
                     ,error: function(){
                         //演示失败状态，并实现重传
@@ -127,7 +139,6 @@
             var bname = $("#bname").val();
             var booktype = $("#booktype").val();
 
-            // var bpic = $("#bpic");
             var bnum = $("#bnum").val();
             var bprice = $("#bprice").val();
 
@@ -148,7 +159,6 @@
             if (flag1 && flag2) {
                 return true;
             }
-            // var mid = $("#mid");
             return false;
         }
         //临时图片删除
@@ -219,6 +229,7 @@
         </div>
         <section>
             <form id="bookMsg"><!--/addBook-->
+                <input type="hidden" name="mid" th:value="${session.user.mid}">
                 <ul class="ulColumn2">
                     <li>
                         <span class="item_name" style="width:120px;">商品名称：</span>
@@ -235,12 +246,6 @@
                         </select>
 
                     </li>
-                    <!--<li>
-                        <span class="item_name" style="width:120px;">商家ID：</span>
-                        <input name="mid" id="mid" type="text" readonly="readonly" th:value="${session.usertype}"
-                               class="textbox"/>
-
-                    </li>-->
                     <li>
                         <span class="item_name" style="width:120px;">售价：</span>
                         <input type="text" id="bprice" name="bprice" class="textbox" placeholder="0.00"/> 元
@@ -254,7 +259,7 @@
 
                     <li>
                         <label class="item_name" style="width:120px;">上传图片：</label>
-                        <input type="hidden" name="images" class="image">
+                        <input type="hidden" name="bpic" id="bpic" value="">
                         <div class="layui-form-item" style="margin-left:100px">
                             <div class="layui-upload">
                                 <button type="button" class="layui-btn" id="btn_upload">上传图片</button>

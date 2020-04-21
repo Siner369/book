@@ -68,8 +68,8 @@ public class BookController {
         return "bookstore/product";
 }
 
-    @GetMapping(value = "proinfo")
-    public String searchByType(String bid,Model model){
+    @GetMapping("proinfo")
+    public String proInfo(String bid,Model model){
         Book b = bookService.searchBookByID(Integer.valueOf(bid));
         System.out.println(b);
         model.addAttribute("bookInfo",b);
@@ -82,18 +82,25 @@ public class BookController {
     }
 
 
-    @RequestMapping(value = "addBook", method = {RequestMethod.POST},
-            produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "addBook", method = {RequestMethod.POST})
     public @ResponseBody
-    String addBook(@RequestBody Book book,HttpSession session) {
-        System.out.println(book);
-        boolean addFlag = bookService.addBook(book);
+    String addBook(String bname,String booktype,String bpic,String bprice,String bnum){
+        System.out.println(bprice);
+        System.out.println(bname);
+        Book b = new Book();
+        b.setBname(bname);
+        b.setBooktype(booktype);
+        b.setBprice(Double.valueOf(bprice));
+        b.setBpic(bpic);
+        b.setBnum(Integer.valueOf(bnum));
+        System.out.println(b);
+        boolean addFlag = bookService.addBook(b);
         JSONObject json = new JSONObject();
         if (addFlag) {
             json.put("msg","success");
             return json.toString();
         } else {
-            json.put("msg","error");
+            json.put("msg","");
             return json.toString();
         }
     }
@@ -103,8 +110,8 @@ public class BookController {
     //图片上传测试
     @ResponseBody
     @RequestMapping("/addBook_Pic")
-    public Map upload(MultipartFile file,HttpSession session, HttpServletRequest request){
-
+    public Map upload(MultipartFile file,HttpSession session){
+        session.removeAttribute("imgSrc");
         String path = "";
         String suffix="";
         //保存上传
@@ -132,6 +139,9 @@ public class BookController {
                 map.put("msg","");
                 map.put("data",map2);
                 map2.put("src",srcPath);
+                System.out.println("test:"+srcPath);
+                map.put("imgSrc",srcPath);
+           //     session.setAttribute("imgSrc",srcPath);
                 map2.put("fullPath",pathRoot+path);
                 session.setAttribute("currPicPath",srcPath);
                 return map;

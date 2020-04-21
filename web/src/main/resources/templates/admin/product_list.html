@@ -54,16 +54,16 @@
                "        <td class='center'><span>"+data[i].booktype+"</span></td>\n" +
                "        <td class='center'><span>"+data[i].mid+"</span></td>\n" +
                "        <td class='center'><span>"+data[i].bnum+"</span></td>\n" +
-               "        <td class='center'><a href='/updatePage(id="+data[i].bid+")}' title='编辑' class='link_icon'>&#101;</a></td>\n" +
-               "        <td class='center'><a href='#' th:onclick='javascript:return del("+ [[data.bid]]+ ")' title='下架' class='link_icon'>&#100;</a></td>\n" +
-               "       </tr>";
-      }
+               "        <td class='center'><a href='/updatePage?bid="+data[i].bid+"' title='编辑' class='link_icon'>&#101;</a></td>\n" +
+     "        <td class='center'><a href='#' th:onclick='javascript:return del("+ [[data.bid]]+ ")' title='下架' class='link_icon'>&#100;</a></td>\n" +
+     "       </tr>";
+    }
 
-     }else{
+   }else{
 
-     }
-     table += "</table>"
-     $("#t_books").html(table);
+   }
+   table += "</table>"
+   $("#t_books").html(table);
     },
     error:function(){
      alert("查询错误");
@@ -82,10 +82,9 @@
      data: {bid:bid},
      dataType: "text",
      success: function (data) {
-      //注册成功，跳转成功页面
-      alert(data);
       if (data != null && data!= "") {
        alert("删除成功！");
+       location.href="/findAllBook";
       }else {
        alert("删除失败！");
       }

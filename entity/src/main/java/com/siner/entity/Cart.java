@@ -9,8 +9,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Manager {
-    private int mid;//管理员ID
-    private String mname;//后台账号
-    private String mpass;//密码
+public class Cart {
+    private int bid;
+    private String bname;
+    private double bprice;
+    private String bpic;
+    private int count;
+    private double sumPrice;
 }

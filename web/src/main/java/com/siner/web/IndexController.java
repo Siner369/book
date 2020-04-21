@@ -1,5 +1,6 @@
 package com.siner.web;
 
+import com.siner.entity.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,8 +14,14 @@ public class IndexController {
      * @return
      */
     @RequestMapping("/bookstore/index")
-    public String toIndex() {
+    public String toIndex(HttpSession session) {
+        if (session.getAttribute("currUser") == null){
+            User u = new User();
+            u.setUname("tourist");
+            session.setAttribute("currUser",u);
+        }
         return "bookstore/index.html";
+
     }
 
     /**

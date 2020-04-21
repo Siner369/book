@@ -15,6 +15,10 @@ $(".content").delegate("a[href='top']","click",function(e){
     $(".content").mCustomScrollbar("scrollTo",$(this).attr("href"));
 });
 
+//sologan
+
+
+
 function logout() {
     var flag = confirm("确定退出？");
     if (flag==true) {

@@ -34,12 +34,10 @@ public class ManagerController {
         Manager m = managerService.login_admin(mname,mpass);
         System.out.println(m);
         String type = null;
-        if (m.getUsertype()==0) type = "(管理员)";
-        else type = "(商家)";
         if (null != m) {
+            session.setAttribute("user",m);
             session.setAttribute("admin", "true");
-            session.setAttribute("mname",m.getMname()+type);
-            session.setAttribute("usertype",m.getUsertype());
+            session.setAttribute("mname",m.getMname());
             return "redirect:/admin/index";
         } else {
             return  "admin/login";

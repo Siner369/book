@@ -6,7 +6,6 @@
         <id property="mid" column="mid"/>
         <result property="mname" column="mname"/>
         <result property="mpass" column="mpass"/>
-        <result property="usertype" column="usertype"/>
 
         <!--<association property="userinfo" javaType="com.hntest.entity.Userinfo">
             <result property="version" column="version"/>
@@ -23,7 +22,7 @@
     </resultMap>
 
     <select id="login_admin" resultType="com.siner.entity.Manager" parameterType="com.siner.entity.Manager">
-        select mid,mname,mpass,usertype from manager where mname = #{name} and mpass = #{pass}
+        select mid,mname,mpass from manager where mname = #{name} and mpass = #{pass}
     </select>
 
 

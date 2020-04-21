@@ -1,510 +1,502 @@
 <!DOCTYPE>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>17书城</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>17书城</title>
 
-<link type="text/css" href="/css/css.css" rel="stylesheet" />
-<link type="text/css" href="/css/banner.css" rel="stylesheet" />
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/banner.js"></script>
-<script type="text/javascript" src="/js/js.js"></script>
-<script type="text/javascript" src="/js/cookie.js"></script>
-<script type="text/javascript" src="/js/wb.js" charset="utf-8"></script>
+    <link type="text/css" href="/css/css.css" rel="stylesheet"/>
+    <link type="text/css" href="/css/banner.css" rel="stylesheet"/>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/banner.js"></script>
+    <script type="text/javascript" src="/js/js.js"></script>
+    <script type="text/javascript" src="/js/cookie.js"></script>
+    <script type="text/javascript" src="/js/wb.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/base.js" charset="utf-8"></script>
 
-<script>
- var uname = cookie.getCookie("uname");
- var ugender = cookie.getCookie("ugender");
- var utel = cookie.getCookie("utel");
- var uaddress = cookie.getCookie("uaddress");
- var umailcode = cookie.getCookie("umailcode");
- var uemail = cookie.getCookie("uemail");
-$(function(){
-  if (uname!='' && uname!=null){
-  var msg = uname+", 欢迎您来到网上书城！";
-  $("#slogan").html(msg + "<a onclick='logout()' id='logout'>退出</a>");
- }else{
-  $("#slogan").html("您好！欢迎来到本网上书城请<a href='login.html'>[登录]</a> <a href='reg.html'>[注册]</a>");
- }
+    <script th:inline="javascript">
 
-});
-//登出
-function logout() {
- alert("log out");
- cookie.removeCookie("uname");
- cookie.removeCookie("ugender");
- cookie.removeCookie("uemail");
- cookie.removeCookie("umailcode");
- cookie.removeCookie("utel");
+        $(function () {
+            var uname = /*[[${session.currUser.uname}]]*/ 'asd';
+            if (uname == "tourist") {
+                $("#slogan").html("您好！欢迎来到本网上书城请<a href='/bookstore/login'>[登录]</a> <a href='/bookstore/reg'>[注册]</a>");
 
- alert(uname);
- location.href="index.html";
-}
-////////////////////个人中心跳转 和核验
-function gotoUserCenter() {
- var uname = cookie.getCookie("uname");
- if (uname!=null && uname!=""){
-  location.href="vip.html";
- }else {
-  location.href="login.html";
- }
- return true;
-}
-</script>
+            } else {
+                var msg = uname + ", 欢迎您来到网上书城！";
+                $("#slogan").html(msg + "<a href='/bookstore/logout' id='logout'>退出</a>");
+            }
+        });
+
+        ////////////////////个人中心跳转 和核验
+        function gotoUserCenter() {
+            var uname = /*[[${session.currUser.uname}]]*/ 'Sebastian';
+            if (uname == "tourist") {
+                location.href = "/bookstore/login";
+            } else {
+                location.href = "/bookstore/vip";
+            }
+            return true;
+        }
+    </script>
 </head>
 
 <body>
- <div class="mianCont">
-  <div class="top">
-   <span id="slogan">您好！欢迎来到本网上书城请&nbsp;<a href="login.html">[登录]</a>&nbsp;<a href="reg.html">[注册]</a></span>
-   <span class="topRight">
-    <a href="vip.html">我的17</a>&nbsp;|
-    <a href="order.html">我的订单</a>&nbsp;| 
+<div class="mianCont">
+    <div class="top">
+        <span id="slogan">您好！欢迎来到本网上书城请&nbsp;<a href="/bookstore/login">[登录]</a>&nbsp;<a href="/bookstore/reg">[注册]</a></span>
+        <span class="topRight">
+    <a href="/bookstore/vip">我的17</a>&nbsp;|
+    <a href="/bookstore/order">我的订单</a>&nbsp;|
     <a onclick="gotoUserCenter();">会员中心</a>&nbsp;|
     <a href="contact.html">联系我们</a>
    </span>
-  </div><!--top/-->
-  <div class="lsg">
-   <h1 class="logo"><a href="index.html"><img src="/images/logo.png" width="217" height="90" /></a></h1>
-   <form action="/keyWordSearch" method="get" class="subBox">
-    <div class="subBoxDiv">
-     <input type="text" name="bname" class="subLeft" />
-     <input type="submit" src="/images/subimg.png" width="63" height="34" class="sub" />
-     <div class="hotWord">
-      热门搜索：
-         <a href="proinfo.html">人生</a>&nbsp;
-         <a href="proinfo.html">星光的速度</a> &nbsp;
-         <a href="proinfo.html">苏东坡词传</a>&nbsp;
-         <a href="proinfo.html">三体</a>  &nbsp;
-         <a href="proinfo.html">五年高考三年模拟</a>&nbsp;
-     </div><!--hotWord/-->
-    </div><!--subBoxDiv/-->
-   </form><!--subBox/-->
-   <div class="gouwuche">
-    <div class="gouCar">
-     <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;" />&nbsp;|&nbsp;
-     <strong class="red">0</strong>&nbsp;件&nbsp;|
-     <strong class="red">￥ 0.00</strong> 
-     <a href="order.html">去结算</a> <img src="/images/youjian.jpg" width="5" height="8" />
-    </div><!--gouCar/-->
-    <div class="myChunlv">
-     <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34" /></a>
-    </div><!--myChunlv/-->
-   </div><!--gouwuche/-->
-  </div><!--lsg/-->
-  <div class="pnt">
-   <div class="pntLeft">
-    <h2 class="Title">所有商品分类</h2>
-    <ul class="InPorNav">
-     <li><a href="/TypeSearch?bookType=network">网络文学</a></li>
-     <li><a href="/TypeSearch?bookType=edu">教育</a></li>
-     <li><a href="/TypeSearch?bookType=novel">小说</a></li>
-     <li><a href="/TypeSearch?bookType=social">人文社科</a></li>
-    </ul><!--InPorNav/-->
-   </div><!--pntLeft/-->
-   <div class="pntRight">
-    <ul class="nav">
-     <li class="navCur"><a href="index.html">商城首页</a></li>
-     <li><a href="#" onclick="gotoUserCenter();">会员中心</a></li>
-     <li><a href="help.html">帮助中心</a></li>
-     <div class="clears"></div>
-     <div class="phone">TEL：021-12345678</div>
-    </ul><!--nav/-->
-    <!--ASDASDASDA-->
-    <!--ASDASDASDA-->
-    <!--ASDASDASDA-->
+    </div><!--top/-->
+    <div class="lsg">
+        <h1 class="logo"><a href="/bookstore/index"><img src="/images/logo.png" width="217" height="90"/></a></h1>
+        <form action="/keyWordSearch" method="get" class="subBox">
+            <div class="subBoxDiv">
+                <input type="text" name="bname" class="subLeft"/>
+                <input type="submit" src="/images/subimg.png" width="63" height="34" class="sub"/>
+                <div class="hotWord">
+                    热门搜索：
+                    <a href="proinfo.html">人生</a>&nbsp;
+                    <a href="proinfo.html">星光的速度</a> &nbsp;
+                    <a href="proinfo.html">苏东坡词传</a>&nbsp;
+                    <a href="proinfo.html">三体</a> &nbsp;
+                    <a href="proinfo.html">五年高考三年模拟</a>&nbsp;
+                </div><!--hotWord/-->
+            </div><!--subBoxDiv/-->
+        </form><!--subBox/-->
+        <div class="gouwuche">
+            <div class="gouCar">
+                <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;"/>&nbsp;|&nbsp;
+                <strong class="red">0</strong>&nbsp;件&nbsp;|
+                <strong class="red">￥ 0.00</strong>
+                <a href="order.html">去结算</a> <img src="/images/youjian.jpg" width="5" height="8"/>
+            </div><!--gouCar/-->
+            <div class="myChunlv">
+                <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34"/></a>
+            </div><!--myChunlv/-->
+        </div><!--gouwuche/-->
+    </div><!--lsg/-->
+    <div class="pnt">
+        <div class="pntLeft">
+            <h2 class="Title">所有商品分类</h2>
+            <ul class="InPorNav">
+                <li><a href="/TypeSearch?bookType=network">网络文学</a></li>
+                <li><a href="/TypeSearch?bookType=edu">教育</a></li>
+                <li><a href="/TypeSearch?bookType=novel">小说</a></li>
+                <li><a href="/TypeSearch?bookType=social">人文社科</a></li>
+            </ul><!--InPorNav/-->
+        </div><!--pntLeft/-->
+        <div class="pntRight">
+            <ul class="nav">
+                <li class="navCur"><a href="index.html">商城首页</a></li>
+                <li><a href="#" onclick="gotoUserCenter();">会员中心</a></li>
+                <li><a href="help.html">帮助中心</a></li>
+                <div class="clears"></div>
+                <div class="phone">TEL：021-12345678</div>
+            </ul><!--nav/-->
+            <!--ASDASDASDA-->
+            <!--ASDASDASDA-->
+            <!--ASDASDASDA-->
 
-    <!--主要内容》》》-->
-    <div class="banners">
-     <!--受保护块，不建议修改》》》-->
-     <div class="click_left"><img class="get_height" onclick="banner_left_right('left')" src="/images/banner_left.png"></div>
-     <div class="click_right"><img onclick="banner_left_right('right')" src="/images/banner_right.png"></div>
-     <div class="number">
-      <div class="numbers"></div>
-      <div style="clear: both;"></div>
-     </div>
-     <!--《《《受保护块，不建议修改-->
-     <!--onlick事件调用函数link(参数1，参数2)>>>参数1:跳转链接; 参数2:跳转方式（true:在新的窗口打开链接,false:在当前窗口打开链接）-->
-     <div class="banner_img" >
-      <!--在此位置内添加img标签即可>>>-->
-      <img class="banner_img1" src="/images/ban1.jpg" onclick="link('http://localhost:8080/bookstore/index.html',true)">
-      <img class="banner_img2" src="/images/ban2.jpg" onclick="link('http://localhost:8080/bookstore/index.html',false)">
-      <img class="banner_img3" src="/images/ban3.jpg" onclick="link('http://localhost:8080/bookstore/index.html',true)">
-      <img class="banner_img4" src="/images/ban4.jpg" onclick="link('http://localhost:8080/bookstore/index.html',false)">
-      <img class="banner_img5" src="/images/ban5.jpg" onclick="link('http://localhost:8080/bookstore/index.html',true)">
-      <!--<<<在此位置内添加img标签即可-->
-     </div>
-     <!--此段代码不可移动位置-->
-     <script type="text/javascript">
-      loads();
-     </script>
-     <!--此段代码不可移动位置-->
-    </div>
-    <!--《《《主要内容-->
-    <!--!!!!!!!!!!!!!!!!!!1-->
-    <!--!!!!!!!!!!!!!!!!!!1-->
-    <!--!!!!!!!!!!!!!!!!!!1-->
-    <!--!!!!!!!!!!!!!!!!!!1-->
-   </div><!--pntRight/-->
-   <div class="clears"></div>
-  </div><!--pnt/-->
-  <div class="rdPro">
-   <div class="rdLeft">
-    <ul class="rdList">
-     <li>推荐产品</li>
-     <li>促销产品</li>
-     <div class="clears"></div>
-    </ul><!--rdList/-->
-    <div class="rdProBox">
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <div class="clears"></div>
+            <!--主要内容》》》-->
+            <div class="banners">
+                <!--受保护块，不建议修改》》》-->
+                <div class="click_left"><img class="get_height" onclick="banner_left_right('left')"
+                                             src="/images/banner_left.png"></div>
+                <div class="click_right"><img onclick="banner_left_right('right')" src="/images/banner_right.png"></div>
+                <div class="number">
+                    <div class="numbers"></div>
+                    <div style="clear: both;"></div>
+                </div>
+                <!--《《《受保护块，不建议修改-->
+                <!--onlick事件调用函数link(参数1，参数2)>>>参数1:跳转链接; 参数2:跳转方式（true:在新的窗口打开链接,false:在当前窗口打开链接）-->
+                <div class="banner_img">
+                    <!--在此位置内添加img标签即可>>>-->
+                    <img class="banner_img1" src="/images/ban1.jpg"
+                         onclick="link('http://localhost:8080/bookstore/index.html',true)">
+                    <img class="banner_img2" src="/images/ban2.jpg"
+                         onclick="link('http://localhost:8080/bookstore/index.html',false)">
+                    <img class="banner_img3" src="/images/ban3.jpg"
+                         onclick="link('http://localhost:8080/bookstore/index.html',true)">
+                    <img class="banner_img4" src="/images/ban4.jpg"
+                         onclick="link('http://localhost:8080/bookstore/index.html',false)">
+                    <img class="banner_img5" src="/images/ban5.jpg"
+                         onclick="link('http://localhost:8080/bookstore/index.html',true)">
+                    <!--<<<在此位置内添加img标签即可-->
+                </div>
+                <!--此段代码不可移动位置-->
+                <script type="text/javascript">
+                    loads();
+                </script>
+                <!--此段代码不可移动位置-->
+            </div>
+            <!--《《《主要内容-->
+            <!--!!!!!!!!!!!!!!!!!!1-->
+            <!--!!!!!!!!!!!!!!!!!!1-->
+            <!--!!!!!!!!!!!!!!!!!!1-->
+            <!--!!!!!!!!!!!!!!!!!!1-->
+        </div><!--pntRight/-->
+        <div class="clears"></div>
+    </div><!--pnt/-->
+    <div class="rdPro">
+        <div class="rdLeft">
+            <ul class="rdList">
+                <li>推荐产品</li>
+                <li>促销产品</li>
+                <div class="clears"></div>
+            </ul><!--rdList/-->
+            <div class="rdProBox">
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129"/></a></dt>
+                    <dd></dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                    <dd>热销书籍</dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129"/></a></dt>
+                    <dd>热销书籍</dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                    <dd>热销书籍</dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                    <dd>热销书籍</dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <div class="clears"></div>
+            </div><!--rdPro/-->
+            <div class="rdProBox">
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                    <dd>热销书籍</dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                    <dd>热销书籍</dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129"/></a></dt>
+                    <dd>热销书籍</dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                    <dd>热销书籍</dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <dl>
+                    <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129"/></a></dt>
+                    <dd>热销书籍</dd>
+                    <dd class="cheng">￥19.80/本</dd>
+                </dl>
+                <div class="clears"></div>
+            </div><!--rdPro/-->
+        </div><!--rdLeft/-->
+        <div class="rdRight">
+            <img src="/images/rdRight.jpg" width="221" height="254"/>
+        </div><!--rdRight/-->
+        <div class="clears"></div>
     </div><!--rdPro/-->
-    <div class="rdProBox">
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <div class="clears"></div>
-    </div><!--rdPro/-->
-   </div><!--rdLeft/-->
-   <div class="rdRight">
-    <img src="/images/rdRight.jpg" width="221" height="254" />
-   </div><!--rdRight/-->
-   <div class="clears"></div>
-  </div><!--rdPro/-->
 
-  <div class="hengfu">
-   <img src="/images/hengfu1.jpg" width="979" height="97" />
-  </div><!--hengfu/-->
+    <div class="hengfu">
+        <img src="/images/hengfu1.jpg" width="979" height="97"/>
+    </div><!--hengfu/-->
 
-  <div class="floor" id="floor2">
-   <h3 class="floorTitle">
-   3F&nbsp;&nbsp;&nbsp;&nbsp;纸浆模塑系列
-   <a href="proinfo.html" class="more">更多 &gt;</a>
-   </h3>
-   <div class="floorBox">
-    <div class="floorLeft">
-     <ul class="flList">
-      <li>纸碟</li>
-      <li>纸袋</li>
-      <li>纸碗</li>
-      <li>食品袋</li>
-      <li>外带打包</li>
-      <li><a href="proinfo.html">更多&gt;&gt;</a></li>
-      <div class="clears"></div>
-     </ul><!--flList/-->
-     <div class="flImg"><img src="/images/flListimg.jpg" width="198" height="290" /></div>
-    </div><!--floorLeft/-->
-    <div class="floorRight">
-     <div class="frProList">
-      <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-       <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-       <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-       <dd class="cheng">￥19.80/袋</dd>
-      </dl>
-      <div class="clears"></div>
-     </div><!--frProList-->
-     <div class="frProList">
-      <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-       <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129" /></a></dt>
-       <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-       <dd class="cheng">￥19.80/袋</dd>
-      </dl>
-      <div class="clears"></div>
-     </div><!--frProList-->
-     <div class="frProList">
-      <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-       <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-       <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-       <dd class="cheng">￥19.80/袋</dd>
-      </dl>
-      <div class="clears"></div>
-     </div><!--frProList-->
-     <div class="frProList">
-      <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-       <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-       <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-       <dd class="cheng">￥19.80/袋</dd>
-      </dl>
-      <div class="clears"></div>
-     </div><!--frProList-->
-     <div class="frProList">
-      <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-      <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129" /></a></dt>
-      <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-      <dd class="cheng">￥19.80/袋</dd>
-     </dl>
-     <dl>
-       <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129" /></a></dt>
-       <dd>妙洁 一次性纸杯 8盎司228ml 100只/袋 20袋/箱</dd>
-       <dd class="cheng">￥19.80/袋</dd>
-      </dl>
-      <div class="clears"></div>
-     </div><!--frProList-->
-    </div><!--floorRight/-->
-    <div class="clears"></div>
-   </div><!--floorBox/-->
-  </div><!--floor/-->
-  <div class="inHelp">
-   <div class="inHLeft">
-    <h4>帮助中心</h4>
-    <ul class="inHeList">
-     <li><a href="help.html">购物指南</a></li>
-     <li><a href="help.html">支付方式</a></li>
-     <li><a href="help.html">售后服务</a></li>
-     <li><a href="about.html">企业简介</a></li>
-     <div class="clears"></div>
-    </ul><!--inHeList/-->
-   </div><!--inHLeft/-->
-   <div class="inHLeft">
-    <h4>会员服务</h4>
-    <ul class="inHeList">
-     <li><a href="reg.html">会员注册</a></li>
-     <li><a href="login.html">会员登录</a></li>
-     <li><a href="order.html">购物车</a></li>
-     <li><a href="order.html">我的订单</a></li>
-     <div class="clears"></div>
-    </ul><!--inHeList/-->
-   </div><!--inHLeft/-->
-   <div class="inHRight">
-    <h4>全国统一免费服务热线</h4>
-    <div class="telBox">400-0000-0000</div>
-    <div class="weibo">
-    <wb:follow-button uid="2991975565" type="red_1" width="67" height="24" ></wb:follow-button>
-    </div>
-   </div><!--inHRight/-->
-   <div class="clears"></div>
-  </div><!--inHelp/-->
-  <div class="footer">
-   <p>
-   <a href="#">进入17官网</a>&nbsp;|&nbsp;
-   <a href="index.html">商城首页</a>&nbsp;|&nbsp;
-   <a href="product.html">促销中心</a>&nbsp;|&nbsp;
-   <a href="order.html">我的订单</a>&nbsp;|&nbsp;
-   <a href="new.html">新闻动态</a>&nbsp;|&nbsp;
-   <a href="login.html">会员中心</a>&nbsp;|&nbsp;
-   <a href="help.htmll">帮助中心</a>
-   </p>
-   <p>
-    版权所有：上海17实业有限公司 版权所有  Copyright 2010-2015   沪ICP备00000000号   <a href="http://www.mycodes.net/" target="_blank">源码之家</a>   
-   </p>
-  </div><!--footer/-->
- </div><!--mianCont/-->
- <a href="#" class="backTop">&nbsp;</a>
+    <div class="floor" id="floor2">
+        <h3 class="floorTitle">
+            【热销】&nbsp;&nbsp;新品系列
+            <a href="proinfo.html" class="more">更多 &gt;</a>
+        </h3>
+        <div class="floorBox">
+            <div class="floorLeft">
+                <ul class="flList">
+                    <li>男频</li>
+                    <li>女频</li>
+                    <li>社会</li>
+                    <li>历史</li>
+                    <li>情感</li>
+                    <li><a href="proinfo.html">更多&gt;&gt;</a></li>
+                    <div class="clears"></div>
+                </ul><!--flList/-->
+                <div class="flImg"><img src="/images/flListimg.jpg" width="198" height="290"/></div>
+            </div><!--floorLeft/-->
+            <div class="floorRight">
+                <div class="frProList">
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <div class="clears"></div>
+                </div><!--frProList-->
+                <div class="frProList">
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <div class="clears"></div>
+                </div><!--frProList-->
+                <div class="frProList">
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <div class="clears"></div>
+                </div><!--frProList-->
+                <div class="frProList">
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <div class="clears"></div>
+                </div><!--frProList-->
+                <div class="frProList">
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <dl>
+                        <dt><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="132" height="129"/></a></dt>
+                        <dd>热销书籍</dd>
+                        <dd class="cheng">￥19.80/本</dd>
+                    </dl>
+                    <div class="clears"></div>
+                </div><!--frProList-->
+            </div><!--floorRight/-->
+            <div class="clears"></div>
+        </div><!--floorBox/-->
+    </div><!--floor/-->
+    <div class="inHelp">
+        <div class="inHLeft">
+            <h4>帮助中心</h4>
+            <ul class="inHeList">
+                <li><a href="help.html">购物指南</a></li>
+                <li><a href="help.html">支付方式</a></li>
+                <li><a href="help.html">售后服务</a></li>
+                <li><a href="about.html">企业简介</a></li>
+                <div class="clears"></div>
+            </ul><!--inHeList/-->
+        </div><!--inHLeft/-->
+        <div class="inHLeft">
+            <h4>会员服务</h4>
+            <ul class="inHeList">
+                <li><a href="reg.html">会员注册</a></li>
+                <li><a href="login.html">会员登录</a></li>
+                <li><a href="order.html">购物车</a></li>
+                <li><a href="order.html">我的订单</a></li>
+                <div class="clears"></div>
+            </ul><!--inHeList/-->
+        </div><!--inHLeft/-->
+        <div class="inHRight">
+            <h4>全国统一免费服务热线</h4>
+            <div class="telBox">400-0000-0000</div>
+            <div class="weibo">
+                <wb:follow-button uid="2991975565" type="red_1" width="67" height="24"></wb:follow-button>
+            </div>
+        </div><!--inHRight/-->
+        <div class="clears"></div>
+    </div><!--inHelp/-->
+    <div class="footer">
+        <p>
+            <a href="#">进入17官网</a>&nbsp;|&nbsp;
+            <a href="index.html">商城首页</a>&nbsp;|&nbsp;
+            <a href="product.html">促销中心</a>&nbsp;|&nbsp;
+            <a href="order.html">我的订单</a>&nbsp;|&nbsp;
+            <a href="new.html">新闻动态</a>&nbsp;|&nbsp;
+            <a href="login.html">会员中心</a>&nbsp;|&nbsp;
+            <a href="help.htmll">帮助中心</a>
+        </p>
+        <p>
+            版权所有：上海17实业有限公司 版权所有 Copyright 2010-2015 沪ICP备00000000号 <a href="http://www.mycodes.net/" target="_blank">源码之家</a>
+        </p>
+    </div><!--footer/-->
+</div><!--mianCont/-->
+<a href="#" class="backTop">&nbsp;</a>
 </body>
 </html>

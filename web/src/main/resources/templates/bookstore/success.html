@@ -7,6 +7,20 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/js.js"></script>
 <script src="/js/wb.js" type="text/javascript" charset="utf-8"></script>
+ <script th:inline="javascript">
+  var uname = /*[[${session.currUser.uname}]]*/ 'Sebastian';
+  $(function () {
+
+   if (uname == "tourist") {
+    $("#slogan").html("您好！欢迎来到本网上书城请<a href='/bookstore/login'>[登录]</a> <a href='/bookstore/reg'>[注册]</a>");
+
+   } else {
+    var msg = uname + ", 欢迎您来到网上书城！";
+    $("#slogan").html(msg + "<a href='/bookstore/logout' id='logout'>退出</a>");
+   }
+  });
+
+ </script>
 </head>
 
 <body>
@@ -21,7 +35,7 @@
    </span>
   </div><!--top/-->
   <div class="lsg">
-   <h1 class="logo"><a href="index.html"><img src="/images/logo.png" width="217" height="90" /></a></h1>
+   <h1 class="logo"><a href="/bookstore/index"><img src="/images/logo.png" width="217" height="90" /></a></h1>
    <form action="/keyWordSearch" method="get" class="subBox">
     <div class="subBoxDiv">
      <input type="text" name="bname" class="subLeft" />

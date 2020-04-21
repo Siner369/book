@@ -15,7 +15,7 @@
     <script src="/js/base.js"></script>
     <script src="/js/jsonHandler.js"></script>
     <script src="/layui/layui.js"></script>
-    <script>
+    <script th:inline="javascript">
         $(function () {
             /*$(window).unload(function(){
                 //响应事件
@@ -50,7 +50,6 @@
             $("#bookMsg").submit(function () {
                 var strdata = $("#bookMsg").serializeObject();
                 var str = JSON.stringify(strdata);
-                alert(str);
                 if (checkNotNull() && checkNotNum()) {
                     alert("正则测试通过");
                     $.ajax({
@@ -101,6 +100,8 @@
                             return layer.msg('上传失败');
                         }
                         //上传成功
+                        var imgs = res.imgSrc;
+                        $("#bpic").val(imgs);
                         var demoText = $('#demoText');
                         demoText.html('<span style="color: #4cae4c;">上传成功</span>');
                         var fileupload = $(".image");
@@ -147,7 +148,6 @@
             if (flag1 && flag2) {
                 return true;
             }
-            // var mid = $("#mid");
             return false;
         }
         //临时图片删除
@@ -248,12 +248,11 @@
 
                     <li>
                         <label class="item_name" style="width:120px;">上传图片：</label>
-                        <input type="hidden" name="images" class="image">
                         <div class="layui-form-item" style="margin-left:100px">
                             <div class="layui-upload">
                                 <button type="button" class="layui-btn" id="btn_upload">上传图片</button>
                                 <div class="layui-upload-list">
-                                    <input name="bpic" type="hidden" th:value="${session.updateBook.bpic}">
+                                    <input name="bpic" id="bpic" type="hidden" th:value="${session.updateBook.bpic}">
                                     <img class="layui-upload-img"  th:src="${session.updateBook.bpic}" id="demo1" style="width:150px; height: 150px;">
                                     <p id="demoText"></p>
                                 </div>
