@@ -1,8 +1,7 @@
-
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.siner.dao.OrdersIteam">
+<mapper namespace="com.siner.dao.OrdersIteamDao">
     <resultMap id="OrdersIteamMap" type="com.siner.entity.OrdersIteam">
         <id property="ooid" column="ooid"/>
         <result property="bid" column="bid"/>
@@ -10,5 +9,8 @@
         <result property="totle" column="totle"/>
     </resultMap>
 
+    <insert id="addOrderIteam" parameterType="com.siner.entity.OrdersIteam">
+        insert into ordersiteam(oid,bid,oocount) values(#{oid},#{bid},#{oocount})
+	</insert>
 
 </mapper>

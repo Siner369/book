@@ -3,6 +3,6 @@ package com.siner.dao;
 
 import org.springframework.stereotype.Repository;
 
-@Repository("OrdersIteam")
-public interface OrdersIteam {
+@Repository("CommentsDao")
+public interface CommentsDao {
 }

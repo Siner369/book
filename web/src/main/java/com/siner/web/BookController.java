@@ -28,8 +28,8 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @RequestMapping("findAllBook")
-    public String findAll(Model model, HttpSession session){
+    @GetMapping("findAllBook")
+    public String findAll(Model model){
         List<Book> list = new ArrayList<Book>();
         list = bookService.findAllBook();
         System.out.println(list);

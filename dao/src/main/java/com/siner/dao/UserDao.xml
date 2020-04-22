@@ -24,28 +24,9 @@
             <result property="unreceiveprincipal" column="unreceiveprincipal"/>
             <result property="unreceiveamount" column="unreceiveamount"/>
             <result property="remainborrowlimit" column="remainborrowlimit"/>
-        </association>
-
-        <association property="userinfo" javaType="com.hntest.entity.Userinfo">
-            <result property="version" column="version"/>
-            <result property="bitState" column="bitState"/>
-            <result property="realName" column="realName"/>
-            <result property="idNumber" column="idNumber"/>
-            <result property="phoneNumber" column="phoneNumber"/>
-            <result property="incomeGrade" column="incomeGrade"/>
-            <result property="Marriage" column="Marriage"/>
-            <result property="KidCount" column="KidCount"/>
-            <result property="educationBackground" column="educationBackground"/>
-            <result property="houseCondition" column="houseCondition"/>
+        </association> -->
 
 
-             <result property="ugender" column="ugender"/>
-        <result property="uaddress" column="uaddress"/>
-        <result property="uemail" column="uemail"/>
-        <result property="utel" column="utel"/>
-        <result property="ustate" column="ustate"/>
-
-        </association>-->
     </resultMap>
 
     <select id="login" resultType="com.siner.entity.User" parameterType="com.siner.entity.User">
@@ -66,15 +47,7 @@
 	</insert>
 
     <update id="updateUserInfo" parameterType="com.siner.entity.User">
-        <!--		update t_Admin-->
-        <!--		<set>-->
-        <!--			<if test="loginPWD!=null">-->
-        <!--				loginPWD = #{loginPWD},-->
-        <!--			</if>-->
-        <!--		</set>-->
-        <!--		where loginID = #{loginID}-->
-        update user set ugender = #{ugender},uaddress = #{uaddress},
-        uemail = #{uemail},utel = #{utel},umailcode = #{umailcode} where uname = #{uname}
+        update user set ugender = #{ugender},uaddress = #{uaddress},umailcode = #{umailcode} where uid = #{uid}
     </update>
     
 

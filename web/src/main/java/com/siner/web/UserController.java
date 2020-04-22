@@ -71,19 +71,17 @@ public class UserController {
     }
     //个人信息完善
     @PostMapping("/bookstore/compleInfo")
-    public  String compleInfo(String uid,String uaddress, String umailcode,String ugender, HttpSession session) {
+    public @ResponseBody String compleInfo(String uid,String uaddress, String umailcode,String ugender, HttpSession session) {
         User u = new User();
         u.setUid(Integer.valueOf(uid));
         u.setUaddress(uaddress);
         u.setUmailcode(Integer.valueOf(umailcode));
         u.setUgender(ugender);
-        System.out.println(u);
         userService.updateUserInfo(u);
         session.setAttribute("currUser",u);
         JSONObject json = new JSONObject();
         json.put("msg","success");
         return json.toString();
-
     }
 
     /*@RequestMapping(value = "checkDouble", method = {RequestMethod.POST})

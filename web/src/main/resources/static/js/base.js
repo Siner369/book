@@ -33,12 +33,12 @@ function logout() {
                 if (data.logout == "success") {
                     cookie.removeCookie(mname);
                     cookie.removeCookie(usertype);
-                    location.href="http://localhost:8080/admin/login.html";
+                    location.href="/admin/login";
                 }
             },
             error: function () {
                 alert("后台错误");
-                location.href="http://localhost:8080/admin/login.html";
+                location.href="/admin/login";
             }
         });
         //ajax完

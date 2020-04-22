@@ -1,5 +1,7 @@
 package com.siner.web;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siner.entity.Book;
@@ -30,10 +32,9 @@ public class OrdersIteamController {
     private BookService bookService;
 
     Jedis jedis = JedisPoolUtils.getJedis();
-    @PostMapping(value = "addCart")
-    public @ResponseBody
-    String addCart(String uid, String bid, String oocount, Model model) throws JsonProcessingException {
 
+    @PostMapping("/bookstore/addCart")
+    public @ResponseBody String addCart(String uid, String bid, String oocount) {
         //1.从redis中获得值，数据的形式为json字符串
         Book book = bookService.searchBookByID(Integer.valueOf(bid));
         String bookCount = jedis.hget("user:" + uid, bid);
@@ -46,11 +47,9 @@ public class OrdersIteamController {
                jedis.hmset("user:" + uid, map);
             }
         }
-        Map<String, String> userCart = jedis.hgetAll("user:" + uid);
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(userCart);
-        System.out.println(json);
-        return json;
+        JSONObject json = new JSONObject();
+        json.put("msg","success");
+        return json.toString();
     }
 
     @PostMapping("bookstore/addOrder")
@@ -80,10 +79,11 @@ public class OrdersIteamController {
     }
 
     @RequestMapping("/bookstore/loadOrderPage")
-    public @ResponseBody List loadOrderPage(HttpSession session,Model model) {
+    public @ResponseBody List loadOrderPage(HttpSession session) {
         User user = (User) session.getAttribute("currUser");
         Map<String, String> map = jedis.hgetAll("user:" + user.getUid());
         List<Cart> list = new ArrayList<>();
+        if (map!=null)
         for(Map.Entry<String, String> a:map.entrySet()){
             Book book = bookService.searchBookByID(Integer.valueOf(a.getKey()));
             Cart cart = new Cart();

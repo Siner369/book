@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siner.dao.OrdersDao">
+    <resultMap id="OrderMap" type="com.siner.entity.Orders">
+        <id property="lid" column="lid"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="state" column="state"/>
+        <result property="usertype" column="usertype"/>
+        <result property="admin" column="admin"/>
+
+
+        <!--<association property="account" javaType="com.hntest.entity.Account">
+            <id property="account_id" column="account_id"/>
+            <result property="tradepassword" column="tradepassword"/>
+            <result property="useableamount" column="useableamount"/>
+            <result property="freezedamount" column="freezedamount"/>
+            <result property="borrowlimit" column="borrowlimit"/>
+            <result property="version" column="version"/>
+            <result property="unreceiveinterest" column="unreceiveinterest"/>
+            <result property="unreceiveprincipal" column="unreceiveprincipal"/>
+            <result property="unreceiveamount" column="unreceiveamount"/>
+            <result property="remainborrowlimit" column="remainborrowlimit"/>
+        </association>-->
+
+    </resultMap>
+
+    <insert id="addOrder" parameterType="com.siner.entity.Orders">
+        insert into orders(oid,uid,uaddress,utel,buytime,state) values(#{oid},#{uid},#{uaddress},#{utel},#{buytime},#{state})
+	</insert>
+    
+
+</mapper>
+

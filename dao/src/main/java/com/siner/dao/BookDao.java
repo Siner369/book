@@ -9,12 +9,6 @@ import java.util.List;
 @Repository("BookDao")
 public interface BookDao {
 
-   /* //前台  关键词检索
-    List<Book> keyWordSearch(String bname);
-
-    //前台  分类检索
-    List<Book> categorySearch(String booktype);
-*/
     //后台 检索全部书籍
     List<Book> findAllBook();
 

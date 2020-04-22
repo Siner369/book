@@ -2,6 +2,7 @@ package com.siner.web;
 
 import com.siner.entity.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -14,7 +15,7 @@ public class IndexController {
      * @return
      */
     @RequestMapping("/bookstore/index")
-    public String toIndex(HttpSession session) {
+    public String toIndex(HttpSession session, Model model) {
         if (session.getAttribute("currUser") == null){
             User u = new User();
             u.setUname("tourist");

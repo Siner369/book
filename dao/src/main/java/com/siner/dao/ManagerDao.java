@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository("ManagerDao")
 public interface ManagerDao {
     //后台检索账号
-    public Manager login_admin(@Param("name") String mname, @Param("pass") String mpass);
+    Manager login_admin(@Param("name") String mname, @Param("pass") String mpass);
 }
