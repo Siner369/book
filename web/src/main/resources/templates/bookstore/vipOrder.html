@@ -28,9 +28,8 @@
   <div class="top">
    <span>您好！欢迎来到17商城 请&nbsp;<a href="login.html">[登录]</a>&nbsp;<a href="reg.html">[注册]</a></span>
    <span class="topRight">
-    <a href="vip.html">我的17</a>&nbsp;| 
-    <a href="order.html">我的订单</a>&nbsp;| 
-    <a href="login.html">会员中心</a>&nbsp;|
+    <a href="/bookstore/vip">个人中心</a>&nbsp;|
+    <a href="/bookstore/vipOrder">我的订单</a>&nbsp;|
     <a href="contact.html">联系我们</a>
    </span>
   </div><!--top/-->
@@ -55,7 +54,7 @@
      <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;" />&nbsp;|&nbsp;
      <strong class="red">0</strong>&nbsp;件&nbsp;|
      <strong class="red">￥ 0.00</strong> 
-     <a href="order.html">去结算</a> <img src="/images/youjian.jpg" width="5" height="8" />
+     <a href="/bookstore/order">去结算</a> <img src="/images/youjian.jpg" width="5" height="8" />
     </div><!--gouCar/-->
     <div class="myChunlv">
      <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34" /></a>
@@ -114,52 +113,30 @@
     </dl><!--helpNav/-->
    </div><!--contLeft/-->
    <div class="contRight">
-    <h1 class="vipName"><span>用户名：</span>纯小绿先森</h1>
+    <h1 class="vipName">用户名：<span th:value="${session.currUser.uname}"></span></h1>
     <h2 class="oredrName">
     我的订单 <span style="margin-left:40px;">待发货 <span class="red">10</span> </span>
     <span>待收货 <span class="red">15</span></span>
     </h2>
     <table class="vipOrder">
-     <tr>
-      <td><a href="proinfo.html"><img src="/images/rdPro4.jpg" width="60" height="55"></a></td>
-      <td>张益达</td>
-      <td>￥16.9<br />支付宝支付</td>
-      <td>2014年6月23日11:32:17</td>
-      <td><a href="success.html"><strong>等待付款</strong></a></td>
+     <tr th:each="order:${orderList}">
+      <!--<td><a href="#"><img src="/images/rdPro4.jpg" width="60" height="55"></a></td>-->
+      <td><span th:text="${session.currUser.uname}"></span></td>
+      <td><span th:text="${order.uaddress}"></span></td>
+      <td><span th:text="${order.utel}"></span></td>
+      <td><span th:text="${#dates.format(order.buytime,'yyyy-MM-dd')}"></span></td>
+      <td><span th:text="${order.sum}"></span>元</td>
+      <td><a href="success.html"><strong>订单状态：</strong><span th:text="${order.state}"></span></a></td>
       <td><a href="orderDetails.html">查看</a></td>
      </tr>
-     <tr>
-      <td><a href="proinfo.html"><img src="/images/rdPro3.jpg" width="60" height="55"></a></td>
-      <td>张益达</td>
-      <td>￥16.9<br />支付宝支付</td>
-      <td>2014年6月23日11:32:17</td>
-      <td><a href="success.html"><strong>等待付款</strong></a></td>
-      <td><a href="orderDetails.html">查看</a></td>
-     </tr>
-     <tr>
-      <td><a href="proinfo.html"><img src="/images/rdPro2.jpg" width="60" height="55"></a></td>
-      <td>张益达</td>
-      <td>￥16.9<br />支付宝支付</td>
-      <td>2014年6月23日11:32:17</td>
-      <td><a href="success.html"><strong>等待付款</strong></a></td>
-      <td><a href="orderDetails.html">查看</a></td>
-     </tr>
-     <tr>
-      <td><a href="proinfo.html"><img src="/images/rdPro1.jpg" width="60" height="55"></a></td>
-      <td>张益达</td>
-      <td>￥16.9<br />支付宝支付</td>
-      <td>2014年6月23日11:32:17</td>
-      <td><a href="success.html"><strong>等待付款</strong></a></td>
-      <td><a href="orderDetails.html">查看</a></td>
-     </tr>
-     <tr>
+     <!--<tr>
       <td><a href="proinfo.html"><img src="/images/rdPro5.jpg" width="60" height="55"></a></td>
       <td>张益达</td>
       <td>￥16.9<br />支付宝支付</td>
       <td>2014年6月23日11:32:17</td>
       <td><a href="success.html"><strong>等待付款</strong></a></td>
       <td><a href="orderDetails.html">查看</a></td>
-     </tr>
+     </tr>-->
     </table><!--vipOrder/-->
     <br />
     <div class="scott"><span class="disabled"> < </span><span class="current">1</span><a href="#?page=2">2</a><a href="#?page=3">3</a><a href="#?page=4">4</a><a href="#?page=5">5</a><a href="#?page=6">6</a><a href="#?page=7">7</a>...<a href="#?page=199">199</a><a href="#?page=200">200</a><a href="#?page=2"> > </a></div>

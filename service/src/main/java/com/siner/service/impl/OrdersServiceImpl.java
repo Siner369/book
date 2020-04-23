@@ -3,9 +3,14 @@ package com.siner.service.impl;
 
 import com.siner.dao.OrdersDao;
 import com.siner.entity.Orders;
+import com.siner.entity.User;
 import com.siner.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("OrdersService")
@@ -25,4 +30,14 @@ public class OrdersServiceImpl implements OrdersService {
             return false;
         }
     }
+
+    @Override
+    public List<Orders> findAllOrder(User user) {
+        System.out.println("开始业务逻辑层的调用（搜索订单）....");
+        Map map = new HashMap();
+        map.put("uid",user.getUid());
+        List<Orders> allOrder = ordersDao.findAllOrder(map);
+        return allOrder;
+    }
+
 }

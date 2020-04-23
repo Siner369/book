@@ -6,11 +6,12 @@
         <id property="ooid" column="ooid"/>
         <result property="bid" column="bid"/>
         <result property="oocount" column="oocount"/>
-        <result property="totle" column="totle"/>
+        <result property="IteamSum" column="IteamSum"/>
     </resultMap>
 
     <insert id="addOrderIteam" parameterType="com.siner.entity.OrdersIteam">
-        insert into ordersiteam(oid,bid,oocount) values(#{oid},#{bid},#{oocount})
+        insert into ordersiteam(oid,bid,oocount,IteamSum) values(#{oid},#{bid},#{oocount},#{IteamSum})
 	</insert>
+
 
 </mapper>

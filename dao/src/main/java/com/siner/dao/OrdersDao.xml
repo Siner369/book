@@ -2,33 +2,39 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.siner.dao.OrdersDao">
-    <resultMap id="OrderMap" type="com.siner.entity.Orders">
-        <id property="lid" column="lid"/>
-        <result property="username" column="username"/>
-        <result property="password" column="password"/>
+    <resultMap id="OrdersMap" type="com.siner.entity.Orders">
+        <id property="oid" column="oid"/>
+        <id property="uid" column="uid"/>
+        <result property="uid" column="uid"/>
+        <result property="uaddress" column="uaddress"/>
+        <result property="utel" column="utel"/>
+        <result property="buytime" column="buytime"/>
+        <result property="sum" column="sum"/>
         <result property="state" column="state"/>
-        <result property="usertype" column="usertype"/>
-        <result property="admin" column="admin"/>
 
+        <!--<association property="OrdersIteam" javaType="com.siner.entity.OrdersIteam">
+            <id property="ooid" column="ooid"/>
+            <result property="bid" column="bid"/>
+            <result property="oocount" column="oocount"/>
+            <result property="IteamSum" column="IteamSum"/>
+        </association>
 
-        <!--<association property="account" javaType="com.hntest.entity.Account">
-            <id property="account_id" column="account_id"/>
-            <result property="tradepassword" column="tradepassword"/>
-            <result property="useableamount" column="useableamount"/>
-            <result property="freezedamount" column="freezedamount"/>
-            <result property="borrowlimit" column="borrowlimit"/>
-            <result property="version" column="version"/>
-            <result property="unreceiveinterest" column="unreceiveinterest"/>
-            <result property="unreceiveprincipal" column="unreceiveprincipal"/>
-            <result property="unreceiveamount" column="unreceiveamount"/>
-            <result property="remainborrowlimit" column="remainborrowlimit"/>
+        <association property="Book" javaType="com.siner.entity.Book">
+            <id property="bid" column="bid"/>
+            <result property="bname" column="bname"/>
         </association>-->
-
     </resultMap>
 
     <insert id="addOrder" parameterType="com.siner.entity.Orders">
-        insert into orders(oid,uid,uaddress,utel,buytime,state) values(#{oid},#{uid},#{uaddress},#{utel},#{buytime},#{state})
+        insert into orders(oid,uid,uaddress,utel,buytime,sum,state)
+        values(#{oid},#{uid},#{uaddress},#{utel},#{buytime},#{sum},#{state})
 	</insert>
+
+    <select id="findAllOrder" resultMap="OrdersMap" parameterType="java.util.Map">
+       select *from  Orders left outer join  OrdersIteam on Orders.oid = OrdersIteam.oid
+         left outer join book on OrdersIteam.bid = Book.bid
+        where Orders.uid = #{uid}
+    </select>
     
 
 </mapper>

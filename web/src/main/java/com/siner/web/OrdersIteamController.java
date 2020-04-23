@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.siner.entity.Book;
 import com.siner.entity.Cart;
+import com.siner.entity.Orders;
 import com.siner.entity.User;
 import com.siner.service.BookService;
 import com.siner.service.OrdersIteamService;
@@ -107,9 +108,10 @@ public class OrdersIteamController {
 
     @GetMapping("/bookstore/orderDel")
     public String orderDel(String bid,HttpSession session) {
-        System.out.println("?");
         User user = (User) session.getAttribute("currUser");
         jedis.hdel("user:"+user.getUid(),bid);
         return "/bookstore/order";
     }
+
+
 }
