@@ -21,7 +21,7 @@ public class Orders{
     private Date buytime;//购买时间
     private double sum; //大订单总价
     private int state;//订单状态  0 未付款  1 已经付款 2 订单失效
-
     private OrdersIteam ordersIteam;   //association
     private Book book;   //association
+    private User user;
 }

@@ -11,14 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.siner.util.FileUtils.deleteDir;
@@ -29,24 +26,33 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("findAllBook")
-    public String findAll(Model model){
-        List<Book> list = new ArrayList<Book>();
-        list = bookService.findAllBook();
-        System.out.println(list);
-        model.addAttribute("books",list);
+    public String findAll(){
         return "admin/product_list";
     }
 
+    @GetMapping("/admin/findAll")
+    public @ResponseBody String adminFindAll(){
+        List<Book> list = new ArrayList<Book>();
+        list = bookService.findAllBook();
+        JSONObject json = new JSONObject();
+        json.put("code",0);
+        json.put("msg","");
+        json.put("count",list.size());
+        json.put("data",list);
+        return json.toString();
+    }
 
 
-    @RequestMapping(value = "searchByName", method = {RequestMethod.POST},
-            produces = "application/json;charset=UTF-8")
-    public @ResponseBody
-    List searchByName(String bookname) {
+    @GetMapping("searchByName")
+    public @ResponseBody String searchByName(String bookname){
         System.out.println(bookname);
         List<Book> list = bookService.searchBookByName(bookname);
-        System.out.println("controller 关键字结果输出："+list);
-        return list;
+        JSONObject json = new JSONObject();
+        json.put("code",0);
+        json.put("msg","");
+        json.put("count",list.size());
+        json.put("data",list);
+        return json.toString();
     }
 
     @GetMapping(value = "keyWordSearch")
@@ -66,7 +72,7 @@ public class BookController {
         model.addAttribute("searchList",list);
         model.addAttribute("world","hello");
         return "bookstore/product";
-}
+    }
 
     @GetMapping("proinfo")
     public String proInfo(String bid,Model model){
@@ -82,7 +88,7 @@ public class BookController {
     }
 
 
-    @RequestMapping(value = "addBook", method = {RequestMethod.POST})
+    @PostMapping(value = "addBook")
     public @ResponseBody
     String addBook(String bname,String booktype,String bpic,String bprice,String bnum){
         System.out.println(bprice);
@@ -110,6 +116,7 @@ public class BookController {
     //图片上传测试
     @ResponseBody
     @RequestMapping("/addBook_Pic")
+
     public Map upload(MultipartFile file,HttpSession session){
         session.removeAttribute("imgSrc");
         String path = "";

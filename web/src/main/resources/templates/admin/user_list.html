@@ -5,6 +5,7 @@
 <title>后台管理系统</title>
 <meta name="author" content="DeathGhost" />
 <link rel="stylesheet" type="text/css" href="/css/style.css">
+ <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
 <!--[if lt IE 9]>
     <script src="/js/html5.js"></script>
     <![endif]-->
@@ -12,13 +13,92 @@
 <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
  <script src="/js/cookie.js"></script>
  <script src="/js/base.js"></script>
- <script>
+ <script src="/layui/layui.js"></script>
+ <script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="lock">冻结</a>
+  <a class="layui-btn layui-btn-xs" lay-event="unlock">解冻</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+ </script>
+ <script type="text/javascript" th:inline="javascript">
+  layui.use('table', function (){
+   var table = layui.table;
+   table.render({
+    elem: '#userTable'
+    ,url:'/admin/allUser'
+    ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+    ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+    }],
+    title: '书本信息表'
+    ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+     layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+     //,curr: 5 //设定初始在第 5 页
+     ,groups: 1 //只显示 1 个连续页码
+     ,first: false //不显示首页
+     ,last: false //不显示尾页
+    }, cols: [
+     [
+      {field: 'uid', width: 100, title: '用户ID', sort: true}
+      , {field: 'uname',  title: '用户名'}
+      , {field: 'ugender', width: 100, title: '性别'}
+      , {field: 'uaddress', width: 180, title: '地址'}
+      , {field: 'uemail', width: 180, title: '邮箱'}
+      , {field: 'umailcode', width: 80, title: '邮编'}
+      , {field: 'utel', width: 180, title: '手机号'}
+      , {fixed: 'right',width: 200, title: '操作', toolbar: '#barDemo'}
+     ]
+    ]
+    , page: true
+   });
+   //监听行工具事件
+   table.on('tool(test)', function(obj){
+    if(obj.event === 'del'){
+     layer.confirm('真的删除么', function(index){
+      del(obj.data.uid);
+      layer.close(index);
+     });
+    }
 
-  $(function () {
+    else if(obj.event === 'lock'){
+     layer.confirm('真的要冻结么', function(index){
+      /*冻结*/
+
+      layer.close(index);
+     });
+    }
+
+    else if(obj.event === 'unlock'){
+     layer.confirm('真的要解冻么', function(index){
+      /*解冻*/
+      layer.close(index);
+     });
+    }
 
 
-  })
-</script>
+   });
+  });
+
+  /////删除书籍
+  function del(bid) {
+   $.ajax({
+    url: "/delUser",
+    type: "post",
+    data: {bid: bid},
+    dataType: "text",
+    success: function (data) {
+     if (data != null && data != "") {
+      alert("删除成功！");
+      location.href = "/findAllBook";
+     } else {
+      alert("删除失败！");
+     }
+    },
+    error: function () {
+     alert("后台错误");
+    }
+   });//ajax完
+
+  }
+ </script>
 </head>
 <body>
 <!--header-->
@@ -41,10 +121,9 @@
    <dl>
     <dt>商品信息</dt>
     <!--当前链接则添加class:active-->
-    <dd><a href="/findAllBook.html">商品检索管理</a></dd>
-    <dd><a href="/addPage.html">上架新商品</a></dd>
-    <dd><a href="recycle_bin.html">下架商品管理</a></dd>
-    <dd><a href="comment_list.html" class="active">评价管理</a></dd>
+    <dd><a href="/findAllBook">商品检索管理</a></dd>
+    <dd><a href="/addPage">上架新商品</a></dd>
+    <dd><a href="/admin/comment_list">评价管理</a></dd>
     
    </dl>
   </li>
@@ -52,15 +131,13 @@
   <li>
    <dl>
     <dt>订单信息</dt>
-    <dd><a href="order_list.html">订单管理</a></dd>
-    <!--<dd><a href="order_detail.html">订单详情</a></dd>-->
+    <dd><a href="/admin/order_list">订单管理</a></dd>
    </dl>
   </li>
   <li>
    <dl>
     <dt>会员信息</dt>
-    <dd><a href="user_list.html" class="active">会员列表</a></dd>
-    <dd><a href="user_detail.html">会员详情</a></dd>
+    <dd><a href="/admin/user_list" class="active">会员列表</a></dd>
    </dl>
   </li>
 
@@ -73,78 +150,8 @@
  <div class="rt_content">
       <div class="page_title">
        <h2 class="fl">会员列表</h2>
-       <a href="user_detail.html" class="fr top_rt_btn add_icon">添加新会员</a>
       </div>
-      <section class="mtb">
-       <select class="select">
-        <option>会员等级</option>
-        <option>普通会员</option>
-        <option>高级会员</option>
-       </select>
-       <input type="text" class="textbox textbox_225" placeholder="输入会员号/手机/电子邮件查询..."/>
-       <input type="button" value="查询" class="group_btn"/>
-      </section>
-      <table class="table">
-       <tr>
-        <th>Id</th>
-        <th>会员头像</th>
-        <th>会员账号</th>
-        <th>手机号码</th>
-        <th>电子邮件</th>
-        <th>验证</th>
-        <th>会员等级</th>
-        <th>账户余额</th>
-        <th>冻结资金</th>
-        <th>操作</th>
-       </tr>
-       <tr>
-        <td class="center">001</td>
-        <td class="center"><img src="/upload/user_002.png" width="50" height="50"/></td>
-        <td>DeathGhost</td>
-        <td class="center">18300000000</td>
-        <td class="center">deathghost@sina.cn</td>
-        <td class="center"><a title="已验证" class="link_icon">&#89;</a></td>
-        <td class="center">普通会员</td>
-        <td class="center">
-         <strong class="rmb_icon">5559.00</strong>
-        </td>
-        <td class="center">
-         <strong class="rmb_icon">59.00</strong>
-        </td>
-        <td class="center">
-         <a href="user_detail.html" title="编辑" class="link_icon">&#101;</a>
-         <a href="#" title="删除" class="link_icon">&#100;</a>
-        </td>
-       </tr>
-       <tr>
-        <td class="center">002</td>
-        <td class="center"><img src="/upload/user_001.png" width="50" height="50"/></td>
-        <td>DeathGhost02</td>
-        <td class="center">15800000000</td>
-        <td class="center">232650413@sina.cn</td>
-        <td class="center"><a title="未验证" class="link_icon">&#88;</a></td>
-        <td class="center">高级会员</td>
-        <td class="center">
-         <strong class="rmb_icon">199.00</strong>
-        </td>
-        <td class="center">
-         <strong class="rmb_icon">15.00</strong>
-        </td>
-        <td class="center">
-         <a href="user_detail.html" title="编辑" class="link_icon">&#101;</a>
-         <a href="#" title="删除" class="link_icon">&#100;</a>
-        </td>
-       </tr>
-      </table>
-      <aside class="paging">
-       <a>第一页</a>
-       <a>1</a>
-       <a>2</a>
-       <a>3</a>
-       <a>…</a>
-       <a>1004</a>
-       <a>最后一页</a>
-      </aside>
+  <table class="layui-hide" id="userTable" lay-filter="test"></table>
  </div>
 </section>
 </body>

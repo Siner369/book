@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 
 @Controller
@@ -18,10 +19,8 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("/doReg")
-    public @ResponseBody
-    boolean doReg(@RequestBody User user,HttpSession session) {
+    public @ResponseBody boolean doReg(@RequestBody User user,HttpSession session) {
         boolean ok = userService.reg(user);
-        System.out.println("新增成功了吗？" + ok);
         if (ok) {
             session.setAttribute("currUser",user);
             return true;
@@ -51,8 +50,7 @@ public class UserController {
         return "bookstore/vip";
     }
 
-    @RequestMapping(value = "doLogin", method = {RequestMethod.POST},
-            produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "doLogin",produces = "application/json;charset=UTF-8")
     public @ResponseBody
     String doLogin(String uname, String upass, HttpSession session) {
         User webUser = new User();
@@ -71,16 +69,17 @@ public class UserController {
     }
     //个人信息完善
     @PostMapping("/bookstore/compleInfo")
-    public @ResponseBody String compleInfo(String uid,String uaddress, String umailcode,String ugender, HttpSession session) {
+    public @ResponseBody String compleInfo(String uid,String uaddress,String utel, String umailcode,String ugender, HttpSession session) {
         User u = new User();
         u.setUid(Integer.valueOf(uid));
+        u.setUtel(utel);
         u.setUaddress(uaddress);
         u.setUmailcode(Integer.valueOf(umailcode));
         u.setUgender(ugender);
-        userService.updateUserInfo(u);
+        int i = userService.updateUserInfo(u);
         session.setAttribute("currUser",u);
         JSONObject json = new JSONObject();
-        json.put("msg","success");
+        if (i!=0) json.put("msg","success");
         return json.toString();
     }
 
@@ -126,4 +125,45 @@ public class UserController {
 
         return object.toString();
     }
+
+    @GetMapping("/admin/user_list")
+    public String user_list() {
+        return "/admin/user_list";
+    }
+
+    @GetMapping("/admin/allUser")
+    public @ResponseBody String allUser() {
+        List<User> list = userService.allUser();
+        JSONObject json = new JSONObject();
+        json.put("code",0);
+        json.put("msg","");
+        json.put("count",list.size());
+        json.put("data",list);
+        return json.toString();
+    }
+
+    @PostMapping("/delUser")
+    public @ResponseBody String delUser(String uid) {
+        int del = userService.delUser(Integer.valueOf(uid));
+        JSONObject json = new JSONObject();
+        json.put("del",del);
+        return json.toString();
+    }
+
+    @GetMapping("/LockUser")
+    public @ResponseBody String LockUser(String uid) {
+        int lock = userService.LockUser(Integer.valueOf(uid));
+        JSONObject json = new JSONObject();
+        json.put("lock",lock);
+        return json.toString();
+    }
+
+    @GetMapping("/UnLockUser")
+    public @ResponseBody String UnLockUser(String uid) {
+        int unlock = userService.UnLockUser(Integer.valueOf(uid));
+        JSONObject json = new JSONObject();
+        json.put("unlock",unlock);
+        return json.toString();
+    }
+
 }

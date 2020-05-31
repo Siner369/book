@@ -2,6 +2,7 @@ package com.siner.service.impl;
 
 
 import com.siner.dao.OrdersDao;
+import com.siner.entity.Book;
 import com.siner.entity.Orders;
 import com.siner.entity.User;
 import com.siner.service.OrdersService;
@@ -34,10 +35,30 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public List<Orders> findAllOrder(User user) {
         System.out.println("开始业务逻辑层的调用（搜索订单）....");
-        Map map = new HashMap();
-        map.put("uid",user.getUid());
-        List<Orders> allOrder = ordersDao.findAllOrder(map);
+        /*Map map = new HashMap();
+        map.put("uid",user.getUid());*/
+        List<Orders> allOrder = ordersDao.findAllOrder(user.getUid());
         return allOrder;
+    }
+
+    @Override
+    public Orders findOrderByOid(String oid) {
+        return ordersDao.findOrderByOid(oid);
+    }
+
+    @Override
+    public List<Orders> adminFindAllOrder() {
+        return ordersDao.adminFindAllOrder();
+    }
+
+    @Override
+    public List<Orders> findOrderByTel(String tel) {
+        return ordersDao.findOrderByTel(tel);
+    }
+
+    @Override
+    public boolean delOrder(String oid) {
+        return ordersDao.delOrder(oid);
     }
 
 }

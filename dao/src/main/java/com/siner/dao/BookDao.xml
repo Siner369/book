@@ -9,27 +9,31 @@
         <result property="bpic" column="bpic"/>
         <result property="bprice" column="bprice"/>
         <result property="bnum" column="bnum"/>
+
+<!--        <collection property="comments" javaType="com.siner.entity.Comments">
+            <id property="cid" column="ooid" />
+            <result property="uid" column="uid"/>
+            <result property="uname" column="uname"/>
+            <result property="isbuy" column="isbuy"/>
+            <result property="cscore" column="cscore"/>
+            <result property="comments" column="comments"/>
+        </collection>-->
     </resultMap>
 
-    <!--<insert id="register" parameterType="com.hntest.entity.Logininfo">
-        insert into Logininfo values(#{lid},#{username},#{password},#{state},
-        #{usertype},#{admin})
-	</insert>-->
-
     <select id="findAllBook" resultMap="BookMap" parameterType="java.lang.String">
-        select * from book b left join comments c on b.bid = c.bid
+        select * from book b
     </select>
 
     <select id="searchBookByName" resultMap="BookMap" parameterType="java.lang.String">
-        select * from book b left join comments c on b.bid = c.bid where b.bname like  concat('%',#{bookname},'%')
+        select * from book where bname like  concat('%',#{bookname},'%')
     </select>   <!--searchByType-->
 
     <select id="searchByType" resultMap="BookMap" parameterType="java.lang.String">
-        select * from book b left join comments c on b.bid = c.bid where b.booktype = #{bookname}
+        select * from book  where booktype = #{bookname}
     </select>
 
-    <select id="searchBookByID" resultType="com.siner.entity.Book" parameterType="int">
-        select * from book b  where bid = #{bid}
+    <select id="searchBookByID" resultMap="BookMap" parameterType="int">
+        select * from book where bid = #{bid}
     </select>
 
     <insert id="addBook" parameterType="com.siner.entity.Book">

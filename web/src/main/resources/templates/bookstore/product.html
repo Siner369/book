@@ -13,7 +13,6 @@
             var uname = /*[[${session.currUser.uname}]]*/ 'Sebastian';
             if (uname=="tourist"){
                 $("#slogan").html("您好！欢迎来到本网上书城请<a href='/bookstore/login'>[登录]</a> <a href='/bookstore/reg'>[注册]</a>");
-
             }else{
                 var msg = uname+", 欢迎您来到网上书城！";
                 $("#slogan").html(msg + "<a onclick='logout()' id='logout'>退出</a>");
@@ -52,12 +51,12 @@
         <div class="gouwuche">
             <div class="gouCar">
                 <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;"/>&nbsp;|&nbsp;
-                <strong class="red">0</strong>&nbsp;件&nbsp;|
-                <strong class="red">￥ 0.00</strong>
+                <strong class="red" th:text="${session.cartSize}"></strong>&nbsp;件&nbsp;|
+                <strong class="red">￥ <span th:text="${session.cartSum}"></span></strong>
                 <a href="/bookstore/order">去结算</a> <img src="/images/youjian.jpg" width="5" height="8"/>
             </div><!--gouCar/-->
             <div class="myChunlv">
-                <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34"/></a>
+                <a href="/bookstore/vip"><img src="/images/mychunlv.jpg" width="112" height="34"/></a>
             </div><!--myChunlv/-->
         </div><!--gouwuche/-->
     </div><!--lsg/-->
@@ -88,7 +87,7 @@
     </div><!--positions/-->
     <div class="cont">
         <div class="jilu">
-            总计 <span>8</span> 个记录
+            总计 <span th:text="${searchList.size()}"></span> 个记录
         </div><!--jilu/-->
         <div class="contLeft">
             <ul class="leftPorNav">

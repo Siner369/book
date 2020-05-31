@@ -5,6 +5,7 @@
 <title>后台管理系统</title>
 <meta name="author" content="DeathGhost" />
 <link rel="stylesheet" type="text/css" href="/css/style.css">
+ <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
 <!--[if lt IE 9]>
     <script src="/js/html5.js"></script>
     <![endif]-->
@@ -12,11 +13,125 @@
 <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
  <script src="/js/cookie.js"></script>
  <script src="/js/base.js"></script>
- <script>
-  $(function () {
+ <script src="/layui/layui.js"></script>
+ <script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs" lay-event="info" >详情</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+ </script>
+ <script type="text/javascript" th:inline="javascript">
+  layui.use('table', function () {
+   var table = layui.table;
+   table.render({
+    elem: '#test'
+    ,url:'/admin/allOrders'
+    ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+    ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+    }],
+    title: '订单信息表'
+    ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+     layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+     //,curr: 5 //设定初始在第 5 页
+     ,groups: 1 //只显示 1 个连续页码
+     ,first: false //不显示首页
+     ,last: false //不显示尾页
+    }, cols: [
+     [
+      {field: 'oid', width: 100, title: '订单ID', sort: true}
+      , {field: 'uid',  title: '书名'}
+      , {field: 'uname',  title: '收件人',templet:function(res){return res.user.uname;}}
+      , {field: 'utel', width: 180, title: '联系电话'}
+      , {field: 'uaddress', width: 180, title: '地址'}
+      , {field: 'sum', width: 180, title: '总价', sort: true}
+      , {field: 'buytime', width: 180, title: '购买时间', sort: true}
+      , {field: 'state', width: 100, title: '订单状态'}
+      , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+     ]
+    ]
+    , page: true
+   });
+   //监听行工具事件
+   table.on('tool(test)', function(obj){
+    if(obj.event === 'del'){
+     layer.confirm('真的删除么', function(index){
+      del(obj.data.oid);
+      layer.close(index);
+     });
+    } else if(obj.event === 'info'){
+     var oid = obj.data.oid;
+     location.href="/admin/order_detail?oid="+oid;
+    }
+   });
+  });
 
-  })
-</script>
+  function searchByName() {
+
+   layui.use('table', function () {
+    var table = layui.table;
+    var bookname = $("#bookname").val();
+    table.render({
+     elem: '#test'
+     ,url:'/searchByName?bookname='+bookname
+     ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+     ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+     }],
+     title: '书本信息表'
+     ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+      layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+      //,curr: 5 //设定初始在第 5 页
+      ,groups: 1 //只显示 1 个连续页码
+      ,first: false //不显示首页
+      ,last: false //不显示尾页
+     }, cols: [
+      [
+       {field: 'bid', width: 180, title: '书籍ID', sort: true}
+       , {field: 'bname', width: 400, title: '书名'}
+       , {field: 'bprice', width: 100, title: '售价', sort: true}
+       , {field: 'booktype', title: '书籍类型'}
+       , {field: 'bnum', width: 100, title: '库存', sort: true}
+       , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+      ]
+     ]
+     , page: true
+    });
+    //监听行工具事件
+    table.on('tool(test)', function(obj){
+     var data = obj.data;
+     //console.log(obj)
+     if(obj.event === 'del'){
+      layer.confirm('真的删除么', function(index){
+       del(obj.data.bid);
+       layer.close(index);
+      });
+     } else if(obj.event === 'edit'){
+      var bid = obj.data.bid;
+      location.href="/updatePage?bid="+bid;
+     }
+    });
+   });
+  }
+
+  /////删除大订单
+  function del(oid) {
+   $.ajax({
+    url: "/admin/delOrder",
+    type: "get",
+    data: {oid: oid},
+    dataType: "text",
+    success: function (data) {
+     if (data != null) {
+      alert("删除成功！");
+      location.href = "/admin/order_list?oid="+oid;
+     } else {
+      alert("删除失败！");
+     }
+    },
+    error: function () {
+     alert("后台错误");
+    }
+   });//ajax完
+
+  }
+ </script>
 </head>
 <body>
 <!--header-->
@@ -33,16 +148,15 @@
 <!--aside nav-->
 <!--aside nav-->
 <aside class="lt_aside_nav content mCustomScrollbar">
- <h2><a href="index.html">后台中心</a></h2>
+ <h2><a href="/admin/index">后台中心</a></h2>
  <ul>
   <li>
    <dl>
     <dt>商品信息</dt>
     <!--当前链接则添加class:active-->
-    <dd><a href="product_list.html">商品检索管理</a></dd>
-    <dd><a href="product_detail.html">上架新商品</a></dd>
-    <dd><a href="recycle_bin.html">下架商品管理</a></dd>
-    <dd><a href="user_list.html">评价管理</a></dd>
+    <dd><a href="/findAllBook">商品检索管理</a></dd>
+    <dd><a href="/addPage">上架新商品</a></dd>
+    <dd><a href="/admin/comment_list">评价管理</a></dd>
     
    </dl>
   </li>
@@ -50,15 +164,14 @@
   <li>
    <dl>
     <dt>订单信息</dt>
-    <dd><a href="order_list.html" class="active">订单管理</a></dd>
+    <dd><a href="/admin/order_list">订单管理</a></dd>
     <!--<dd><a href="order_detail.html">订单详情</a></dd>-->
    </dl>
   </li>
   <li>
    <dl>
     <dt>会员管理</dt>
-    <dd><a href="user_list.html">会员列表</a></dd>
-    <dd><a href="user_detail.html">会员详情</a></dd>
+    <dd><a href="/admin/user_list">会员列表</a></dd>
    </dl>
   </li>
 
@@ -75,63 +188,11 @@
        <a class="fr top_rt_btn add_icon">添加商品</a>
       </div>
       <section class="mtb">
-       <select class="select">
-        <option>订单状态</option>
-        <option>待付款</option>
-        <option>待发货</option>
-        <option>待评价</option>
-       </select>
-       <input type="text" class="textbox textbox_225" placeholder="输入订单编号或收件人姓名/电话..."/>
+       搜索用户订单：
+       <input type="text" class="textbox textbox_225" placeholder="输入用户电话..."/>
        <input type="button" value="查询" class="group_btn"/>
       </section>
-      <table class="table">
-       <tr>
-        <th>订单编号</th>
-        <th>收件人</th>
-        <th>联系电话</th>
-        <th>收件人地址</th>
-        <th>订单金额</th>
-        <th>配送方式</th>
-        <th>操作</th>
-       </tr>
-       <tr>
-        <td class="center">201602011207</td>
-        <td>DeathGhost</td>
-        <td>18300000000</td>
-        <td>
-         <address>陕西省西安市未央区幸福路222号</address>
-        </td>
-        <td class="center"><strong class="rmb_icon">59.00</strong></td>
-        <td class="center">申通快递</td>
-        <td class="center">
-         <a href="order_detail.html" title="查看订单" class="link_icon">&#118;</a>
-         <a href="" title="删除" class="link_icon">&#100;</a>
-        </td>
-       </tr>
-       <tr>
-        <td class="center">201602011207</td>
-        <td>DeathGhost</td>
-        <td>18300000000</td>
-        <td>
-         <address>陕西省西安市未央区幸福路222号</address>
-        </td>
-        <td class="center"><strong class="rmb_icon">59.00</strong></td>
-        <td class="center">圆通快递</td>
-        <td class="center">
-         <a href="#" title="查看订单" class="link_icon" target="_blank">&#118;</a>
-         <a href="#" title="删除" class="link_icon">&#100;</a>
-        </td>
-       </tr>
-      </table>
-      <aside class="paging">
-       <a>第一页</a>
-       <a>1</a>
-       <a>2</a>
-       <a>3</a>
-       <a>…</a>
-       <a>1004</a>
-       <a>最后一页</a>
-      </aside>
+     <table class="layui-hide" id="test" lay-filter="test"></table>
  </div>
 </section>
 </body>

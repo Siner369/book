@@ -12,29 +12,14 @@
         <result property="utel" column="utel"/>
         <result property="ustate" column="ustate"/>
 
-
-        <!--<association property="account" javaType="com.hntest.entity.Account">
-            <id property="account_id" column="account_id"/>
-            <result property="tradepassword" column="tradepassword"/>
-            <result property="useableamount" column="useableamount"/>
-            <result property="freezedamount" column="freezedamount"/>
-            <result property="borrowlimit" column="borrowlimit"/>
-            <result property="version" column="version"/>
-            <result property="unreceiveinterest" column="unreceiveinterest"/>
-            <result property="unreceiveprincipal" column="unreceiveprincipal"/>
-            <result property="unreceiveamount" column="unreceiveamount"/>
-            <result property="remainborrowlimit" column="remainborrowlimit"/>
-        </association> -->
-
-
     </resultMap>
 
     <select id="login" resultType="com.siner.entity.User" parameterType="com.siner.entity.User">
-        select uid,uname,upass,ugender,uaddress,uemail,utel,ustate from user where uname = #{uname} and upass = #{upass}
+        select uid,uname,upass,umailcode,ugender,uaddress,uemail,utel,ustate from user where uname = #{uname} and upass = #{upass}
     </select>
 
     <select id="loadInfo" resultType="com.siner.entity.User" parameterType="com.siner.entity.User">
-        select uid,uname,upass,ugender,uaddress,uemail,utel,ustate from user where uname = #{uname}
+        select uid,uname,upass,umailcode,ugender,uaddress,uemail,utel,ustate from user where uname = #{uname}
     </select>
 
     <select id="checkRepeat" resultType="java.lang.String" parameterType="com.siner.entity.User">
@@ -47,8 +32,23 @@
 	</insert>
 
     <update id="updateUserInfo" parameterType="com.siner.entity.User">
-        update user set ugender = #{ugender},uaddress = #{uaddress},umailcode = #{umailcode} where uid = #{uid}
+        update user set ugender = #{ugender},utel=#{utel},uaddress = #{uaddress},umailcode = #{umailcode} where uid = #{uid}
     </update>
-    
+    <select id="allUser" resultType="com.siner.entity.User">
+        select * from user;
+    </select>
+
+    <delete id="delUser">
+        delete  from user where uid = #{uid}
+    </delete>
+
+    <update id="lockUser">
+        update user set ustate = 1
+    </update>
+
+    <update id="unlockUser">
+        update user set ustate = 0
+    </update>
+
 
 </mapper>

@@ -14,5 +14,4 @@ public class Book {
     private String bpic;
     private double bprice;
     private int bnum;
-    private Comments comments;
 }

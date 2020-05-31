@@ -54,8 +54,8 @@
    <div class="gouwuche">
     <div class="gouCar">
      <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;" />&nbsp;|&nbsp;
-     <strong class="red">0</strong>&nbsp;件&nbsp;|
-     <strong class="red">￥ 0.00</strong> 
+     <strong class="red" th:text="${session.cartSize}"></strong>&nbsp;件&nbsp;|
+     <strong class="red">￥ <span th:text="${session.cartSum}"></span></strong>
      <a href="order.html">去结算</a> <img src="/images/youjian.jpg" width="5" height="8" />
     </div><!--gouCar/-->
     <div class="myChunlv">

@@ -24,12 +24,13 @@
                 //补全个人信息
                 var uid =/*[[${session.currUser.uid}]]*/ 'Sebastian';
                 var uaddress = $("#uaddress").val();
+                var utel = $("#utel").val();
                 var ugender = $("#ugender").val();
                 var umailcode = $("#umailcode").val();
                 $.ajax({
                     url: "/bookstore/compleInfo",
                     type: "post",
-                    data: {uid:uid,uaddress:uaddress,ugender:ugender,umailcode:umailcode},
+                    data: {uid:uid,uaddress:uaddress,ugender:ugender,utel:utel,umailcode:umailcode},
                     dataType: "json",
                     success: function (data) {
                         //注册成功，跳转成功页面
@@ -85,12 +86,12 @@
         <div class="gouwuche">
             <div class="gouCar">
                 <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;"/>&nbsp;|&nbsp;
-                <strong class="red">0</strong>&nbsp;件&nbsp;|
-                <strong class="red">￥ 0.00</strong>
+                <strong class="red" th:text="${session.cartSize}"></strong>&nbsp;件&nbsp;|
+                <strong class="red">￥ <span th:text="${session.cartSum}"></span></strong>
                 <a href="/bookstore/order">去结算</a> <img src="/images/youjian.jpg" width="5" height="8"/>
             </div><!--gouCar/-->
             <div class="myChunlv">
-                <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34"/></a>
+                <a href="/bookstore/vip"><img src="/images/mychunlv.jpg" width="112" height="34"/></a>
             </div><!--myChunlv/-->
         </div><!--gouwuche/-->
     </div><!--lsg/-->
@@ -118,7 +119,7 @@
     </div><!--pnt/-->
     <div class="positions">
         当前位置：<a href="/bookstore/index">首页</a> &gt; <a href="/bookstore/vip">会员中心</a>
-        &gt; <a href="#" class="posCur">我的订单</a>
+        &gt; <a href="#" class="posCur">个人中心</a>
     </div><!--positions/-->
     <div class="cont">
         <div class="contLeft" id="contLeft">
@@ -146,7 +147,7 @@
             </dl><!--helpNav/-->
         </div><!--contLeft/-->
         <div class="contRight">
-            <h1 class="vipName"><span>用户名：</span>叶兴 <strong class="vipUp">[点击修改/补充个人信息]</strong></h1>
+            <h1 class="vipName"><span>用户名：</span> <span th:text="${session.currUser.uname}"></span> <strong class="vipUp">[点击修改/补充个人信息]</strong></h1>
             <table class="vipMy">
                 <tr>
                     <th>用户名</th>
@@ -155,10 +156,11 @@
                     <th>地址</th>
                 </tr>
                 <tr>
-                    <td>心沉北海</td>
-                    <td>424100</td>
-                    <td>13322256586</td>
-                    <td>湖南省郴州市汝城县汝城一中</td>
+                    <td th:text="${session.currUser.uname}"></td>
+                    <td th:text="${session.currUser.umailcode}"></td>
+                    <td th:text="${session.currUser.utel}"></td>
+                    <td th:text="${session.currUser.uaddress}"></td>
+
                 </tr>
             </table><!--vipMy/-->
 
@@ -174,6 +176,10 @@
                             <option value="man">男</option>
                             <option value="woman">女</option>
                         </select>
+                    </div><!--addList-->
+                    <div class="addList">
+                        <label><span class="red">* </span>手机号:</label>
+                        <input id="utel" name="utel" type="text"/>
                     </div><!--addList-->
                     <div class="addList">
                         <label><span class="red">* </span>详细地址:</label>

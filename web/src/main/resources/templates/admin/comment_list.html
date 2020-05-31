@@ -5,6 +5,7 @@
 <title>后台管理系统</title>
 <meta name="author" content="DeathGhost" />
 <link rel="stylesheet" type="text/css" href="/css/style.css">
+ <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
 <!--[if lt IE 9]>
     <script src="/js/html5.js"></script>
     <![endif]-->
@@ -12,10 +13,71 @@
 <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
  <script src="/js/cookie.js"></script>
  <script src="/js/base.js"></script>
- <script>
-  $(function () {
+ <script src="/layui/layui.js"></script>
+ <script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+ </script>
+ <script type="text/javascript" th:inline="javascript">
+  layui.use('table', function () {
+   var table = layui.table;
+   table.render({
+    elem: '#commentsTable'
+    ,url:'/admin/allComments'
+    ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+    ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+    }],
+    title: '书本信息表'
+    ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+     layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+     //,curr: 5 //设定初始在第 5 页
+     ,groups: 1 //只显示 1 个连续页码
+     ,first: false //不显示首页
+     ,last: false //不显示尾页
+    }, cols: [
+     [
+      {field: 'cid', width: 100, title: '评论ID', sort: true}
+      , {field: 'uname',width: 100,  title: '用户名'}
+      , {field: 'bid', width: 120, title: '书籍ID', sort: true}
+      , {field: 'bname',  title: '书籍名称',templet:function(res){return res.book.bname;}}
+      , {field: 'isbuy', width: 80, title: '是否购买'}
+      , {field: 'cscore', width: 150, title: '评分（0-5）', sort: true}
+      , {field: 'comments',  title: '评论内容'}
+      , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+     ]
+    ]
+    , page: true
+   });
+   //监听行工具事件
+   table.on('tool(test)', function(obj){
+    var data = obj.data;
+    //console.log(obj)
+    if(obj.event === 'del'){
+     layer.confirm('真的删除么', function(index){
+      del(obj.data.cid);
+      layer.close(index);
+     });
+    }
+   });
+  });
 
-  })
+  function del(cid) {
+   $.ajax({
+    url: "/delComments",
+    type: "post",
+    data: {cid: cid},
+    dataType: "text",
+    success: function (data) {
+     if (data.del=='success') {
+      alert("删除评论成功！");
+      location.href = "/admin/comment_list";
+     }
+    },
+    error: function () {
+     alert("后台错误");
+    }
+   });//ajax完
+
+  }
 </script>
 </head>
 <body>
@@ -40,25 +102,22 @@
     <dt>商品信息</dt>
     <!--当前链接则添加class:active-->
     <dd><a href="/findAllBook">商品检索管理</a></dd>
-    <dd><a href="/addBook">上架新商品</a></dd>
-    <dd><a href="recycle_bin.html">下架商品管理</a></dd>
-    <dd><a href="user_list.html" class="active">评价管理</a></dd>
-    
+    <dd><a href="/addPage">上架新商品</a></dd>
+    <dd><a href="/admin/comment_list" class="active">评价管理</a></dd>
    </dl>
   </li>
   
   <li>
    <dl>
     <dt>订单信息</dt>
-    <dd><a href="order_list.html">订单管理</a></dd>
+    <dd><a href="/admin/order_list">订单管理</a></dd>
     <!--<dd><a href="order_detail.html">订单详情</a></dd>-->
    </dl>
   </li>
   <li>
    <dl>
     <dt>会员信息</dt>
-    <dd><a href="user_list.html">会员列表</a></dd>
-    <dd><a href="user_detail.html">会员详情</a></dd>
+    <dd><a href="/admin/user_list">会员列表</a></dd>
    </dl>
   </li>
 
@@ -75,75 +134,12 @@
        <a href="user_detail.html" class="fr top_rt_btn add_icon">添加新会员</a>
       </div>
       <section class="mtb">
-       <select class="select">
-        <option>会员等级</option>
-        <option>普通会员</option>
-        <option>高级会员</option>
-       </select>
-       <input type="text" class="textbox textbox_225" placeholder="输入商品号查询评论..."/>
+       搜索用户名：
+       <input type="text" class="textbox textbox_225" placeholder="输入用户名..."/>
        <input type="button" value="查询" class="group_btn"/>
       </section>
-      <table class="table">
-       <tr>
-        <th>Id</th>
-        <th>会员头像</th>
-        <th>会员账号</th>
-        <th>手机号码</th>
-        <th>电子邮件</th>
-        <th>验证</th>
-        <th>会员等级</th>
-        <th>账户余额</th>
-        <th>冻结资金</th>
-        <th>操作</th>
-       </tr>
-       <tr>
-        <td class="center">001</td>
-        <td class="center"><img src="/upload/user_002.png" width="50" height="50"/></td>
-        <td>DeathGhost</td>
-        <td class="center">18300000000</td>
-        <td class="center">deathghost@sina.cn</td>
-        <td class="center"><a title="已验证" class="link_icon">&#89;</a></td>
-        <td class="center">普通会员</td>
-        <td class="center">
-         <strong class="rmb_icon">5559.00</strong>
-        </td>
-        <td class="center">
-         <strong class="rmb_icon">59.00</strong>
-        </td>
-        <td class="center">
-         <a href="user_detail.html" title="编辑" class="link_icon">&#101;</a>
-         <a href="#" title="删除" class="link_icon">&#100;</a>
-        </td>
-       </tr>
-       <tr>
-        <td class="center">002</td>
-        <td class="center"><img src="/upload/user_001.png" width="50" height="50"/></td>
-        <td>DeathGhost02</td>
-        <td class="center">15800000000</td>
-        <td class="center">232650413@sina.cn</td>
-        <td class="center"><a title="未验证" class="link_icon">&#88;</a></td>
-        <td class="center">高级会员</td>
-        <td class="center">
-         <strong class="rmb_icon">199.00</strong>
-        </td>
-        <td class="center">
-         <strong class="rmb_icon">15.00</strong>
-        </td>
-        <td class="center">
-         <a href="user_detail.html" title="编辑" class="link_icon">&#101;</a>
-         <a href="#" title="删除" class="link_icon">&#100;</a>
-        </td>
-       </tr>
-      </table>
-      <aside class="paging">
-       <a>第一页</a>
-       <a>1</a>
-       <a>2</a>
-       <a>3</a>
-       <a>…</a>
-       <a>1004</a>
-       <a>最后一页</a>
-      </aside>
+  <table class="layui-hide" id="commentsTable" lay-filter="test"></table>
+
  </div>
 </section>
 </body>

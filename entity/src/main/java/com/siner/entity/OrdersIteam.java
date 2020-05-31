@@ -14,5 +14,6 @@ public class OrdersIteam {
     private int bid;//书籍ID
     private int oocount;//购买数量
     private double IteamSum; //小订单总价
+    private Book book;
 
 }

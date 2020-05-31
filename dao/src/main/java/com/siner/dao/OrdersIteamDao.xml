@@ -7,11 +7,24 @@
         <result property="bid" column="bid"/>
         <result property="oocount" column="oocount"/>
         <result property="IteamSum" column="IteamSum"/>
+
+        <collection property="book" javaType="com.siner.entity.Book">
+            <id property="bid" column="bid"/>
+            <result property="bname" column="bname"/>
+            <result property="booktype" column="booktype"/>
+            <result property="bpic" column="bpic"/>
+            <result property="bprice" column="bprice"/>
+            <result property="bnum" column="bnum"/>
+        </collection>
     </resultMap>
 
     <insert id="addOrderIteam" parameterType="com.siner.entity.OrdersIteam">
         insert into ordersiteam(oid,bid,oocount,IteamSum) values(#{oid},#{bid},#{oocount},#{IteamSum})
 	</insert>
+    <select id="FindOrdersIteam" resultMap="OrdersIteamMap" parameterType="java.lang.String">
+       select * from ordersiteam o left outer join book b on o.bid = b.bid
+        where b.bid in (select o.bid from ordersiteam where o.oid = #{oid})
+    </select>
 
 
 </mapper>

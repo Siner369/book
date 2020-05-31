@@ -14,4 +14,5 @@ public interface OrdersIteamDao {
     int addOrderIteam(OrdersIteam ordersIteam);
 
 
+    List<OrdersIteam> FindOrdersIteam(String oid);
 }

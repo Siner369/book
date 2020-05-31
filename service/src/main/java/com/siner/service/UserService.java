@@ -2,20 +2,29 @@ package com.siner.service;
 
 import com.siner.entity.User;
 
+import java.util.List;
+
 public interface UserService {
     //登录
-    public User login(User user);
+    User login(User user);
 
     //注册
-    public boolean reg(User user);
+    boolean reg(User user);
 
     //查找同名
-    public boolean checkDouble(User user);
+    boolean checkDouble(User user);
 
     //加载个人资料
-    public User loadInfo(String username);
+    User loadInfo(String username);
 
     //更新资料
-    public int updateUserInfo(User user);
+    int updateUserInfo(User user);
 
+    List<User> allUser();
+
+    int delUser(int uid);
+
+    int LockUser(int uid);
+
+    int UnLockUser(int uid);
 }

@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service("UserService")
 public class UserServiceImpl implements UserService {
 
@@ -54,6 +56,27 @@ public class UserServiceImpl implements UserService {
         System.out.println("改变了吗："+n);
         return n;
     }
+
+    @Override
+    public List<User> allUser() {
+        return userDao.allUser();
+    }
+
+    @Override
+    public int delUser(int uid) {
+        return userDao.delUser(uid);
+    }
+
+    @Override
+    public int LockUser(int uid) {
+        return userDao.lockUser(uid);
+    }
+
+    @Override
+    public int UnLockUser(int uid) {
+        return userDao.unlockUser(uid);
+    }
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED)

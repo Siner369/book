@@ -12,17 +12,21 @@
         <result property="sum" column="sum"/>
         <result property="state" column="state"/>
 
-        <!--<association property="OrdersIteam" javaType="com.siner.entity.OrdersIteam">
-            <id property="ooid" column="ooid"/>
-            <result property="bid" column="bid"/>
-            <result property="oocount" column="oocount"/>
-            <result property="IteamSum" column="IteamSum"/>
-        </association>
+       <!--<collection property="ordersIteam" javaType="com.siner.entity.OrdersIteam">
+           <id property="ooid" column="ooid" />
+           <result property="bid" column="bid"/>
+           <result property="oocount" column="bid"/>
+           <result property="IteamSum" column="IteamSum"/>
+       </collection>-->
 
-        <association property="Book" javaType="com.siner.entity.Book">
-            <id property="bid" column="bid"/>
+        <collection  property="user" javaType="com.siner.entity.User">
+            <result property="uname" column="uname"/>
+        </collection >
+        <!--<collection  property="book" javaType="com.siner.entity.Book">
+            <id property="bid"  column="bid"/>
             <result property="bname" column="bname"/>
-        </association>-->
+            <result property="bpic" column="bpic"/>
+        </collection >-->
     </resultMap>
 
     <insert id="addOrder" parameterType="com.siner.entity.Orders">
@@ -30,12 +34,29 @@
         values(#{oid},#{uid},#{uaddress},#{utel},#{buytime},#{sum},#{state})
 	</insert>
 
-    <select id="findAllOrder" resultMap="OrdersMap" parameterType="java.util.Map">
-       select *from  Orders left outer join  OrdersIteam on Orders.oid = OrdersIteam.oid
-         left outer join book on OrdersIteam.bid = Book.bid
-        where Orders.uid = #{uid}
+    <select id="findAllOrder" resultMap="OrdersMap" parameterType="int">
+       select *from  orders left outer join  ordersiteam on orders.oid = ordersiteam.oid
+         left outer join book on ordersiteam.bid = book.bid
+        <where>
+            <if test="uid != null and uid != ''">
+                 orders.uid = #{uid}
+            </if>
+        </where>
     </select>
-    
+
+    <select id="findOrderByOid"  resultMap="OrdersMap" parameterType="java.lang.String">
+        select  *from orders o left outer join user u on o.uid = u.uid where o.oid = #{oid}
+    </select>
+    <select id="adminFindAllOrder" resultMap="OrdersMap">
+        select  *from orders o left outer join user u on o.uid = u.uid;
+    </select>
+    <select id="findOrderByTel" resultType="com.siner.entity.Orders" >
+        select * from orders where utel = #{tel}
+    </select>
+
+    <delete id="delOrder">
+        delete from orders where oid = #{oid}
+    </delete>
 
 </mapper>
 

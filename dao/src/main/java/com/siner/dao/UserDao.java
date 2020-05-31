@@ -3,6 +3,8 @@ package com.siner.dao;
 import com.siner.entity.User;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository("UserDao")
 public interface UserDao {
@@ -22,4 +24,11 @@ public interface UserDao {
     //用户修改信息
     public int updateUserInfo(User user);
 
+    List<User> allUser();
+
+    int delUser(int uid);
+
+    int lockUser(int uid);
+
+    int unlockUser(int uid);
 }

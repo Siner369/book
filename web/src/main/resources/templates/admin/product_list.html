@@ -1,201 +1,197 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8"/>
-<title>后台管理系统</title>
-<meta name="author" content="DeathGhost" />
-<link rel="stylesheet" type="text/css" href="/css/style.css">
-<!--[if lt IE 9]>
+    <meta charset="utf-8"/>
+    <title>后台管理系统</title>
+    <meta name="author" content="DeathGhost"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/layui/css/layui.css">
+    <!--[if lt IE 9]>
     <script src="/js/html5.js"></script>
     <![endif]-->
-<script src="/js/jquery.js"></script>
-<script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
- <script src="/js/cookie.js"></script>
- <script src="/js/base.js"></script>
- <script>
-  $(function () {
+    <script src="/js/jquery.js"></script>
+    <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="/js/cookie.js"></script>
+    <script src="/js/base.js"></script>
+    <script src="/layui/layui.js"></script>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script type="text/javascript" th:inline="javascript">
+            layui.use('table', function () {
+                var table = layui.table;
+                table.render({
+                    elem: '#test'
+                    ,url:'/admin/findAll'
+                    ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                    ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                    }],
+                    title: '书本信息表'
+                    ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                        layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                        //,curr: 5 //设定初始在第 5 页
+                        ,groups: 1 //只显示 1 个连续页码
+                        ,first: false //不显示首页
+                        ,last: false //不显示尾页
+                    }, cols: [
+                        [
+                            {field: 'bid', width: 100, title: '书籍ID', sort: true}
+                            , {field: 'bname',  title: '书名'}
+                            , {field: 'bprice', width: 180, title: '售价', sort: true}
+                            , {field: 'booktype', width: 180, title: '书籍类型'}
+                            , {field: 'bnum', width: 180, title: '库存', sort: true}
+                            , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+                        ]
+                    ]
+                    , page: true
+                });
+                //监听行工具事件
+                table.on('tool(test)', function(obj){
+                    var data = obj.data;
+                    //console.log(obj)
+                    if(obj.event === 'del'){
+                        layer.confirm('真的删除么', function(index){
+                            del(obj.data.bid);
+                            layer.close(index);
+                        });
+                    } else if(obj.event === 'edit'){
+                       var bid = obj.data.bid;
+                        location.href="/updatePage?bid="+bid;
+                    }
+                });
+            });
 
+            function searchByName() {
 
-  });
-  
-  function searchByName() {
+                layui.use('table', function () {
+                    var table = layui.table;
+                    var bookname = $("#bookname").val();
+                    table.render({
+                        elem: '#test'
+                        ,url:'/searchByName?bookname='+bookname
+                        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                        }],
+                        title: '书本信息表'
+                        ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                            layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                            //,curr: 5 //设定初始在第 5 页
+                            ,groups: 1 //只显示 1 个连续页码
+                            ,first: false //不显示首页
+                            ,last: false //不显示尾页
+                        }, cols: [
+                            [
+                                {field: 'bid', width: 180, title: '书籍ID', sort: true}
+                                , {field: 'bname', width: 400, title: '书名'}
+                                , {field: 'bprice', width: 100, title: '售价', sort: true}
+                                , {field: 'booktype', title: '书籍类型'}
+                                , {field: 'bnum', width: 100, title: '库存', sort: true}
+                                , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+                            ]
+                        ]
+                        , page: true
+                    });
+                    //监听行工具事件
+                    table.on('tool(test)', function(obj){
+                        var data = obj.data;
+                        //console.log(obj)
+                        if(obj.event === 'del'){
+                            layer.confirm('真的删除么', function(index){
+                                del(obj.data.bid);
+                                layer.close(index);
+                            });
+                        } else if(obj.event === 'edit'){
+                            var bid = obj.data.bid;
+                            location.href="/updatePage?bid="+bid;
+                        }
+                    });
+                });
+            }
 
-   var bookname= $("#bookname").val();
-   $.ajax({
-    url:"/searchByName",
-    type:"post",
-    data:{bookname:bookname},
-    dataType:"json",
-    success:function (data) {
-     //注册成功，跳转成功页面
-     //data = JSON.stringify(data);
-     console.info(data[0].bname);
-     $("#t_books").html("");
-     var table = "<table id=\"t_books\" class=\"table\">\n" +
-             "       <tr>\n" +
-             "        <th>缩略图</th>\n" +
-             "        <th>书籍ID</th>\n" +
-             "        <th>书名</th>\n" +
-             "        <th>单价</th>\n" +
-             "        <th>类型</th>\n" +
-             "        <th>商家ID</th>\n" +
-             "        <th>库存</th>\n" +
-             "        <th>修改</th>\n" +
-             "        <th>下架</th>\n" +
-             "       </tr>";
+            /////删除书籍
+            function del(bid) {
+                    $.ajax({
+                        url: "/delBook",
+                        type: "post",
+                        data: {bid: bid},
+                        dataType: "text",
+                        success: function (data) {
+                            if (data != null && data != "") {
+                                alert("删除成功！");
+                                location.href = "/findAllBook";
+                            } else {
+                                alert("删除失败！");
+                            }
+                        },
+                        error: function () {
+                            alert("后台错误");
+                        }
+                    });//ajax完
 
-     if (data!="" && data != null){
-      for (var i = 0; i < data.length; i++) {
-       table += "<tr>\n" +
-               "        <td class='center'><img width='50' height='50' src="+data[i].bpic+"></td>\n" +
-               "        <td class='center'><span >"+data[i].bid+"</span></td>\n" +
-               "        <td class='center'><span>"+data[i].bname+"</span></td>\n" +
-               "        <td class='center'><strong class='rmb_icon'><span>"+data[i].bprice+"</span></strong></td>\n" +
-               "        <td class='center'><span>"+data[i].booktype+"</span></td>\n" +
-               "        <td class='center'><span>"+data[i].mid+"</span></td>\n" +
-               "        <td class='center'><span>"+data[i].bnum+"</span></td>\n" +
-               "        <td class='center'><a href='/updatePage?bid="+data[i].bid+"' title='编辑' class='link_icon'>&#101;</a></td>\n" +
-     "        <td class='center'><a href='#' th:onclick='javascript:return del("+ [[data.bid]]+ ")' title='下架' class='link_icon'>&#100;</a></td>\n" +
-     "       </tr>";
-    }
-
-   }else{
-
-   }
-   table += "</table>"
-   $("#t_books").html(table);
-    },
-    error:function(){
-     alert("查询错误");
-
-    }
-   });
-  }
-
-  /////删除书籍
-  function del(bid){
-   var flag = confirm("确定删除？");
-   if (flag==true) {
-    $.ajax({
-     url: "/delBook",
-     type: "post",
-     data: {bid:bid},
-     dataType: "text",
-     success: function (data) {
-      if (data != null && data!= "") {
-       alert("删除成功！");
-       location.href="/findAllBook";
-      }else {
-       alert("删除失败！");
-      }
-     },
-     error: function (){
-      alert("后台错误");
-     }
-    });//ajax完
-    return true;
-   } //if确认框完
-   return  false;
-  }
-</script>
+            }
+    </script>
 </head>
 <body>
 <!--header-->
 <header>
- <h1><img src="/images/admin_logo.png"/></h1>
- <ul class="rt_nav">
-  <li><a href="#" target="_blank" class="website_icon">站点首页</a></li>
-  <li><a href="#" class="clear_icon">清除缓存</a></li>
-  <li><a th:text="${session.mname}" class="admin_icon"></a></li>
-  <li><a href="#" class="set_icon">账号设置</a></li>
-  <li><a href="login.html" onclick="return logout()" class="quit_icon">安全退出</a></li>
- </ul>
+    <h1><img src="/images/admin_logo.png"/></h1>
+    <ul class="rt_nav">
+        <li><a href="#" target="_blank" class="website_icon">站点首页</a></li>
+        <li><a href="#" class="clear_icon">清除缓存</a></li>
+        <li><a th:text="${session.mname}" class="admin_icon"></a></li>
+        <li><a href="#" class="set_icon">账号设置</a></li>
+        <li><a href="login.html" onclick="return logout()" class="quit_icon">安全退出</a></li>
+    </ul>
 </header>
 <!--aside nav-->
 <!--aside nav-->
 <aside class="lt_aside_nav content mCustomScrollbar">
- <h2><a href="index.html">后台中心</a></h2>
- <ul>
-  <li>
-   <dl>
-    <dt>商品信息</dt>
-    <!--当前链接则添加class:active-->
-    <dd><a href="/findAllBook" class="active">商品检索管理</a></dd>
-    <dd><a href="/addPage" >上架新商品</a></dd>
-    <dd><a href="#">下架商品管理</a></dd>
-    <dd><a href="#">评价管理</a></dd>
-    
-   </dl>
-</li>
-  <li>
-   <dl>
-    <dt>订单信息</dt>
-    <dd><a href="order_list.html">订单管理</a></dd>
-    <!--<dd><a href="order_detail.html">订单详情</a></dd>-->
-   </dl>
-  </li>
-  <li>
-   <dl>
-    <dt>会员管理</dt>
-    <dd><a href="user_list.html">会员列表</a></dd>
-    <dd><a href="user_detail.html">会员详情</a></dd>
-   </dl>
-  </li>
+    <h2><a href="/admin/index">后台中心</a></h2>
+    <ul>
+        <li>
+            <dl>
+                <dt>商品信息</dt>
+                <!--当前链接则添加class:active-->
+                <dd><a href="/findAllBook" class="active">商品检索管理</a></dd>
+                <dd><a href="/addPage">上架新商品</a></dd>
+                <dd><a href="/admin/comment_list">评价管理</a></dd>
 
-  <li>
-   <p class="btm_infor">©1606401-13 YeXing</p>
-  </li>
- </ul>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>订单信息</dt>
+                <dd><a href="/admin/order_list">订单管理</a></dd>
+                <!--<dd><a href="order_detail.html">订单详情</a></dd>-->
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>会员管理</dt>
+                <dd><a href="/admin/user_list">会员列表</a></dd>
+            </dl>
+        </li>
+
+        <li>
+            <p class="btm_infor">©1606401-13 YeXing</p>
+        </li>
+    </ul>
 </aside>
 <section class="rt_wrap content mCustomScrollbar">
- <div class="rt_content">
-      <div class="page_title">
-       <h2 class="fl">商品列表示例</h2>
-       <a href="product_detail.html" class="fr top_rt_btn add_icon">添加商品</a>
-      </div>
-      <section class="mtb">
-       <select class="select">
-        <option>下拉菜单</option>
-        <option>教育类</option>
-        <option>小说类</option>
-        <option>科学类</option>
-       </select>
-       <input type="text" id="bookname" th:name="bookname" class="textbox textbox_225" placeholder="输入关键词..."/>
-       <input type="button"  value="查询" onclick="searchByName()" class="group_btn"/>
-      </section>
-      <table id="t_books" class="table">
-       <tr>
-        <th>缩略图</th>
-        <th>书籍ID</th>
-        <th>书名</th>
-        <th>单价</th>
-        <th>类型</th>
-        <th>库存</th>
-        <th>修改</th>
-        <th>下架</th>
-       </tr>
-       <tr th:each="book:${books}">
-        <td class="center"><img width="50" height="50" th:src="${book.bpic}"></td>
-        <td class="center"><span th:text="${book.bid}"></span></td>
-        <td class="center"><span th:text="${book.bname}"></span></td>
-        <td class="center"><strong class="rmb_icon"><span th:text="${book.bprice}"></span></strong></td>
-        <td class="center"><span th:text="${book.booktype}"></span></td>
-        <td class="center"><span th:text="${book.bnum}"></span></td>
-        <td class="center"><a th:href="@{/updatePage(bid=${book.bid})}" title="编辑" class="link_icon">&#101;</a></td>
-        <td class="center"><a href="#" th:onclick="'javascript:return del(\''+${book.bid}+'\')'" title="下架" class="link_icon">&#100;</a></td>
-       </tr>
+    <div class="rt_content">
+        <div class="page_title">
+            <h2 class="fl">商品列表</h2>
+            <a href="/addPage" class="fr top_rt_btn add_icon">添加商品</a>
+        </div>
+        <section class="mtb">
+            查找书名：
+            <input type="text" id="bookname" th:name="bookname" class="textbox textbox_225" placeholder="输入关键词..."/>
+            <input type="button" value="查询" onclick="searchByName()" class="group_btn"/>
+        </section>
 
-      </table>
-      <aside class="paging">
-       <a>第一页</a>
-       <a>1</a>
-       <a>2</a>
-       <a>3</a>
-       <a>…</a>
-       <a>1004</a>
-       <a>最后一页</a>
-      </aside>
- </div>
+        <table class="layui-hide" id="test" lay-filter="test"></table>
+    </div>
 </section>
 </body>
 </html>

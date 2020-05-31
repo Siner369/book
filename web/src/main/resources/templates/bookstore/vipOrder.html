@@ -52,12 +52,12 @@
    <div class="gouwuche">
     <div class="gouCar">
      <img src="/images/gouimg.png" width="19" height="20" style="position:relative;top:6px;" />&nbsp;|&nbsp;
-     <strong class="red">0</strong>&nbsp;件&nbsp;|
-     <strong class="red">￥ 0.00</strong> 
+     <strong class="red" th:text="${session.cartSize}"></strong>&nbsp;件&nbsp;|
+     <strong class="red">￥ <span th:text="${session.cartSum}"></span></strong>
      <a href="/bookstore/order">去结算</a> <img src="/images/youjian.jpg" width="5" height="8" />
     </div><!--gouCar/-->
     <div class="myChunlv">
-     <a href="vip.html"><img src="/images/mychunlv.jpg" width="112" height="34" /></a>
+     <a href="/bookstore/vip"><img src="/images/mychunlv.jpg" width="112" height="34"/></a>
     </div><!--myChunlv/-->
    </div><!--gouwuche/-->
   </div><!--lsg/-->
@@ -93,8 +93,8 @@
     <dl class="helpNav vipNav">
      <dt>我的主页</dt>
       <dd>
-       <a href="vip.html">个人中心</a>
-       <a href="vipOrder.html" class="vipCur">我的订单</a>
+       <a href="/bookstore/vip">个人中心</a>
+       <a href="/bookstore/vipOrder" class="vipCur">我的订单</a>
       </dd>
      <dt>账户设置</dt>
       <dd>
@@ -113,20 +113,30 @@
     </dl><!--helpNav/-->
    </div><!--contLeft/-->
    <div class="contRight">
-    <h1 class="vipName">用户名：<span th:value="${session.currUser.uname}"></span></h1>
+    <h1 class="vipName">用户名：<span th:text="${session.currUser.uname}"></span></h1>
     <h2 class="oredrName">
-    我的订单 <span style="margin-left:40px;">待发货 <span class="red">10</span> </span>
-    <span>待收货 <span class="red">15</span></span>
+    我的订单<!-- <span style="margin-left:40px;">待发货 <span class="red">10</span> </span>
+    <span>待收货 <span class="red">15</span></span>-->
     </h2>
-    <table class="vipOrder">
+    <table class="vipOrder" style="font-size: small">
+        <tr>
+            <td>订单号</td>
+            <td>地址 </td>
+            <td>手机号</td>
+            <td>购买时间  </td>
+            <td>总价</td>
+            <td>订单状态</td>
+            <td></td>
+        </tr>
      <tr th:each="order:${orderList}">
       <!--<td><a href="#"><img src="/images/rdPro4.jpg" width="60" height="55"></a></td>-->
-      <td><span th:text="${session.currUser.uname}"></span></td>
+     <!-- <td><img th:src="${order.Book.bpic}" width="60" height="55"/></td>-->
+      <td><span th:text="${order.oid}"></span></td>
       <td><span th:text="${order.uaddress}"></span></td>
       <td><span th:text="${order.utel}"></span></td>
       <td><span th:text="${#dates.format(order.buytime,'yyyy-MM-dd')}"></span></td>
       <td><span th:text="${order.sum}"></span>元</td>
-      <td><a href="success.html"><strong>订单状态：</strong><span th:text="${order.state}"></span></a></td>
+      <td><a href="#"><span th:text="${order.state}"></span></a></td>
       <td><a href="orderDetails.html">查看</a></td>
      </tr>
      <!--<tr>

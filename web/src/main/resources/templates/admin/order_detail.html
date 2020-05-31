@@ -40,10 +40,9 @@
    <dl>
     <dt>商品信息</dt>
     <!--当前链接则添加class:active-->
-    <dd><a href="/findAllBook.html">商品检索管理</a></dd>
-    <dd><a href="/addPage.html">上架新商品</a></dd>
-    <dd><a href="recycle_bin.html">下架商品管理</a></dd>
-    <dd><a href="user_list.html">评价管理</a></dd>
+    <dd><a href="/admin/findAll">商品检索管理</a></dd>
+    <dd><a href="/addPage">上架新商品</a></dd>
+    <dd><a href="/admin/comment_list">评价管理</a></dd>
     
    </dl>
   </li>
@@ -58,8 +57,7 @@
   <li>
    <dl>
     <dt>会员信息</dt>
-    <dd><a href="user_list.html">会员列表</a></dd>
-    <dd><a href="user_detail.html">会员详情</a></dd>
+    <dd><a href="/admin/user_list">会员列表</a></dd>
    </dl>
   </li>
 
@@ -72,77 +70,50 @@
 <section class="rt_wrap content mCustomScrollbar">
  <div class="rt_content">
       <div class="page_title">
-       <h2 class="fl">订单详情示例</h2>
+       <h2 class="fl">订单详情</h2>
       </div>
-      <table class="table">
+     <table class="table">
        <tr>
-        <td>收件人：DeathGhost</td>
-        <td>联系电话：18300000000</td>
-        <td>收件地址：陕西省西安市雁塔区丈八路2000集都市印象18栋2160室</td>
-        <td>付款时间：2016-02-01 13:56</td>
+        <td>收件人：<p th:text="${orderInfo.user.uname}"></td>
+        <td>联系电话：<p th:text="${orderInfo.utel}"></p></td>
+        <td>收件地址：<p th:text="${orderInfo.uaddress}"></p></td>
        </tr>
        <tr>
         <td>下单时间：2016-02-01 13:56</td>
-        <td>付款时间：2016-02-01 13:56</td>
-        <td>确认时间：2016-02-01 13:56</td>
-        <td>评价时间时间：---</td>
+    <!--    <td>付款时间：2016-02-01 13:56</td>-->
+        <td>订单总价：<p th:text="${orderInfo.sum}"></p></td>
+        <td>订单状态：<a th:text="${orderInfo.state}"></a></td>
        </tr>
-       <tr>
-        <td>订单状态：<a>已付款，待发货</a></td>
-        <td colspan="3">订单备注：<mark>帮我检查好呀~谢谢~</mark></td>
-        </tr>
       </table>
+  <aside class="mtb" style="text-align:right;">
+  <a href="/admin/order_list"><input type="button" value="返回" class="group_btn"/></a>
+  </aside>
+
       <table class="table">
-       <tr>
-        <td class="center"><img src="/upload/goods01.jpg" width="50" height="50"/></td>
-        <td>这里是产品名称</td>
-        <td class="center">A15902</td>
-        <td class="center"><strong class="rmb_icon">59.00</strong></td>
-        <td class="center">
-         <p>颜色：蓝色</p>
-         <p>尺码：XXL码</p>
-        </td>
-        <td class="center"><strong>1</strong></td>
-        <td class="center"><strong class="rmb_icon">59.00</strong></td>
-        <td class="center">包</td>
-       </tr>
-       <tr>
-        <td class="center"><img src="/upload/goods02.jpg" width="50" height="50"/></td>
-        <td>这里是产品名称</td>
-        <td class="center">A15902</td>
-        <td class="center"><strong class="rmb_icon">59.00</strong></td>
-        <td class="center">
-         <p>颜色：蓝色</p>
-         <p>尺码：XXL码</p>
-        </td>
-        <td class="center"><strong>2</strong></td>
-        <td class="center"><strong class="rmb_icon">118.00</strong></td>
-        <td class="center">包</td>
-       </tr>
-       <tr>
-        <td class="center"><img src="/upload/goods03.jpg" width="50" height="50"/></td>
-        <td>这里是产品名称</td>
-        <td class="center">A15902</td>
-        <td class="center"><strong class="rmb_icon">59.00</strong></td>
-        <td class="center">
-         <p>颜色：蓝色</p>
-         <p>尺码：XXL码</p>
-        </td>
-        <td class="center"><strong>1</strong></td>
-        <td class="center"><strong class="rmb_icon">59.00</strong></td>
-        <td class="center">包</td>
-       </tr>
+          <thead>
+          <tr>
+              <th>略缩图</th>
+              <th>书籍ID</th>
+              <th>书名</th>
+              <th>类型</th>
+              <th>单价</th>
+              <th>数量</th>
+              <th>总价</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="iteam:${IteamList}">
+              <td> <img th:src="${iteam.book.bpic}" width="50" height="50" class="center"/> </td>
+              <td th:text="${iteam.book.bid}">1</td>
+              <td th:text="${iteam.book.bname}">1</td>
+              <td th:text="${iteam.book.booktype}">1</td>
+              <td th:text="${iteam.book.bprice}">1</td>
+              <td th:text="${iteam.oocount}">1</td>
+              <td th:text="${iteam.IteamSum}">1</td>
+          </tr>
+          </tbody>
       </table>
-      <aside class="mtb" style="text-align:right;">
-       <label>管理员操作：</label>
-       <input type="text" class="textbox textbox_295" placeholder="管理员操作备注"/>
-       <input type="button" value="打印订单" class="group_btn"/>
-       <input type="button" value="确认订单" class="group_btn"/>
-       <input type="button" value="付款" class="group_btn"/>
-       <input type="button" value="配货" class="group_btn"/>
-       <input type="button" value="发货" class="group_btn"/>
-       <input type="button" value="确认收货" class="group_btn"/>
-      </aside>
+
  </div>
 </section>
 </body>

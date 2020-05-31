@@ -7,7 +7,9 @@ import com.siner.entity.User;
 import java.util.List;
 
 public interface OrdersIteamService {
+
     boolean addOrderIteam(OrdersIteam ordersIteam);
 
 
+    List<OrdersIteam> FindOrdersIteam(String oid);
 }

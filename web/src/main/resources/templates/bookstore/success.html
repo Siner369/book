@@ -8,7 +8,7 @@
 <script type="text/javascript" src="/js/js.js"></script>
 <script src="/js/wb.js" type="text/javascript" charset="utf-8"></script>
  <script th:inline="javascript">
-  var uname = /*[[${session.currUser.uname}]]*/ 'Sebastian';
+  var uname = /*[[${session.currUser.uname}]]*/ 'siner';
   $(function () {
 
    if (uname == "tourist") {
@@ -19,11 +19,56 @@
     $("#slogan").html(msg + "<a href='/bookstore/logout' id='logout'>退出</a>");
    }
   });
+  
+  /*function toPay() {
+   var oid = /!*[[${OID}]]*!/ 'siner';
+   //////
+   $.ajax({
+    url:"/bookstore/makeCode",
+    type:"post",
+    data:{oid:oid},
+    dataType:"html",
+    success:function (data) {
+
+    },
+    error:function(){
+
+    }
+   });
+
+  }*/
+  //////
+  //发起支付请求
+  function toPay() {
+   var oid = /*[[${oid}]]*/ 'siner';
+   alert(oid);
+   $.ajax({
+    url: "/aliplay",
+    type: "post",
+    dataType: "html",
+    cache: false,
+    async: false,
+    data: {bid: bid},
+    success: function (data) {
+     $("#mainBody").html(data);
+    },
+    error: function (retMsg) {
+     try {
+     } catch (eee) {
+     }
+    }
+   });
+
+
+  }
+
+
+  ///////
 
  </script>
 </head>
 
-<body>
+<body id="mainBody">
  <div class="mianCont">
   <div class="top">
    <span id="slogan">您好！欢迎来到17商城 请&nbsp;<a href="login.html">[登录]</a>&nbsp;<a href="reg.html">[注册]</a></span>
@@ -91,7 +136,7 @@
     <h3>下单成功</h3>
     <div class="zhifu">
      您选择的支付方式是 <strong class="red">支付宝</strong><br />
-     <a href="https://www.alipay.com/" target="_blank"><img src="/images/zhifu.png" width="133" height="41" /></a>
+     <a href="#" onclick="toPay();" target="_blank"><img src="/images/zhifu.png" width="133" height="41" /></a>
     </div><!--zhifu/-->
    </div><!--chenggong/-->
   </div><!--cont/-->

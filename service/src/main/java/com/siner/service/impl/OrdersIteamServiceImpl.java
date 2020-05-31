@@ -29,5 +29,10 @@ public class OrdersIteamServiceImpl implements OrdersIteamService {
         }
     }
 
+    @Override
+    public List FindOrdersIteam(String oid) {
+        return ordersIteamDao.FindOrdersIteam(oid);
+    }
+
 
 }

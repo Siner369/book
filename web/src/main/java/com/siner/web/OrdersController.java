@@ -1,6 +1,7 @@
 package com.siner.web;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.siner.entity.Book;
 import com.siner.entity.Orders;
 import com.siner.entity.OrdersIteam;
@@ -12,10 +13,7 @@ import com.siner.util.JedisPoolUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +40,7 @@ public class OrdersController {
     }
 
     @RequestMapping("/bookstore/orderSubmit")
-    public String orderSubmit(HttpSession session) {
+        public String orderSubmit(HttpSession session,Model model) {
         User user = (User) session.getAttribute("currUser");
         Map<String, String> map = jedis.hgetAll("user:" + user.getUid());
         Orders order = new Orders();
@@ -66,6 +64,8 @@ public class OrdersController {
         boolean b1 = ordersService.addOrder(order);
         if (b1){
             System.out.println("订单大表插入成功");
+            model.addAttribute("OID",uuid);
+            jedis.del("user:"+user.getUid());
         } else {
             System.out.println("订单大表插入失败");
         }
@@ -84,6 +84,7 @@ public class OrdersController {
             if (b2) {
                 System.out.println("订单详情插入成功");
                 jedis.hdel("user:"+user.getUid(),a.getKey());
+                model.addAttribute("oid",uuid);
             }else{
                 System.out.println("订单详情插入失败");
             }
@@ -99,6 +100,50 @@ public class OrdersController {
         System.out.println(allOrder);
         model.addAttribute("orderList",allOrder);
         return "/bookstore/vipOrder";
+    }
+
+    @RequestMapping("/bookstore/pay")
+    public String pay() {
+        return "/bookstore/vipOrder";
+    }
+
+    @RequestMapping("/admin/order_list")
+    public String to_order_list(){
+        return "/admin/order_list";
+    }
+
+    @GetMapping("/admin/allOrders")
+    public @ResponseBody String allOrders(HttpSession session){
+        List<Orders> list = ordersService.adminFindAllOrder();
+        JSONObject json = new JSONObject();
+        json.put("code",0);
+        json.put("msg","");
+        json.put("count",list.size());
+        json.put("data",list);
+        return json.toString();
+    }
+
+    @GetMapping("/admin/delOrder")
+    public @ResponseBody String delOrder(String oid){
+        System.out.println("需要删除的订单号："+oid);
+        boolean flag = ordersService.delOrder(oid);
+        JSONObject json = new JSONObject();
+        if (flag){
+            System.out.println("删除大订单成功！");
+            json.put("delOrder","success");
+        }
+        return json.toString();
+    }
+
+    @GetMapping("/admin/findOrderByTel")
+    public @ResponseBody String findOrderByTel(String tel){
+        List<Orders> list = ordersService.findOrderByTel(tel);
+        JSONObject json = new JSONObject();
+        json.put("code",0);
+        json.put("msg","");
+        json.put("count",list.size());
+        json.put("data",list);
+        return json.toString();
     }
 
 

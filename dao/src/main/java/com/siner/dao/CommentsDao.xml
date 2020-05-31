@@ -5,38 +5,41 @@
     <resultMap id="commentMap" type="com.siner.entity.Comments">
         <id property="cid" column="cid"/>
         <result property="uid" column="uid"/>
+        <result property="uname" column="uname"/>
         <result property="bid" column="bid"/>
-        <result property="oid" column="oid"/>
+        <result property="isbuy" column="isbuy"/>
         <result property="cscore" column="cscore"/>
         <result property="comments" column="comments"/>
 
-
-       <!--<association property="account" javaType="com.hntest.entity.Account">
-            <id property="account_id" column="account_id"/>
-            <result property="tradepassword" column="tradepassword"/>
-            <result property="useableamount" column="useableamount"/>
-            <result property="freezedamount" column="freezedamount"/>
-            <result property="borrowlimit" column="borrowlimit"/>
-            <result property="version" column="version"/>
-            <result property="unreceiveinterest" column="unreceiveinterest"/>
-            <result property="unreceiveprincipal" column="unreceiveprincipal"/>
-            <result property="unreceiveamount" column="unreceiveamount"/>
-            <result property="remainborrowlimit" column="remainborrowlimit"/>
-        </association>
--->
+        <collection property="book" javaType="com.siner.entity.Book">
+            <result property="bname" column="bname"></result>
+        </collection>
     </resultMap>
 
-<!--    <select id="Login" resultType="int" parameterType="com.hntest.entity.Logininfo">
-        select l.username,l.password from Logininfo l left outer join Account a
-        on l.lid = a.account_id
+
+    <insert id="addComments" parameterType="com.siner.entity.Comments">
+        insert into comments(uid,uname,bid,isbuy,cscore,comments) values(#{uid},#{uname},#{bid},#{isbuy},#{cscore},
+        #{comments})
+    </insert>
+
+    <select id="checkIsBuy" resultType="java.lang.String">
+        select orders.oid from orders  left outer join ordersIteam  on orders.oid = ordersIteam.oid
+         left outer join book on ordersIteam.bid = book.bid
+        where orders.uid = #{uid} and  ordersIteam.bid = #{bid} and orders.state = 1;
     </select>
 
+    <select id="findCommentsByBid" resultMap="commentMap" parameterType="int">
+        select  *from comments c where c.bid = #{bid}
+    </select>
 
+    <select id="allComments" resultMap="commentMap">
+        select c.cid,c.bid,c.uname,b.bname,c.bid,c.isbuy,c.cscore,c.comments from
+         comments c left outer join book b on c.bid = b.bid;
+    </select>
 
-    <insert id="register" parameterType="com.hntest.entity.Logininfo">
-        insert into Logininfo values(#{lid},#{username},#{password},#{state},
-        #{usertype},#{admin})
-	</insert>-->
-    
+    <delete id="delComment" parameterType="int">
+        delete from comments where cid = #{cid}
+    </delete>
+
 
 </mapper>
